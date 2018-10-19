@@ -25,9 +25,10 @@ setup(
         'Natural Language :: English',
     ],
     keywords='engineering computational',
-    packages=find_packages(exclude=['docs']),
+    packages=find_packages(exclude=['docs', 'examples']),
     python_requires='>=3.6',
     install_requires=[
-        "toml",
+        "numpy",
+        "scipy",
     ],
 )

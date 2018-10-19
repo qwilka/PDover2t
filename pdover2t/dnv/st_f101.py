@@ -1,8 +1,8 @@
-import scipy as np
 from math import sqrt
 import logging
 logger = logging.getLogger(__name__)
-#from functools import partial
+
+import scipy as np
 
 #__all__ = ["pipeCollapse", "P_containment", "derating_strength"]
 
