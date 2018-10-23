@@ -1,5 +1,21 @@
 import math
 
+
+# Reference: DNVGL-ST-F101 (2017-12) table:5.1 sec:5.3.2.3 page:87
+gamma_m = {
+    "SLS": 1.15,
+    "ULS": 1.15,
+    "ALS": 1.15,
+    "FLS": 1.00,
+}
+
+# Reference: DNVGL-ST-F101 (2017-12) table:5.2 sec:5.3.2.4 page:88
+gamma_SCPC = {
+    "low": 1.046,
+    "medium": 1.138,
+    "high": 1.308,
+}
+
 # Reference: DNVGL-ST-F101 (2017-12) table:5.3 sec:5.3.3.6 page:90
 alpha_U = {
     "normal": 1.00,
