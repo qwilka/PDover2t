@@ -133,7 +133,7 @@ def mill_test_press(D, t_min, SMYS, SMTS):
 def press_contain_unity(p_li, p_e,
                         p_b, gamma_m, gamma_SCPC,
                         p_lt, alpha_spt, 
-                        p_mpt, alpha_U, alpha_mpt):
+                        p_mpt, alpha_U, alpha_mpt, long_op=False):
     """Pressure containment unity check in accordance with DNVGL-ST-F101.
 
     :param D: Pipe diameter       
@@ -167,84 +167,88 @@ def press_contain_unity(p_li, p_e,
     # _items = [press_contain_resis(D, t, f_y, f_u, gamma_m, gamma_SCPC)]
     # p_t = (p_d, gamma_inc, alpha_spt)
     # _items.append(local_test_press(p_t, rho_t, h_l, h_ref, p_e, alpha_spt, g))
-    _term1 = p_b / gamma_m / gamma_SCPC
-    _term2 = p_lt/alpha_spt - p_e
-    _term3 = p_mpt * alpha_U / alpha_mpt
-    unity_check = (p_li - p_e) / min(_term1, _term2, _term3)
+    burst = p_b / gamma_m / gamma_SCPC
+    systest = p_lt/alpha_spt - p_e
+    milltest = p_mpt * alpha_U / alpha_mpt
+    pdiff = p_li - p_e
+    if long_op:
+        unity_check = (pdiff/burst, pdiff/systest, pdiff/milltest)
+    else:
+        unity_check = pdiff / min(burst, systest, milltest)
     return unity_check
 
 
-def P_containment(D, f_y, f_u=None,t=None, p_lx=None, p_e=0,  
-                 gamma_m=1.15, gamma_SC=1.138, mode=None):                 
-    r'''Pressure containment check in accordance with DNVGL-ST-F101.
+# def P_containment(D, f_y, f_u=None,t=None, p_lx=None, p_e=0,  
+#                  gamma_m=1.15, gamma_SC=1.138, mode=None):                 
+#     r'''Pressure containment check in accordance with DNVGL-ST-F101.
     
-    .. math::
-        p_{lx} - p_e \:\leq\: \frac{p_b}{\gamma_m \,\cdot\, \gamma_{SC}}, 
-        \quad where \quad p_b = \frac{2 \cdot t}{D - t} \cdot 
-        f_{cb} \cdot \frac{2}{\sqrt{3}},
-        \quad and \quad f_{cb} = Min\left[f_y, \frac{f_u}{1.15}  \right]
+#     .. math::
+#         p_{lx} - p_e \:\leq\: \frac{p_b}{\gamma_m \,\cdot\, \gamma_{SC}}, 
+#         \quad where \quad p_b = \frac{2 \cdot t}{D - t} \cdot 
+#         f_{cb} \cdot \frac{2}{\sqrt{3}},
+#         \quad and \quad f_{cb} = Min\left[f_y, \frac{f_u}{1.15}  \right]
 
-    :param D: Pipe diameter       
-    :param f_y: Pipe material yield stress
-    :param f_u: Pipe material tensile strength
-    :param t: Pipe wall thickness     
-    :param p_lx: Internal pressure
-    :param p_e: External pressure
-    :param gamma_m: Material resistance factor, :math:`\gamma_m`
-    :param gamma_SC: Safety class resistance factor, :math:`\gamma_{SC}`
-    :param mode: 'check' [default], 'WT', 'P', or 'func', (see returns)
-    :returns: According to the value for **mode**:  
-              mode='check' return True or False (pass or fail resp.); 
-              mode='util' return utilisation factor;
-              mode='WT' return minimum pipe wall thickness; 
-              mode='P' return maximum internal pressure (pl_x); 
-              mode='func' return pressure containment function. 
+#     :param D: Pipe diameter       
+#     :param f_y: Pipe material yield stress
+#     :param f_u: Pipe material tensile strength
+#     :param t: Pipe wall thickness     
+#     :param p_lx: Internal pressure
+#     :param p_e: External pressure
+#     :param gamma_m: Material resistance factor, :math:`\gamma_m`
+#     :param gamma_SC: Safety class resistance factor, :math:`\gamma_{SC}`
+#     :param mode: 'check' [default], 'WT', 'P', or 'func', (see returns)
+#     :returns: According to the value for **mode**:  
+#               mode='check' return True or False (pass or fail resp.); 
+#               mode='util' return utilisation factor;
+#               mode='WT' return minimum pipe wall thickness; 
+#               mode='P' return maximum internal pressure (pl_x); 
+#               mode='func' return pressure containment function. 
 
-    The default value for **gamma_m** corresponds to limit state 
-    categories SLS/ULS/ALS.  The default for **gamma_SC** corresponds
-    to safety class *Medium* for the *Pressure Containment* case. If
-    **f_u** is not specified, then :math:`f_{cb}=f_y`.
+#     The default value for **gamma_m** corresponds to limit state 
+#     categories SLS/ULS/ALS.  The default for **gamma_SC** corresponds
+#     to safety class *Medium* for the *Pressure Containment* case. If
+#     **f_u** is not specified, then :math:`f_{cb}=f_y`.
     
-    Examples:    
-    >>> P_containment(660.e-3, 4.32e8, 5.136e8, 0.0199, 2.5e7, 2.5e6,
-    ...                1.15, 1.138, 'check')
-    True
-    >>> P_containment(660.e-3, 4.32e8, 5.136e8, 0.0199, 2.5e7, 2.5e6,
-    ...                1.15, 1.138, 'WT')
-    0.018921...
-    >>> P_containment(660.e-3, 4.32e8, 5.136e8, 0.0199, 2.5e7, 2.5e6,
-    ...                1.15, 1.138, 'P')
-    26199995.17...
-    '''
-    if not mode:
-        if p_lx and t:
-            mode='check'
-        elif p_lx and not t:
-            mode='WT'
-        elif not p_lx and t:
-            mode='P'
-        else:
-            raise ValueError("arguments not correctly specified")
+#     Examples:    
+#     >>> P_containment(660.e-3, 4.32e8, 5.136e8, 0.0199, 2.5e7, 2.5e6,
+#     ...                1.15, 1.138, 'check')
+#     True
+#     >>> P_containment(660.e-3, 4.32e8, 5.136e8, 0.0199, 2.5e7, 2.5e6,
+#     ...                1.15, 1.138, 'WT')
+#     0.018921...
+#     >>> P_containment(660.e-3, 4.32e8, 5.136e8, 0.0199, 2.5e7, 2.5e6,
+#     ...                1.15, 1.138, 'P')
+#     26199995.17...
+#     '''
+#     if not mode:
+#         if p_lx and t:
+#             mode='check'
+#         elif p_lx and not t:
+#             mode='WT'
+#         elif not p_lx and t:
+#             mode='P'
+#         else:
+#             raise ValueError("arguments not correctly specified")
 
-    if f_u:
-        f_cb = min(f_y, f_u/1.15)
-    else:
-        f_cb = f_y
+#     if f_u:
+#         f_cb = min(f_y, f_u/1.15)
+#     else:
+#         f_cb = f_y
 
-    if mode.upper()=='WT':
-        p_b  = (p_lx - p_e)*gamma_m*gamma_SC
-        return p_b*D / (2*f_cb*2/math.sqrt(3) + p_b)
-    else:
-        p_b  = 2*t/(D-t) * f_cb * 2/math.sqrt(3)
+#     if mode.upper()=='WT':
+#         p_b  = (p_lx - p_e)*gamma_m*gamma_SC
+#         return p_b*D / (2*f_cb*2/math.sqrt(3) + p_b)
+#     else:
+#         p_b  = 2*t/(D-t) * f_cb * 2/math.sqrt(3)
 
-    if mode.lower()=='check':
-        return p_lx - p_e <= p_b/gamma_m/gamma_SC
-    elif mode.lower()=='util':
-        return (p_lx - p_e) / (p_b/gamma_m/gamma_SC)
-    elif mode.upper()=='P':
-        return p_b/gamma_m/gamma_SC + p_e
-    elif mode.lower()=='func':
-        return p_lx - p_e - p_b/gamma_m/gamma_SC
+#     if mode.lower()=='check':
+#         return p_lx - p_e <= p_b/gamma_m/gamma_SC
+#     elif mode.lower()=='util':
+#         return (p_lx - p_e) / (p_b/gamma_m/gamma_SC)
+#     elif mode.upper()=='P':
+#         return p_b/gamma_m/gamma_SC + p_e
+#     elif mode.lower()=='func':
+#         return p_lx - p_e - p_b/gamma_m/gamma_SC
 
 
 
