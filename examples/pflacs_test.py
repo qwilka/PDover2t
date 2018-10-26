@@ -1,7 +1,7 @@
 import logging
 
 import pdover2t
-from pflacs import Loadcase, Parameter
+from pflacs import Loadcase
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)  # logging.DEBUG 
@@ -34,12 +34,7 @@ basecase = Loadcase("Base case", params=params,
                 data={"desc": "This is the base-case loadcase."})
 lc1 = Loadcase("Load case 1", parent=basecase, 
             data={"desc": "This is the 1st child loadcase."})
-# basecase.plugin_func(pdover2t.dnvgl_st_f101.incid_ref_press)
-# basecase.plugin_func(pdover2t.dnvgl_st_f101.local_incid_press)
-# basecase.plugin_func(pdover2t.dnvgl_st_f101.external_pressure)
-# basecase.plugin_func(pdover2t.dnvgl_st_f101.char_mat_strength)
-# basecase.plugin_func(pdover2t.dnvgl_st_f101.system_test_press)
-# basecase.plugin_func(pdover2t.dnvgl_st_f101.press_contain_resis)
+
 basecase.plugin_func("incid_ref_press", "pdover2t.dnvgl_st_f101")
 basecase.plugin_func("local_incid_press", "pdover2t.dnvgl_st_f101")
 basecase.plugin_func("external_pressure", "pdover2t.dnvgl_st_f101")
@@ -60,23 +55,28 @@ basecase.add_param("p_b", basecase.press_contain_resis(t=basecase.t_1))
 
 basecase.add_param("alpha_spt", pdover2t.dnvgl_st_f101.factor.alpha_spt[basecase.SC])
 basecase.add_param("p_t", basecase.system_test_press())
-#basecase.plugin_func(pdover2t.dnvgl_st_f101.local_test_press)
 basecase.plugin_func("local_test_press", "pdover2t.dnvgl_st_f101")
 basecase.add_param("p_lt", basecase.local_test_press())
 
 basecase.add_param("t_min", basecase.t - basecase.t_fab)  # t1, prior to operation table 5.5 p.91
-#basecase.plugin_func(pdover2t.dnvgl_st_f101.mill_test_press)
 basecase.plugin_func("mill_test_press", "pdover2t.dnvgl_st_f101")
 basecase.add_param("p_mpt", basecase.mill_test_press())
 basecase.add_param("alpha_mpt", pdover2t.dnvgl_st_f101.factor.alpha_mpt[basecase.SC])
 
-#basecase.plugin_func(pdover2t.dnvgl_st_f101.press_contain_unity)
+basecase.plugin_func("press_contain_resis_unity", "pdover2t.dnvgl_st_f101")
+basecase.add_param("p_cont_res_uty", basecase.press_contain_resis_unity())
+basecase.plugin_func("local_test_press_unity", "pdover2t.dnvgl_st_f101")
+basecase.add_param("p_lt_uty", basecase.local_test_press_unity())
+basecase.plugin_func("mill_test_press_unity", "pdover2t.dnvgl_st_f101")
+basecase.add_param("p_mpt_uty", basecase.mill_test_press_unity())
+
+
 basecase.plugin_func("press_contain_unity", "pdover2t.dnvgl_st_f101")
-basecase.add_param("p_cont_unity", basecase.press_contain_unity(long_op=True))
+basecase.add_param("p_cont_uty", basecase.press_contain_unity())
 
 
 print("char_mat_strength=", basecase.char_mat_strength())
-print("p_cont_unity=", basecase.p_cont_unity)
+print("p_cont_uty=", basecase.p_cont_uty)
 #print(basecase.local_incid_press(h_l=30)/1.e5)
 
 treedict = basecase.to_treedict()
