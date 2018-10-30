@@ -10,7 +10,7 @@ lh = logging.StreamHandler()
 # lh.setFormatter(formatter)
 logger.addHandler(lh)
 
-params = {
+parameters = {
     "alpha_U": 1.0,
     "D": 0.6176,
     "g": 9.81,
@@ -30,7 +30,7 @@ params = {
     "T": 60,
 }
 
-basecase = Loadcase("Base case", params=params,
+basecase = Loadcase("Base case", parameters=parameters,
                 data={"desc": "This is the base-case loadcase."})
 lc1 = Loadcase("Load case 1", parent=basecase, 
             data={"desc": "This is the 1st child loadcase."})
