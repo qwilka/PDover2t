@@ -47,13 +47,13 @@ basecase.add_param("h_l", -340)
 basecase.add_param("p_li", basecase.local_incid_press())
 basecase.add_param("p_e", basecase.external_pressure())
 basecase.add_param("f_y", basecase.char_mat_strength())
-basecase.add_param("gamma_m", pdover2t.dnvgl_st_f101.factor.gamma_m["ULS"])
-basecase.add_param("gamma_SCPC", pdover2t.dnvgl_st_f101.factor.gamma_SCPC[basecase.SC])
+basecase.add_param("gamma_m", pdover2t.dnvgl_st_f101.factor.gamma_m_map["ULS"])
+basecase.add_param("gamma_SCPC", pdover2t.dnvgl_st_f101.factor.gamma_SCPC_map[basecase.SC])
 
 basecase.add_param("t_1", basecase.t-basecase.t_corr-basecase.t_fab)
 basecase.add_param("p_b", basecase.press_contain_resis(t=basecase.t_1))
 
-basecase.add_param("alpha_spt", pdover2t.dnvgl_st_f101.factor.alpha_spt[basecase.SC])
+basecase.add_param("alpha_spt", pdover2t.dnvgl_st_f101.factor.alpha_spt_map[basecase.SC])
 basecase.add_param("p_t", basecase.system_test_press())
 basecase.plugin_func("local_test_press", "pdover2t.dnvgl_st_f101")
 basecase.add_param("p_lt", basecase.local_test_press())
@@ -61,7 +61,7 @@ basecase.add_param("p_lt", basecase.local_test_press())
 basecase.add_param("t_min", basecase.t - basecase.t_fab)  # t1, prior to operation table 5.5 p.91
 basecase.plugin_func("mill_test_press", "pdover2t.dnvgl_st_f101")
 basecase.add_param("p_mpt", basecase.mill_test_press())
-basecase.add_param("alpha_mpt", pdover2t.dnvgl_st_f101.factor.alpha_mpt[basecase.SC])
+basecase.add_param("alpha_mpt", pdover2t.dnvgl_st_f101.factor.alpha_mpt_map[basecase.SC])
 
 basecase.plugin_func("press_contain_resis_unity", "pdover2t.dnvgl_st_f101")
 basecase.add_param("p_cont_res_uty", basecase.press_contain_resis_unity())
@@ -78,6 +78,9 @@ basecase.add_param("p_cont_uty", basecase.press_contain_unity())
 print("char_mat_strength=", basecase.char_mat_strength())
 print("p_cont_uty=", basecase.p_cont_uty)
 #print(basecase.local_incid_press(h_l=30)/1.e5)
+
+basecase.plugin_func("press_contain_overall", "pdover2t.dnvgl_st_f101")
+print("p_cont_overall=", basecase.press_contain_overall(ret="all"))
 
 treedict = basecase.to_treedict()
 import pickle

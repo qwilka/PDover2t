@@ -1,8 +1,9 @@
 import math
 
-from .factor import calc_alpha_mpt
+from . import factor
+from .material import char_mat_strength
 
-testlam = lambda x: "just a test..."
+##testlam = lambda x: "just a test..."
 
 def incid_ref_press(p_d, gamma_inc) -> "p_inc":
     """Calculate DNVGL-ST-F101 «incidental reference pressure». 
@@ -149,54 +150,73 @@ def press_contain_unity(p_cont_res_uty, p_lt_uty,
     return p_cont_uty
 
 
-# def press_contain_unity(p_li, p_e,
-#                         p_b, gamma_m, gamma_SCPC,
-#                         p_lt, alpha_spt, 
-#                         p_mpt, alpha_U, alpha_mpt, long_op=False) -> "p_cont_uty":
-#     """Pressure containment unity check in accordance with DNVGL-ST-F101.
+def press_contain_overall(p_d,  
+        D, t, t_corr, t_fab,
+        h_l, h_ref, rho_cont, rho_water,
+        SMYS, SMTS, T, material, f_ytemp=None, p_t=None, rho_t=None,
+        gamma_m=None, limit_state="ULS",
+        gamma_SCPC=None, alpha_spt=None, alpha_mpt=None, SC="medium",
+        gamma_inc=1.1, alpha_U=None,  alpha_U_loading="other", 
+        g=9.81, ret="unity" ):
+    p_inc = incid_ref_press(p_d, gamma_inc)
+    p_li = local_incid_press(p_d, rho_cont, h_l, h_ref, gamma_inc, g)
+    p_e = external_pressure(h_l, rho_water, g)
+    f_y = char_mat_strength(SMYS, T, material, f_ytemp, alpha_U)
+    if gamma_m is None:
+        gamma_m = factor.gamma_m_map[limit_state]
+    if gamma_SCPC is None:
+        gamma_SCPC = factor.gamma_SCPC_map[SC]
+    if alpha_spt is None:
+        alpha_spt = factor.alpha_spt_map[SC]
+    t_1 = t - t_corr - t_fab
+    t_min = t - t_fab
+    p_b = press_contain_resis(D, t_1, f_y, f_u=None,
+                        gamma_m=gamma_m, gamma_SCPC=gamma_SCPC)
 
-#     :param D: Pipe diameter       
-#     :param f_y: Pipe material yield stress
-#     :param f_u: Pipe material tensile strength
-#     :param t: Pipe wall thickness     
-#     :param p_li: local incidental internal pressure
-#     :param p_e: External pressure
-#     :param gamma_m: Material resistance factor, :math:`\gamma_m`
-#     :param gamma_SC: Safety class resistance factor, :math:`\gamma_{SC}`
-#     :returns: unity check value: (p_li-p_e) / min(...)
+    if p_t is None:
+        p_t = system_test_press(p_d, gamma_inc, alpha_spt)
+    if rho_t is None:
+        rho_t = rho_water
+    p_lt = local_test_press(p_t, rho_t, h_l, h_ref, p_e, alpha_spt, g)
 
-#     .. math::
-#         p_{li} - p_e \:\leq\: \min \left( 
-#         \frac{p_b(t_1)}{\gamma_m \,\cdot\, \gamma_{SC,PC}} ;
-#         \frac{p_{lt}}{\alpha_{spt}}  - p_e ;
-#         \frac{p_{mpt} \cdot \alpha_U}{\alpha_{mpt}}  \right) \\ 
-#         p_{lt} - p_e \:\leq\: \min \left( 
-#         \frac{p_b(t_1)}{\gamma_m \,\cdot\, \gamma_{SC,PC}} ;
-#         p_{mpt}  \right)
+    if alpha_U is None:
+        alpha_U = factor.alpha_U_map[alpha_U_loading]
+    if alpha_mpt is None:
+        alpha_mpt = factor.alpha_mpt_map[SC]
+    p_mpt = mill_test_press(D, t_min, SMYS, SMTS, alpha_U, alpha_mpt)
 
-#     Reference:
-#     DNVGL-ST-F101 (2017-12) 
-#         sec:5.4.2.1 eq:5.6 page:93 $p_{li}$
-#         sec:5.4.2.1 eq:5.7 page:94 p_lt
-
-#     Examples:    
-#     >>> P_containment(660.e-3, 4.32e8, 5.136e8, 0.0199, 2.5e7, 2.5e6,
-#     ...                1.15, 1.138)
-#     """
-#     # _items = [press_contain_resis(D, t, f_y, f_u, gamma_m, gamma_SCPC)]
-#     # p_t = (p_d, gamma_inc, alpha_spt)
-#     # _items.append(local_test_press(p_t, rho_t, h_l, h_ref, p_e, alpha_spt, g))
-#     burst = p_b / gamma_m / gamma_SCPC
-#     systest = p_lt/alpha_spt - p_e
-#     milltest = p_mpt * alpha_U / alpha_mpt
-#     pdiff = p_li - p_e
-#     if long_op:
-#         unity_check = (pdiff/burst, pdiff/systest, pdiff/milltest)
-#     else:
-#         unity_check = pdiff / min(burst, systest, milltest)
-#     return unity_check
-
-
+    p_cont_res_uty = press_contain_resis_unity(p_li, p_e, p_b)
+    p_lt_uty = local_test_press_unity(p_li, p_e, p_lt)
+    p_mpt_uty = mill_test_press_unity(p_li, p_e, p_mpt)
+    p_cont_uty = press_contain_unity(p_cont_res_uty, p_lt_uty,
+                        p_mpt_uty)
+    if ret.lower()=="all":
+        return {
+            "p_inc": p_inc,
+            "p_li": p_li,
+            "p_e": p_e,
+            "f_y": f_y,
+            "gamma_m": gamma_m,
+            "gamma_SCPC": gamma_SCPC,
+            "alpha_spt": alpha_spt,
+            "t_1": t_1,
+            "t_min": t_min,
+            "p_b": p_b,
+            "p_t": p_t,
+            "rho_t": rho_t,
+            "p_lt": p_lt,
+            "alpha_U": alpha_U,
+            "alpha_mpt": alpha_mpt,
+            "p_mpt": p_mpt,
+            "p_cont_res_uty": p_cont_res_uty,
+            "p_lt_uty": p_lt_uty,
+            "p_mpt_uty": p_mpt_uty,
+            "p_cont_uty": p_cont_uty,
+        }
+    elif ret.lower()=="unity":
+        return p_cont_uty
+    else:
+        return p_cont_uty <= 1.0
 
 
 
@@ -204,3 +224,24 @@ def press_contain_unity(p_cont_res_uty, p_lt_uty,
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True, optionflags=doctest.ELLIPSIS)
+    parameters = {
+        "alpha_U": 1.0,
+        "D": 0.6176,
+        "g": 9.81,
+        "gamma_inc": 1.1,
+        "h_ref": 30.,
+        "material": "CMn",
+        "p_d": 240e5, 
+        "rho_cont": 275.,
+        "rho_water": 1027.,
+        "rho_t": 1027.,
+        "SC": "medium",
+        "SMYS": 450.e6,
+        "SMTS": 535.e6,
+        "t": 0.0212,
+        "t_corr": 0.0005,
+        "t_fab": 0.001,
+        "T": 60,
+    }
+    p_cont_overall = press_contain_overall(ret="all", **parameters)
+    print("press_contain_overall=", p_cont_overall)
