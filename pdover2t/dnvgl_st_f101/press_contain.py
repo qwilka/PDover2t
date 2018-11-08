@@ -1,5 +1,7 @@
 import math
 
+import numpy as np
+
 from . import factor
 from .material import char_mat_strength
 
@@ -146,7 +148,10 @@ def mill_test_press_unity(p_li, p_e, p_mpt) -> "p_mpt_uty":
 
 def press_contain_unity(p_cont_res_uty, p_lt_uty,
                         p_mpt_uty) -> "p_cont_uty":
-    p_cont_uty = min(p_cont_res_uty, p_lt_uty, p_mpt_uty)
+    try:
+        p_cont_uty = min(p_cont_res_uty, p_lt_uty, p_mpt_uty)
+    except ValueError: # ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+        p_cont_uty = np.minimum(p_cont_res_uty, p_lt_uty, p_mpt_uty)
     return p_cont_uty
 
 
