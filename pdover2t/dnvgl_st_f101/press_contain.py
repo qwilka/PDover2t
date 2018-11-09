@@ -162,7 +162,7 @@ def press_contain_overall(p_d,
         gamma_m=None, limit_state="ULS",
         gamma_SCPC=None, alpha_spt=None, alpha_mpt=None, SC="medium",
         gamma_inc=1.1, alpha_U=None,  alpha_U_loading="other", 
-        g=9.81, ret="unity" ):
+        g=9.81, ret="unity" ) -> "p_cont_XXX":
     p_inc = incid_ref_press(p_d, gamma_inc)
     p_li = local_incid_press(p_d, rho_cont, h_l, h_ref, gamma_inc, g)
     p_e = external_pressure(h_l, rho_water, g)

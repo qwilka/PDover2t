@@ -3,7 +3,7 @@ import logging
 import numpy as np
 
 import pdover2t
-from pflacs import Loadcase
+from pflacs import Loadcase, CallNode
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)  # logging.DEBUG 
@@ -63,8 +63,7 @@ print(_uty)
 #         _func = getattr(self, name)
 #         self.primfunc = _func
 
-# lc1_pcont = ExNode("ExNode: lc1 press contain", parent=lc1, 
-#             data={"desc": "Group lc1 pressure contain calcs."}) 
+
 
 lc1_pcont = Loadcase("GROUP: lc1 press contain", parent=lc1, 
             data={"desc": "Group lc1 pressure contain calcs."}) 
@@ -74,6 +73,10 @@ _uty = lc1_pcont.press_contain_overall(ret="unity", rho_cont=200)
 print("lc1_pcont (rho_cont=200) ", _uty)
 
 lc1_pcont.p_cont_uty = lc1_pcont.press_contain_overall(ret="unity", rho_cont=100)
+
+
+lc2_pcont = CallNode("CallNode: lc2 press contain", parent=lc2, 
+            data={"desc": "Group lc2 pressure contain calcs."}) 
 
 treedict = basecase.to_treedict()
 import pickle
