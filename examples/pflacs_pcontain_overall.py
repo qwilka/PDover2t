@@ -76,7 +76,10 @@ lc1_pcont.p_cont_uty = lc1_pcont.press_contain_overall(ret="unity", rho_cont=100
 
 
 lc2_pcont = CallNode("CallNode: lc2 press contain", parent=lc2, 
-            data={"desc": "Group lc2 pressure contain calcs."}) 
+            data={"desc": "Group lc2 pressure contain calcs."},
+            callfunc="press_contain_overall") 
+lc2_pcont.rho_cont = np.linspace(100,1000,10) 
+lc2_pcont()
 
 treedict = basecase.to_treedict()
 import pickle
