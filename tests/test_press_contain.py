@@ -1,6 +1,6 @@
 import unittest
 
-from pdover2t.dnvgl_st_f101.press_contain import press_contain_overall
+from pdover2t.dnvgl_st_f101.press_contain import press_contain_all
 
 
 parameters = {
@@ -27,12 +27,12 @@ parameters = {
 
 class BasicTests(unittest.TestCase):
 
-    def test_press_contain_overall_unity(self):
-        retVal = press_contain_overall(ret="unity", **parameters)
+    def test_press_contain_all_unity(self):
+        retVal = press_contain_all(ret="unity", **parameters)
         self.assertAlmostEqual(retVal, 0.8375219, places=4)
 
-    def test_press_contain_overall_all(self):
-        retVal = press_contain_overall(ret="all", **parameters)
+    def test_press_contain_all_all(self):
+        retVal = press_contain_all(ret="all", **parameters)
         self.assertAlmostEqual(retVal['p_inc'], 26400000.00000, places=2)
         self.assertAlmostEqual(retVal['p_li'], 27398167.5000, places=2)
         self.assertAlmostEqual(retVal['p_e'], -3425455.80000, places=2)

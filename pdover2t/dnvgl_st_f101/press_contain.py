@@ -155,7 +155,7 @@ def press_contain_unity(p_cont_res_uty, p_lt_uty,
     return p_cont_uty
 
 
-def press_contain_overall(p_d,  
+def press_contain_all(p_d,  
         D, t, t_corr, t_fab,
         h_l, h_ref, rho_cont, rho_water,
         SMYS, SMTS, T, material, f_ytemp=None, p_t=None, rho_t=None,
