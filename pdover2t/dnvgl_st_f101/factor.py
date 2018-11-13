@@ -15,6 +15,11 @@ gamma_SCPC_map = {
     "medium": 1.138,
     "high": 1.308,
 }
+gamma_SCLB_map = {
+    "low": 1.04,
+    "medium": 1.14,
+    "high": 1.26,
+}
 
 # Reference: DNVGL-ST-F101 (2017-12) table:5.3 sec:5.3.3.6 page:90
 alpha_U_map = {

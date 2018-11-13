@@ -53,18 +53,6 @@ print(_uty)
 
 
 
-# class ExNode(Loadcase):
-#     def __init__(self, name=None, parent=None, parameters=None, pyfile=None,
-#                 data=None, treedict=None):
-#         super().__init__(name, parent, data, treedict)
-#         self.primfunc = None
-#     def __call__(self, *args, **kwargs):
-#         return self.primfunc(*args, **kwargs)
-#     def set_primfunc(self, name):
-#         _func = getattr(self, name)
-#         self.primfunc = _func
-
-
 
 lc1_pcont = Loadcase("GROUP: lc1 press contain", parent=lc1, 
             data={"desc": "Group lc1 pressure contain calcs."}) 
