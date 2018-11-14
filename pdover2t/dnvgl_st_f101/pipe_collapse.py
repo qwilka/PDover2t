@@ -54,7 +54,7 @@ def p_c_zerofunc(p_c, p_el, p_p, O_0, D, t):
 def p_c_fprime(p_c, p_el, p_p, O_0, D, t):
     return 3*p_c**2 - 2*p_c*p_el - p_p**2 - p_el*p_p**O_0*D/t
 
-def char_collapse_pressure(p_c_0, p_el, p_p, O_0, D, t) -> "p_c":
+def char_collapse_pressure(p_el, p_p, O_0, D, t, p_c_0=1.e5) -> "p_c":
     p_c = scipy.optimize.newton(p_c_zerofunc, p_c_0, p_c_fprime,
         args=(p_el, p_p, O_0, D, t))
     return p_c
@@ -63,7 +63,7 @@ def char_collapse_pressure(p_c_0, p_el, p_p, O_0, D, t) -> "p_c":
 
 def pipe_collapse_unity(p_e, p_c, 
         gamma_m=None, limit_state="ULS", gamma_SCLB=None, SC="medium",
-        p_min=0) -> "pipe_collapse_uty":
+        p_min=0) -> "pipe_colpse_uty":
     """Calculate pipe collapse unity value.
     Local buckling – system collapse (external over pressure only).
     Reference:
@@ -74,20 +74,31 @@ def pipe_collapse_unity(p_e, p_c,
         gamma_m = factor.gamma_m_map[limit_state]
     if gamma_SCLB is None:
         gamma_SCLB = factor.gamma_SCLB_map[SC]
-    pipe_collapse_uty = p_c / (gamma_m * gamma_SCLB) / (p_e - p_min)
-    return pipe_collapse_uty
+    pipe_colpse_uty = (p_e - p_min) * gamma_m * gamma_SCLB / p_c 
+    return pipe_colpse_uty
 
 
 
 
 if __name__ == "__main__":
-    p_c_0 = 1025*9.81*10
-    D = D_max = D_min = 10 * 0.0254
-    t = 0.0254
-    f_y = 450e6
+    p_c_0 = 1025*9.81*1
+    t = 0.0212
+    t_corr = 0.0005
+    t_fab = 0.001
+    t_1 = t - t_corr - t_fab 
+    D = 0.660
+    D_max = D
+    D_min = D
+    SMYS = 450e6
+    f_y =  SMYS - 6e6
     alpha_fab = 1.00
-    p_el = pipe_char_elastic_pressure(t, D, nu=0.3, E=207.*10**9)
-    p_p = pipe_char_plastic_pressure(t, D, f_y, alpha_fab)
+    h_l = -410.
+    rho_water = 1027.
+    p_e = rho_water*9.81*abs(h_l)
+    p_el = pipe_char_elastic_pressure(t_1, D, nu=0.3, E=207.*10**9)
+    p_p = pipe_char_plastic_pressure(t_1, D, f_y, alpha_fab)
     O_0 = pipe_ovality(D, D_max, D_min)
-    p_c = char_collapse_pressure(p_c_0, p_el, p_p, O_0, D, t)
+    p_c = char_collapse_pressure(p_el, p_p, O_0, D, t_1, p_c_0=p_c_0)
     print("p_c=", p_c)
+    pipe_colpse_uty = pipe_collapse_unity(p_e, p_c)
+    print("pipe_colpse_uty=", pipe_colpse_uty)

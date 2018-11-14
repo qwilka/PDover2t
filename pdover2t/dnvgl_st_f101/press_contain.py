@@ -88,19 +88,19 @@ def local_test_press(p_t, rho_t, h_l, h_ref, p_e=None, alpha_spt=None,
     p_lt = local_incid_press(p_t, rho_t, h_l, h_ref, g)
     if alpha_spt:
         p_lt = p_lt / alpha_spt
-    if p_e:
+    if p_e is not None:
         p_lt = p_lt - p_e
     return p_lt
 
 def local_test_press_unity(p_li, p_e, p_lt) -> "p_lt_uty":
-    p_lt_uty = p_lt / (p_li - p_e)
+    p_lt_uty = (p_li - p_e) / p_lt
     return p_lt_uty
 
 
 def external_pressure(h_l, rho_water, g=9.81) -> "p_e":
     """Water pressure, external to pipe.
     """
-    return h_l * rho_water * g
+    return abs(h_l) * rho_water * g
 
 
 #def press_contain_resis(D, t, f_y, f_u=None, gamma_m=None, gamma_SCPC=None):
@@ -123,7 +123,7 @@ def press_contain_resis(D, t, f_y, f_u=None,
     return p_b
 
 def press_contain_resis_unity(p_li, p_e, p_b) -> "p_cont_res_uty":
-    p_cont_res_uty = p_b / (p_li - p_e)
+    p_cont_res_uty = (p_li - p_e) / p_b
     return p_cont_res_uty
 
 
@@ -142,16 +142,16 @@ def mill_test_press(D, t_min, SMYS, SMTS,
 
 
 def mill_test_press_unity(p_li, p_e, p_mpt) -> "p_mpt_uty":
-    p_mpt_uty = p_mpt / (p_li - p_e)
+    p_mpt_uty = (p_li - p_e) / p_mpt
     return p_mpt_uty
 
 
 def press_contain_unity(p_cont_res_uty, p_lt_uty,
                         p_mpt_uty) -> "p_cont_uty":
     try:
-        p_cont_uty = min(p_cont_res_uty, p_lt_uty, p_mpt_uty)
+        p_cont_uty = max(p_cont_res_uty, p_lt_uty, p_mpt_uty)
     except ValueError: # ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
-        p_cont_uty = np.minimum(p_cont_res_uty, p_lt_uty, p_mpt_uty)
+        p_cont_uty = np.maximum(p_cont_res_uty, p_lt_uty, p_mpt_uty)
     return p_cont_uty
 
 
@@ -227,14 +227,16 @@ def press_contain_all(p_d,
 
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod(verbose=True, optionflags=doctest.ELLIPSIS)
+    #import doctest
+    #doctest.testmod(verbose=True, optionflags=doctest.ELLIPSIS)
     parameters = {
         "alpha_U": 1.0,
-        "D": 0.6176,
+        "D": 0.660,
         "g": 9.81,
         "gamma_inc": 1.1,
+        "gamma_SCPC": 1.138,
         "h_ref": 30.,
+        "h_l": 0.,
         "material": "CMn",
         "p_d": 240e5, 
         "rho_cont": 275.,
@@ -248,5 +250,6 @@ if __name__ == "__main__":
         "t_fab": 0.001,
         "T": 60,
     }
+    #parameters["h_l"] = np.array([-340., -300, 0])
     p_cont_overall = press_contain_all(ret="all", **parameters)
     print("press_contain_overall=", p_cont_overall)
