@@ -63,7 +63,7 @@ def char_collapse_pressure(p_el, p_p, O_0, D, t, p_c_0=1.e5) -> "p_c":
 
 def pipe_collapse_unity(p_e, p_c, p_min=0,
         gamma_m=None, limit_state="ULS", gamma_SCLB=None, SC="medium"
-        ) -> "pipe_colpse_uty":
+        ) -> "pipe_collapse_uty":
     """Calculate pipe collapse unity value.
     Local buckling – system collapse (external over pressure only).
     Reference:
@@ -74,8 +74,8 @@ def pipe_collapse_unity(p_e, p_c, p_min=0,
         gamma_m = factor.gamma_m_map[limit_state]
     if gamma_SCLB is None:
         gamma_SCLB = factor.gamma_SCLB_map[SC]
-    pipe_colpse_uty = (p_e - p_min) * gamma_m * gamma_SCLB / p_c 
-    return pipe_colpse_uty
+    pipe_collapse_uty = (p_e - p_min) * gamma_m * gamma_SCLB / p_c 
+    return pipe_collapse_uty
 
 
 
@@ -100,5 +100,5 @@ if __name__ == "__main__":
     O_0 = pipe_ovality(D, D_max, D_min)
     p_c = char_collapse_pressure(p_el, p_p, O_0, D, t_1, p_c_0=p_c_0)
     print("p_c=", p_c)
-    pipe_colpse_uty = pipe_collapse_unity(p_e, p_c)
-    print("pipe_colpse_uty=", pipe_colpse_uty)
+    pipe_collapse_uty = pipe_collapse_unity(p_e, p_c)
+    print("pipe_colpse_uty=", pipe_collapse_uty)

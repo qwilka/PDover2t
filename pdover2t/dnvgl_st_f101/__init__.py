@@ -22,5 +22,5 @@ from .pipe_collapse import pipe_ovality
 from .pipe_collapse import char_collapse_pressure
 from .pipe_collapse import pipe_collapse_unity
 
-from .propagation_buckling import prop_char_pressure
-from .propagation_buckling import prop_buckling_unity
+from .propagating_buckle import prop_char_pressure
+from .propagating_buckle import prop_buck_unity
