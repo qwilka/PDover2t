@@ -1,4 +1,4 @@
-import math
+#import math
 
 import numpy as np
 import scipy.optimize
@@ -61,9 +61,9 @@ def char_collapse_pressure(p_el, p_p, O_0, D, t, p_c_0=1.e5) -> "p_c":
 
 
 
-def pipe_collapse_unity(p_e, p_c, 
-        gamma_m=None, limit_state="ULS", gamma_SCLB=None, SC="medium",
-        p_min=0) -> "pipe_colpse_uty":
+def pipe_collapse_unity(p_e, p_c, p_min=0,
+        gamma_m=None, limit_state="ULS", gamma_SCLB=None, SC="medium"
+        ) -> "pipe_colpse_uty":
     """Calculate pipe collapse unity value.
     Local buckling – system collapse (external over pressure only).
     Reference:

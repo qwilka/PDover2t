@@ -15,3 +15,12 @@ from .press_contain import mill_test_press_unity
 from .press_contain import press_contain_unity
 from .press_contain import press_contain_all
 from .material import char_mat_strength
+
+from .pipe_collapse import pipe_char_elastic_pressure
+from .pipe_collapse import pipe_char_plastic_pressure
+from .pipe_collapse import pipe_ovality
+from .pipe_collapse import char_collapse_pressure
+from .pipe_collapse import pipe_collapse_unity
+
+from .propagation_buckling import prop_char_pressure
+from .propagation_buckling import prop_buckling_unity
