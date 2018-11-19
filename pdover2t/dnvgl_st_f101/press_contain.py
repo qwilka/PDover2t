@@ -1,5 +1,7 @@
 import math
 
+import numpy as np
+
 from . import factor
 from .material import char_mat_strength
 
