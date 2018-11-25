@@ -1,5 +1,7 @@
+import logging
 import math
 
+logger = logging.getLogger(__name__)
 
 # Reference: DNVGL-ST-F101 (2017-12) table:5.1 sec:5.3.2.3 page:87
 gamma_m_map = {
@@ -47,3 +49,24 @@ def calc_alpha_mpt(gamma_m, gamma_SCPC):
         table:5.8 sec:5.4.2.1 page:94
     """
     return gamma_m * gamma_SCPC * 0.96 *(math.sqrt(3)/2)
+
+
+# def stab_gamma_SC_lookup(SC, soil_type):
+#     """lookup gamma_SC for on-bottom stability check.
+
+#     Reference:
+#     DNVGL-RP-F109 (2017-05) 
+#         table:3.5 sec:3.6.3 page:31
+#     """
+#     gamma_SC = None
+#     if soil_type.lower() in ["sand", "rock", "gravel", "sand and rock"]:
+#         gamma_SC = {"low": 0.98, 
+#                     "normal": 1.32, 
+#                     "high": 1.67}.get(SC.lower(), None)
+#     elif soil_type.lower() in ["clay"]:
+#         gamma_SC = {"low": 1.00, 
+#                     "normal": 1.40, 
+#                     "high": 1.83}.get(SC.lower(), None)
+#     if gamma_SC is None:
+#         logger.error("stab_gamma_SC_lookup: cannot resolve args «SC»=«%s» «soil_type»=«%s»" % (SC, soil_type))
+#     return gamma_SC

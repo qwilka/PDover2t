@@ -1,6 +1,7 @@
 
 import numpy as np
 
+#from . import factor
 from ..pipe_properties import pipe_physical_props
 
 __all__ = [
@@ -13,6 +14,8 @@ def floatation_stability(W_sub, b, gamma_w=1.1) -> "float_stab_uty":
     Reference:
     DNVGL-ST-F101 (2017-12) 
         sec:5.5.5.3, eq:5.42, page:113 
+    DNVGL-RP-F109 (2017-05) 
+        sec:3.2, eq:3.1, page:12 
     """
     float_stab_uty = gamma_w * b / (W_sub + b)
     return float_stab_uty
