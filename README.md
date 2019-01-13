@@ -1,6 +1,6 @@
 # PDover2t  
 
-Computational subsea pipeline engineering.
+`pdover2t` is a Python package for computational subsea pipeline engineering.
 
 Development of `PDover2t` is currently in alpha phase. Python versions 3.6+ only are supported.
 
