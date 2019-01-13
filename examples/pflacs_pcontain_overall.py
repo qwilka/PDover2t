@@ -33,49 +33,58 @@ parameters = {
     "T": 60,
 }
 
+vnpkl_file = "/home/develop/engineering/src/scratch/pflacs_test/pf_test.vnpkl"
+
 basecase = Loadcase("Base case", parameters=parameters,
-                data={"desc": "This is the base-case loadcase."})
+                data={"desc": "This is the base-case loadcase."},
+                vnpkl_fpath=vnpkl_file)
 lc1 = Loadcase("Load case 1", parent=basecase, 
+            data={"desc": "This is the 1st child loadcase."})
+gc1 = Loadcase("gchild lc1", parent=lc1, 
             data={"desc": "This is the 1st child loadcase."})
 lc2 = Loadcase("Load case 2", parent=basecase, 
             data={"desc": "This is the 2nd child loadcase."})
 
-basecase.plugin_func("press_contain_unity", "pdover2t.dnvgl_st_f101")
-basecase.plugin_func("press_contain_all", "pdover2t.dnvgl_st_f101")
-_uty = lc1.press_contain_all(ret="unity")
-lc1.add_param("p_cont_uty", _uty)
-print(_uty)
+#basecase.plugin_func("press_contain_unity", "pdover2t.dnvgl_st_f101")
+basecase.plugin_func("pressure_containment_all", "pdover2t.dnvgl_st_f101")
+
 lc1.rho_cont = np.linspace(100,1000,10) 
 print("lc1.rho_cont", lc1.rho_cont) 
-_uty = lc1.press_contain_all(ret="unity")
-print(_uty)
+resdict = lc1.pressure_containment_all()
+print(resdict["p_cont_uty"])
 
+# _uty = lc1.press_contain_unity()
+# lc1.add_param("p_cont_uty", _uty)
+# print(_uty)
 
 
 
 
 lc1_pcont = Loadcase("GROUP: lc1 press contain", parent=lc1, 
             data={"desc": "Group lc1 pressure contain calcs."}) 
-_uty = lc1_pcont.press_contain_all(ret="unity", rho_cont=100)
+_uty = lc1_pcont.pressure_containment_all(rho_cont=100)
 print("lc1_pcont (rho_cont=100) ", _uty)
-_uty = lc1_pcont.press_contain_all(ret="unity", rho_cont=200)
-print("lc1_pcont (rho_cont=200) ", _uty)
+# _uty = lc1_pcont.press_contain_all(ret="unity", rho_cont=200)
+# print("lc1_pcont (rho_cont=200) ", _uty)
 
-lc1_pcont.p_cont_uty = lc1_pcont.press_contain_all(ret="unity", rho_cont=100)
+# lc1_pcont.p_cont_uty = lc1_pcont.press_contain_all(ret="unity", rho_cont=100)
 
 
 lc2_pcont = CallNode("CallNode: lc2 press contain", parent=lc2, 
             data={"desc": "Group lc2 pressure contain calcs."},
-            callfunc="press_contain_all") 
+            callfunc="pressure_containment_all") 
 lc2_pcont.rho_cont = np.linspace(100,1000,10) 
 lc2_pcont()
 
-cc = lc2_pcont.call_child(call=True, T=22)
+# cc = lc2_pcont.call_child(call=True, T=22)
 
-treedict = basecase.to_treedict()
-import pickle
-#import dill as pickle
-pkl_file = "/home/develop/engineering/src/scratch/pflacs_test/pf_test.pkl"
-with open(pkl_file, "wb") as pf:
-    #pickle.dump(basecase, pf, byref=True)
-    pickle.dump(treedict, pf)
+# treedict = basecase.to_treedict()
+# import pickle
+# #import dill as pickle
+# pkl_file = "/home/develop/engineering/src/scratch/pflacs_test/pf_test.pkl"
+# with open(pkl_file, "wb") as pf:
+#     #pickle.dump(basecase, pf, byref=True)
+#     pickle.dump(treedict, pf)
+
+#basecase.savefile(vnpkl_file)
+basecase.savefile()

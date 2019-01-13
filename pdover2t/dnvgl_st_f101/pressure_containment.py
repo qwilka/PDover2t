@@ -5,7 +5,13 @@ import numpy as np
 from . import factor
 from .material import char_mat_strength
 
-##testlam = lambda x: "just a test..."
+
+__all__ = [ "pressure_containment_all", 
+            "press_contain_unity" ]
+
+
+
+
 
 def incid_ref_press(p_d, gamma_inc) -> "p_inc":
     """Calculate DNVGL-ST-F101 «incidental reference pressure». 
@@ -27,6 +33,8 @@ def incid_ref_press(p_d, gamma_inc) -> "p_inc":
 
 def system_test_press(p_d, gamma_inc, alpha_spt) -> "p_t":
     """Calculate DNVGL-ST-F101 «system test pressure». 
+
+    (system_test_press)
 
     :param p_d: $p_d$ design pressure
     :param gamma_inc: $\gamma_{inc}$ incidental to design pressure ratio
@@ -80,10 +88,12 @@ def local_incid_press(p_d, rho_cont,
 def local_test_press(p_t, rho_t, h_l, h_ref, p_e=None, alpha_spt=None,
                         g=9.81) -> "p_lt":
     """Calculate local test pressure.
+    
     Reference:
     DNVGL-ST-F101 (2017-12) 
         sec:4.2.2.2 eq:4.2 page:67 $p_{lt}$
         sec:5.4.2.1 eq:5.6 page:93 $p_{li}$
+    (local_test_press)
     """
     p_lt = local_incid_press(p_t, rho_t, h_l, h_ref, g)
     if alpha_spt:
@@ -93,6 +103,10 @@ def local_test_press(p_t, rho_t, h_l, h_ref, p_e=None, alpha_spt=None,
     return p_lt
 
 def local_test_press_unity(p_li, p_e, p_lt) -> "p_lt_uty":
+    """Local test pressure unity
+
+    (local_test_press_unity)
+    """
     p_lt_uty = (p_li - p_e) / p_lt
     return p_lt_uty
 
@@ -103,10 +117,11 @@ def external_pressure(h_l, rho_water, g=9.81) -> "p_e":
     return abs(h_l) * rho_water * g
 
 
-#def press_contain_resis(D, t, f_y, f_u=None, gamma_m=None, gamma_SCPC=None):
 def press_contain_resis(D, t, f_y, f_u=None,
                         gamma_m=None, gamma_SCPC=None) -> "p_b":
     """Pressure containment resistance in accordance with DNVGL-ST-F101.
+
+    (press_contain_resis)
 
     Reference:
     DNVGL-ST-F101 (2017-12) 
@@ -122,17 +137,24 @@ def press_contain_resis(D, t, f_y, f_u=None,
         p_b = p_b / gamma_m / gamma_SCPC
     return p_b
 
+
 def press_contain_resis_unity(p_li, p_e, p_b) -> "p_cont_res_uty":
+    """Pressure containment resistance unity
+
+    (press_contain_resis_unity)
+    """
     p_cont_res_uty = (p_li - p_e) / p_b
     return p_cont_res_uty
 
 
 def mill_test_press(D, t_min, SMYS, SMTS, 
                     alpha_U=None, alpha_mpt=None) -> "p_mpt":
-    """
+    """Mill test pressure
+
     Reference:
     DNVGL-ST-F101 (2017-12) 
         sec:7.5.1.2 eq:7.3 page:175 $p_{mpt}$
+    (mill_test_press)
     """
     k=1.15  # assuming end-cap effect applies
     p_mpt = k * (2*t_min)/(D-t_min) * min(SMYS*0.96, SMTS*0.84)
@@ -142,12 +164,20 @@ def mill_test_press(D, t_min, SMYS, SMTS,
 
 
 def mill_test_press_unity(p_li, p_e, p_mpt) -> "p_mpt_uty":
+    """Mill test pressure unity
+
+    (mill_test_press_unity)
+    """
     p_mpt_uty = (p_li - p_e) / p_mpt
     return p_mpt_uty
 
 
 def press_contain_unity(p_cont_res_uty, p_lt_uty,
                         p_mpt_uty) -> "p_cont_uty":
+    """Pressure containment unity
+
+    (press_contain_unity)
+    """
     try:
         p_cont_uty = max(p_cont_res_uty, p_lt_uty, p_mpt_uty)
     except ValueError: # ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
@@ -155,14 +185,14 @@ def press_contain_unity(p_cont_res_uty, p_lt_uty,
     return p_cont_uty
 
 
-def press_contain_all(p_d,  
+def pressure_containment_all(p_d,  
         D, t, t_corr, t_fab,
         h_l, h_ref, rho_cont, rho_water,
         SMYS, SMTS, T, material, f_ytemp=None, p_t=None, rho_t=None,
         gamma_m=None, limit_state="ULS",
         gamma_SCPC=None, alpha_spt=None, alpha_mpt=None, SC="medium",
         gamma_inc=1.1, alpha_U=None,  alpha_U_loading="other", 
-        g=9.81, ret="unity" ) -> "p_cont_all":
+        g=9.81) -> "{}":
     p_inc = incid_ref_press(p_d, gamma_inc)
     p_li = local_incid_press(p_d, rho_cont, h_l, h_ref, gamma_inc, g)
     p_e = external_pressure(h_l, rho_water, g)
@@ -195,33 +225,29 @@ def press_contain_all(p_d,
     p_mpt_uty = mill_test_press_unity(p_li, p_e, p_mpt)
     p_cont_uty = press_contain_unity(p_cont_res_uty, p_lt_uty,
                         p_mpt_uty)
-    if ret.lower()=="all":
-        return {
-            "p_inc": p_inc,
-            "p_li": p_li,
-            "p_e": p_e,
-            "f_y": f_y,
-            "gamma_m": gamma_m,
-            "gamma_SCPC": gamma_SCPC,
-            "alpha_spt": alpha_spt,
-            "t_1": t_1,
-            "t_min": t_min,
-            "p_b": p_b,
-            "p_t": p_t,
-            "rho_t": rho_t,
-            "p_lt": p_lt,
-            "alpha_U": alpha_U,
-            "alpha_mpt": alpha_mpt,
-            "p_mpt": p_mpt,
-            "p_cont_res_uty": p_cont_res_uty,
-            "p_lt_uty": p_lt_uty,
-            "p_mpt_uty": p_mpt_uty,
-            "p_cont_uty": p_cont_uty,
-        }
-    elif ret.lower()=="unity":
-        return p_cont_uty
-    else:
-        return p_cont_uty <= 1.0
+
+    return {
+        "p_inc": p_inc,
+        "p_li": p_li,
+        "p_e": p_e,
+        "f_y": f_y,
+        "gamma_m": gamma_m,
+        "gamma_SCPC": gamma_SCPC,
+        "alpha_spt": alpha_spt,
+        "t_1": t_1,
+        "t_min": t_min,
+        "p_b": p_b,
+        "p_t": p_t,
+        "rho_t": rho_t,
+        "p_lt": p_lt,
+        "alpha_U": alpha_U,
+        "alpha_mpt": alpha_mpt,
+        "p_mpt": p_mpt,
+        "p_cont_res_uty": p_cont_res_uty,
+        "p_lt_uty": p_lt_uty,
+        "p_mpt_uty": p_mpt_uty,
+        "p_cont_uty": p_cont_uty,
+    }
 
 
 
@@ -251,5 +277,5 @@ if __name__ == "__main__":
         "T": 60,
     }
     #parameters["h_l"] = np.array([-340., -300, 0])
-    p_cont_overall = press_contain_all(ret="all", **parameters)
-    print("press_contain_overall=", p_cont_overall)
+    p_cont_overall = pressure_containment_all(**parameters)
+    print("pressure_containment_all=", p_cont_overall)

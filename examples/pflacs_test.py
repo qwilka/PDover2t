@@ -82,10 +82,10 @@ print("p_cont_uty=", basecase.p_cont_uty)
 basecase.plugin_func("press_contain_overall", "pdover2t.dnvgl_st_f101")
 print("p_cont_overall=", basecase.press_contain_overall(ret="all"))
 
-treedict = basecase.to_treedict()
-import pickle
-#import dill as pickle
-pkl_file = "/home/develop/engineering/src/scratch/pflacs_test/pf_test.pkl"
-with open(pkl_file, "wb") as pf:
-    #pickle.dump(basecase, pf, byref=True)
-    pickle.dump(treedict, pf)
+# treedict = basecase.to_treedict()
+# import pickle
+# #import dill as pickle
+# pkl_file = "/home/develop/engineering/src/scratch/pflacs_test/pf_test.pkl"
+# with open(pkl_file, "wb") as pf:
+#     #pickle.dump(basecase, pf, byref=True)
+#     pickle.dump(treedict, pf)
