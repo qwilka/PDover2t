@@ -5,7 +5,7 @@ import logging
 import numpy as np
 
 import pdover2t
-from pflacs import Premise, CallNode
+from pflacs import Premise, Calc
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)  # logging.DEBUG 
@@ -31,12 +31,10 @@ pipeline_params = {
     "ast_desc": "P-01 gas pipeline",
     "ast_tag": "P-01",
     "ast_uri": "IRL:PFLACS:P-01",
-    "D": 0.6176,
-    "h_l": -340.,
+    "h_l": [-250., -440.],
     "material": "CMn",
     "SMYS": 450.e6,
     "SMTS": 535.e6,
-    "t": 0.0212,
     "t_corr": 0.0005,
     "t_fab": 0.001,
 }
@@ -81,15 +79,62 @@ vnpkl_file = "/home/develop/engineering/src/scratch/pflacs_test/IRL--PFLACS--P-0
 
 
 rootnode = Premise("Pflacs oil&gas field, subsea", 
-                parameters={ **field_params, 
+                parameters={ 
+                    **field_params, 
                     **constants,
-                    **env_params
+                    **env_params,
                 },
                 data={"desc": "Top-level field details, environmental and universal parameters."},
                 vnpkl_fpath=vnpkl_file)
 P01 = Premise("P-01 gas pipeline", 
                 parent=rootnode,
-                parameters=env_params,
-                data={"desc": "Environmental parameters."})
+                parameters={
+                    **pipeline_params,
+                    **process_params,
+                    **design_params,
+                },
+                data={"desc": "P-01 gas pipeline."})
+
+P01_1 = Premise("P-01 section 1, KP 0-0.3", 
+                parent=P01,
+                parameters={
+                    "KP": [0, 0.3],
+                    "h_l": -370,
+                    "LC": 2,
+                    "SC": "high",
+                    "D": 0.6172 + 2*0.0242,
+                    "t": 0.0242,
+                },
+                data={"desc": "P-01 section 1, KP 0-0.3."})
+
+P01_2 = Premise("P-01 section 2, KP 0.3-15", 
+                parent=P01,
+                parameters={
+                    "KP": [0.3, 15.0],
+                    "h_l": -420,
+                    "LC": 1,
+                    "D": 0.6172 + 2*0.0242,
+                    "t": 0.0242,
+                },
+                data={"desc": "P-01 section 2, KP 0.3-15."})
+
+P01_3 = Premise("P-01 section 3, KP 15-79.7", 
+                parent=P01,
+                parameters={
+                    "KP": [15.0, 79.7],
+                    "LC": 1,
+                    "D": 0.6172 + 2*0.0214,
+                    "t": 0.0214,
+                },
+                data={"desc": "P-01 section 3, KP 15-79.7."})
+
+rootnode.plugin_func("pressure_containment_all", "pdover2t.dnvgl_st_f101")
+
+lc1 = Calc("Calc: lc2 press contain", parent=P01_1, 
+                parameters={
+                    "h_l": -370,
+                },
+                data={"desc": "Group lc2 pressure contain calcs."},
+                funcname="pressure_containment_all") 
 
 rootnode.savefile()
