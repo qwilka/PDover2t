@@ -7,7 +7,7 @@ import numpy as np
 import pdover2t
 from pflacs import Premise, Calc
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 logger.setLevel(logging.INFO)  # logging.DEBUG 
 lh = logging.StreamHandler()
 # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
