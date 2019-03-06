@@ -21,6 +21,35 @@ def floatation_stability(W_sub, b, gamma_w=1.1) -> "float_stab_uty":
     return float_stab_uty
 
 
+def absolute_lateral_stability(F_y, F_z, F_R, mu, W_sub, gamma_SC) -> "abs_lat_stab_uty":
+    """Absolute lateral stability unity check. 
+    Reference:
+    DNVGL-RP-F109 (2017-05) 
+        sec:3.6.1, eq:3.38, page:31 
+    """
+    abs_lat_stab_uty = gamma_SC * (F_y + mu*F_z) / (mu*W_sub + F_R)
+    return abs_lat_stab_uty
+
+
+def absolute_vertical_stability(F_z, W_sub, gamma_SC) -> "abs_vert_stab_uty":
+    """Absolute vertical stability unity check. 
+    Reference:
+    DNVGL-RP-F109 (2017-05) 
+        sec:3.6.1, eq:3.39, page:31 
+    """
+    abs_vert_stab_uty = gamma_SC * F_z / W_sub
+    return abs_vert_stab_uty
+
+def peak_horizontal_load(r_toty, rho_w, D, C_y, U, V) -> "F_y":
+    """Peak horizontal load for on-bottom stability check. 
+    Reference:
+    DNVGL-RP-F109 (2017-05) 
+        sec:3.6.4, eq:3.40, page:32 
+    """
+    F_y = r_toty * 0.5 * rho_w * D * C_y * (U + V)**2
+    return F_y
+
+
 
 if __name__ == "__main__":
     D = 0.3229

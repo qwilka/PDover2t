@@ -77,7 +77,7 @@ def local_incid_press(p_d, rho_cont,
         sec:4.2.2.2 eq:4.2 page:67 $p_{lt}$ 
 
     Example:    
-    #>>> local_incid_press(100.e-5, 1025, -125, 30)
+    >>> local_incid_press(100.e-5, 1025, -125, 30)
     1558563.751
     '''
     p_inc = p_d * gamma_inc
@@ -118,7 +118,7 @@ def external_pressure(h_l, rho_water, g=9.81) -> "p_e":
 
 
 def press_contain_resis(D, t, f_y, f_u=None,
-                        gamma_m=None, gamma_SCPC=None) -> "p_b":
+                        gamma_m=1.0, gamma_SCPC=1.0) -> "p_b":
     """Pressure containment resistance in accordance with DNVGL-ST-F101.
 
     (press_contain_resis)
@@ -132,9 +132,9 @@ def press_contain_resis(D, t, f_y, f_u=None,
         f_cb = min(f_y, f_u/1.15)
     else:
         f_cb = f_y
-    p_b = 2*t/(D-t) * f_cb * 2/math.sqrt(3)
-    if (gamma_m and gamma_SCPC):
-        p_b = p_b / gamma_m / gamma_SCPC
+    p_b = (2*t/(D-t) * f_cb * 2/math.sqrt(3)) / gamma_m / gamma_SCPC
+    # if (gamma_m and gamma_SCPC):
+    #     p_b = p_b / gamma_m / gamma_SCPC
     return p_b
 
 
@@ -188,21 +188,21 @@ def press_contain_unity(p_cont_res_uty, p_lt_uty,
 def pressure_containment_all(p_d,  
         D, t, t_corr, t_fab,
         h_l, h_ref, rho_cont, rho_water,
+        gamma_m, gamma_SCPC, alpha_U, alpha_spt, alpha_mpt, 
         SMYS, SMTS, T, material, f_ytemp=None, p_t=None, rho_t=None,
-        gamma_m=None, limit_state="ULS",
-        gamma_SCPC=None, alpha_spt=None, alpha_mpt=None, SC="medium",
-        gamma_inc=1.1, alpha_U=None,  alpha_U_loading="other", 
+        gamma_inc=1.1, 
         g=9.81) -> "{}":
     p_inc = incid_ref_press(p_d, gamma_inc)
     p_li = local_incid_press(p_d, rho_cont, h_l, h_ref, gamma_inc, g)
     p_e = external_pressure(h_l, rho_water, g)
-    f_y = char_mat_strength(SMYS, T, material, f_ytemp, alpha_U)
-    if gamma_m is None:
-        gamma_m = factor.gamma_m_map[limit_state]
-    if gamma_SCPC is None:
-        gamma_SCPC = factor.gamma_SCPC_map[SC]
-    if alpha_spt is None:
-        alpha_spt = factor.alpha_spt_map[SC]
+    # _alpha_U = factor.alpha_U_map(alpha_U)
+    f_y = char_mat_strength(SMYS, material, T, f_ytemp, alpha_U)
+    # if gamma_m is None:
+    #     gamma_m = factor.gamma_m_map[limit_state]
+    # if gamma_SCPC is None:
+    #     gamma_SCPC = factor.gamma_SCPC_map[SC]
+    # if alpha_spt is None:
+    #     alpha_spt = factor.alpha_spt_map[SC]
     t_1 = t - t_corr - t_fab
     t_min = t - t_fab
     p_b = press_contain_resis(D, t_1, f_y, f_u=None,
@@ -214,10 +214,10 @@ def pressure_containment_all(p_d,
         rho_t = rho_water
     p_lt = local_test_press(p_t, rho_t, h_l, h_ref, p_e, alpha_spt, g)
 
-    if alpha_U is None:
-        alpha_U = factor.alpha_U_map[alpha_U_loading]
-    if alpha_mpt is None:
-        alpha_mpt = factor.alpha_mpt_map[SC]
+    # if alpha_U is None:
+    #     alpha_U = factor.alpha_U_map[alpha_U_loading]
+    # if alpha_mpt is None:
+    #     alpha_mpt = factor.alpha_mpt_map[SC]
     p_mpt = mill_test_press(D, t_min, SMYS, SMTS, alpha_U, alpha_mpt)
 
     p_cont_res_uty = press_contain_resis_unity(p_li, p_e, p_b)

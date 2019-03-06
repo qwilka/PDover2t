@@ -4,6 +4,7 @@ import numpy as np
 import scipy.optimize
 
 from . import factor
+from .material import char_mat_strength
 
 __all__ = [
     "pipe_ovality",
@@ -12,6 +13,7 @@ __all__ = [
     "char_collapse_pressure_num",
     "char_collapse_pressure",
     "pipe_collapse_unity",
+    "pipe_collapse_all"
 ]
 
 # from .pipe_collapse import pipe_char_elastic_pressure
@@ -30,12 +32,16 @@ __all__ = [
 #     return (P_c-P_el)*(P_c**2-P_p**2) - P_c*P_el*P_p*f_o*D/t
 
 
-def pipe_ovality(D, D_max, D_min) -> "O_0":
+def pipe_ovality(D, D_max=None, D_min=None) -> "O_0":
     """Calculate pipe ovality.
     Reference:
     DNVGL-ST-F101 (2017-12) 
         sec:5.4.4.2 eq:5.14 page:96 $O_0$
     """
+    if D_max is None:
+        D_max = D
+    if D_min is None:
+        D_min = D
     O_0 = (D_max - D_min) / D
     if O_0 < 0.005:
         O_0 = 0.005
@@ -52,7 +58,7 @@ def pipe_char_elastic_pressure(t, D, nu=0.3, E=207.*10**9) -> "p_el":
     return p_el
 
 def pipe_char_plastic_pressure(t, D, f_y, alpha_fab) -> "p_p":
-    """Calculate p_el.
+    """Calculate characteristic plastic pressure p_p.
     Reference:
     DNVGL-ST-F101 (2017-12) 
         sec:5.4.4.2 eq:5.13 page:96 $p_p$
@@ -96,22 +102,48 @@ def char_collapse_pressure(p_el, p_p, O_0, D, t) -> "p_c":
     return p_c
 
 
-def pipe_collapse_unity(p_e, p_c, p_min=0,
-        gamma_m=None, limit_state="ULS", gamma_SCLB=None, SC="medium"
+def pipe_collapse_unity(p_e, p_c, gamma_m, gamma_SCLB, p_min=0
         ) -> "pipe_collapse_uty":
     """Calculate pipe collapse unity value.
     Local buckling – system collapse (external over pressure only).
     Reference:
     DNVGL-ST-F101 (2017-12) 
         sec:5.4.4.1 eq:5.10 page:95 $p_{lt}$
-    """
-    if gamma_m is None:
-        gamma_m = factor.gamma_m_map[limit_state]
-    if gamma_SCLB is None:
-        gamma_SCLB = factor.gamma_SCLB_map[SC]
+    """ 
+    # if gamma_m is None:
+    #     gamma_m = factor.gamma_m_map[limit_state]
+    # if gamma_SCLB is None:
+    #     gamma_SCLB = factor.gamma_SCLB_map[SC]
     pipe_collapse_uty = (p_e - p_min) * gamma_m * gamma_SCLB / p_c 
     return pipe_collapse_uty
 
+
+def external_pressure(depth, rho_water, g=9.81) -> "p_e":
+    p_e = abs(depth) * rho_water * g
+    return p_e
+
+def pipe_collapse_all(t, D, E, nu, SMYS, h_l, rho_water,
+        gamma_m, alpha_fab, alpha_U, gamma_SCLB, 
+        material=None, T=None, f_ytemp=None,  
+        D_max=None, D_min=None, p_min=0, g=9.81
+        ) -> "{}":
+    O_0 = pipe_ovality(D, D_max, D_min)
+    p_el = pipe_char_elastic_pressure(t, D, nu, E)
+    #_alpha_U = factor.alpha_U_map(alpha_U)
+    f_y = char_mat_strength(SMYS, material, T, f_ytemp, alpha_U)
+    #_alpha_fab = factor.alpha_fab_map(alpha_fab)
+    p_p = pipe_char_plastic_pressure(t, D, f_y, alpha_fab)
+    p_c = char_collapse_pressure(p_el, p_p, O_0, D, t)
+    p_e = external_pressure(abs(h_l), rho_water, g)
+    pipe_collapse_uty = pipe_collapse_unity(p_e, p_c, gamma_m, gamma_SCLB, p_min)
+    return {
+        "O_0": O_0,
+        "p_el": p_el,
+        "p_p": p_p,
+        "p_c": p_c,
+        "p_e": p_e,
+        "pipe_collapse_uty": pipe_collapse_uty,
+    }
 
 
 
