@@ -1,37 +1,41 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>API reference &#8212; PDover2t  documentation</title>
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/better.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="User Guide" href="user-guide.html" /> 
+    <link rel="prev" title="User Guide" href="user-guide.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="user-guide.html" title="User Guide"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PDover2t  documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+    <header id="pageheader"><h1><a href="index.html ">
+        PDover2t  documentation
+    </a></h1></header>
+  <div class="related top">
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="user-guide.html" title="Previous document">User Guide</a>
+        </li>
+    </ul>
+  </nav>
+  <nav id="breadcrumbs">
+    <ul>
+      <li><a href="index.html">PDover2t  documentation</a></li> 
+    </ul>
+  </nav>
+  </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -41,15 +45,180 @@
   <div class="section" id="module-pdover2t">
 <span id="api-reference"></span><h1>API reference<a class="headerlink" href="#module-pdover2t" title="Permalink to this headline">¶</a></h1>
 <p><cite>pdover2t</cite> computational subsea pipeline engineering.</p>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#test" id="id1">Test</a></li>
+<span class="target" id="module-pdover2t.dnvgl_st_f101"></span><span class="target" id="module-pdover2t.dnvgl_st_f101.pressure_containment"></span><dl class="function">
+<dt id="pdover2t.dnvgl_st_f101.pressure_containment.external_pressure">
+<code class="sig-prename descclassname">pdover2t.dnvgl_st_f101.pressure_containment.</code><code class="sig-name descname">external_pressure</code><span class="sig-paren">(</span><em class="sig-param">h_l</em>, <em class="sig-param">rho_water</em>, <em class="sig-param">g=9.81</em><span class="sig-paren">)</span> &#x2192; p_e<a class="reference internal" href="_modules/pdover2t/dnvgl_st_f101/pressure_containment.html#external_pressure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.dnvgl_st_f101.pressure_containment.external_pressure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Water pressure, external to pipe.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdover2t.dnvgl_st_f101.pressure_containment.incid_ref_press">
+<code class="sig-prename descclassname">pdover2t.dnvgl_st_f101.pressure_containment.</code><code class="sig-name descname">incid_ref_press</code><span class="sig-paren">(</span><em class="sig-param">p_d</em>, <em class="sig-param">gamma_inc</em><span class="sig-paren">)</span> &#x2192; p_inc<a class="reference internal" href="_modules/pdover2t/dnvgl_st_f101/pressure_containment.html#incid_ref_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.dnvgl_st_f101.pressure_containment.incid_ref_press" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate DNVGL-ST-F101 «incidental reference pressure».</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – design pressure <span class="math notranslate nohighlight">\((p_d)\)</span></p></li>
+<li><p><strong>gamma_inc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – incidental to design pressure ratio <span class="math notranslate nohighlight">\((\gamma_{inc})\)</span></p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>p_inc incidental reference pressure <span class="math notranslate nohighlight">\((p_{inc})\)</span></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+</dd>
+</dl>
+<p>Reference:
+DNVGL-ST-F101 (2017-12)</p>
+<blockquote>
+<div><p>eq:4.3 sec:4.2.2.2 page:67 <span class="math notranslate nohighlight">\((p_{inc})\)</span></p>
+</div></blockquote>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">incid_ref_press</span><span class="p">(</span><span class="mf">100e5</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+<span class="go">11000000.0</span>
+</pre></div>
 </div>
-<div class="section" id="test">
-<h2><a class="toc-backref" href="#id1">Test</a><a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h2>
-<p>this is testing</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdover2t.dnvgl_st_f101.pressure_containment.local_incid_press">
+<code class="sig-prename descclassname">pdover2t.dnvgl_st_f101.pressure_containment.</code><code class="sig-name descname">local_incid_press</code><span class="sig-paren">(</span><em class="sig-param">p_d</em>, <em class="sig-param">rho_cont</em>, <em class="sig-param">h_l</em>, <em class="sig-param">h_ref</em>, <em class="sig-param">gamma_inc=1.1</em>, <em class="sig-param">g=9.81</em><span class="sig-paren">)</span> &#x2192; p_li<a class="reference internal" href="_modules/pdover2t/dnvgl_st_f101/pressure_containment.html#local_incid_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.dnvgl_st_f101.pressure_containment.local_incid_press" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate local incidental pressure. Also applicable for 
+local system test pressure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – design pressure at ref elevation <span class="math notranslate nohighlight">\((p_d)\)</span></p></li>
+<li><p><strong>rho_cont</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – density of pipeline contents <span class="math notranslate nohighlight">\((\rho_{cont})\)</span></p></li>
+<li><p><strong>h_l</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – elevation of the local pressure point <span class="math notranslate nohighlight">\((h_l)\)</span></p></li>
+<li><p><strong>h_ref</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – elevation of the reference point <span class="math notranslate nohighlight">\((h_{ref})\)</span></p></li>
+<li><p><strong>gamma_inc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – incidental to design pressure ratio <span class="math notranslate nohighlight">\((\gamma_{inc})\)</span></p></li>
+<li><p><strong>g</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – gravitational acceleration <span class="math notranslate nohighlight">\((g)\)</span></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>p_li local incidental pressure <span class="math notranslate nohighlight">\((p_{li})\)</span></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+</dd>
+</dl>
+<div class="math notranslate nohighlight">
+\[p_{li} = p_{inc} - \rho_{cont} \cdot g \cdot \left( h_l - h_{ref} \right)\]</div>
+<p>Reference:
+DNVGL-ST-F101 (2017-12)</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">sec:4.2.2.2 eq:4.1 page:67 <span class="math notranslate nohighlight">\((p_{li})\)</span></div>
+<div class="line">sec:4.2.2.2 eq:4.2 page:67 <span class="math notranslate nohighlight">\((p_{lt})\)</span> </div>
 </div>
+</div></blockquote>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">local_incid_press</span><span class="p">(</span><span class="mf">100.e-5</span><span class="p">,</span> <span class="mi">1025</span><span class="p">,</span> <span class="o">-</span><span class="mi">125</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="go">1558563.751</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdover2t.dnvgl_st_f101.pressure_containment.local_test_press">
+<code class="sig-prename descclassname">pdover2t.dnvgl_st_f101.pressure_containment.</code><code class="sig-name descname">local_test_press</code><span class="sig-paren">(</span><em class="sig-param">p_t</em>, <em class="sig-param">rho_t</em>, <em class="sig-param">h_l</em>, <em class="sig-param">h_ref</em>, <em class="sig-param">p_e=None</em>, <em class="sig-param">alpha_spt=None</em>, <em class="sig-param">g=9.81</em><span class="sig-paren">)</span> &#x2192; p_lt<a class="reference internal" href="_modules/pdover2t/dnvgl_st_f101/pressure_containment.html#local_test_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.dnvgl_st_f101.pressure_containment.local_test_press" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate local test pressure.</p>
+<p>Reference:
+DNVGL-ST-F101 (2017-12)</p>
+<blockquote>
+<div><p>sec:4.2.2.2 eq:4.2 page:67 $p_{lt}$
+sec:5.4.2.1 eq:5.6 page:93 $p_{li}$</p>
+</div></blockquote>
+<p>(local_test_press)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdover2t.dnvgl_st_f101.pressure_containment.local_test_press_unity">
+<code class="sig-prename descclassname">pdover2t.dnvgl_st_f101.pressure_containment.</code><code class="sig-name descname">local_test_press_unity</code><span class="sig-paren">(</span><em class="sig-param">p_li</em>, <em class="sig-param">p_e</em>, <em class="sig-param">p_lt</em><span class="sig-paren">)</span> &#x2192; p_lt_uty<a class="reference internal" href="_modules/pdover2t/dnvgl_st_f101/pressure_containment.html#local_test_press_unity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.dnvgl_st_f101.pressure_containment.local_test_press_unity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Local test pressure unity</p>
+<p>(local_test_press_unity)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdover2t.dnvgl_st_f101.pressure_containment.mill_test_press">
+<code class="sig-prename descclassname">pdover2t.dnvgl_st_f101.pressure_containment.</code><code class="sig-name descname">mill_test_press</code><span class="sig-paren">(</span><em class="sig-param">D</em>, <em class="sig-param">t_min</em>, <em class="sig-param">SMYS</em>, <em class="sig-param">SMTS</em>, <em class="sig-param">alpha_U=None</em>, <em class="sig-param">alpha_mpt=None</em><span class="sig-paren">)</span> &#x2192; p_mpt<a class="reference internal" href="_modules/pdover2t/dnvgl_st_f101/pressure_containment.html#mill_test_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.dnvgl_st_f101.pressure_containment.mill_test_press" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mill test pressure</p>
+<p>Reference:
+DNVGL-ST-F101 (2017-12)</p>
+<blockquote>
+<div><p>sec:7.5.1.2 eq:7.3 page:175 $p_{mpt}$</p>
+</div></blockquote>
+<p>(mill_test_press)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdover2t.dnvgl_st_f101.pressure_containment.mill_test_press_unity">
+<code class="sig-prename descclassname">pdover2t.dnvgl_st_f101.pressure_containment.</code><code class="sig-name descname">mill_test_press_unity</code><span class="sig-paren">(</span><em class="sig-param">p_li</em>, <em class="sig-param">p_e</em>, <em class="sig-param">p_mpt</em><span class="sig-paren">)</span> &#x2192; p_mpt_uty<a class="reference internal" href="_modules/pdover2t/dnvgl_st_f101/pressure_containment.html#mill_test_press_unity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.dnvgl_st_f101.pressure_containment.mill_test_press_unity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mill test pressure unity</p>
+<p>(mill_test_press_unity)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdover2t.dnvgl_st_f101.pressure_containment.press_contain_resis">
+<code class="sig-prename descclassname">pdover2t.dnvgl_st_f101.pressure_containment.</code><code class="sig-name descname">press_contain_resis</code><span class="sig-paren">(</span><em class="sig-param">D</em>, <em class="sig-param">t</em>, <em class="sig-param">f_y</em>, <em class="sig-param">f_u=None</em>, <em class="sig-param">gamma_m=1.0</em>, <em class="sig-param">gamma_SCPC=1.0</em><span class="sig-paren">)</span> &#x2192; p_b<a class="reference internal" href="_modules/pdover2t/dnvgl_st_f101/pressure_containment.html#press_contain_resis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.dnvgl_st_f101.pressure_containment.press_contain_resis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pressure containment resistance in accordance with DNVGL-ST-F101.</p>
+<p>(press_contain_resis)</p>
+<p>Reference:
+DNVGL-ST-F101 (2017-12)</p>
+<blockquote>
+<div><p>sec:5.4.2.2 eq:5.8 page:94 $p_{b}(t)$</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdover2t.dnvgl_st_f101.pressure_containment.press_contain_resis_unity">
+<code class="sig-prename descclassname">pdover2t.dnvgl_st_f101.pressure_containment.</code><code class="sig-name descname">press_contain_resis_unity</code><span class="sig-paren">(</span><em class="sig-param">p_li</em>, <em class="sig-param">p_e</em>, <em class="sig-param">p_b</em><span class="sig-paren">)</span> &#x2192; p_cont_res_uty<a class="reference internal" href="_modules/pdover2t/dnvgl_st_f101/pressure_containment.html#press_contain_resis_unity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.dnvgl_st_f101.pressure_containment.press_contain_resis_unity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pressure containment resistance unity</p>
+<p>(press_contain_resis_unity)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdover2t.dnvgl_st_f101.pressure_containment.press_contain_unity">
+<code class="sig-prename descclassname">pdover2t.dnvgl_st_f101.pressure_containment.</code><code class="sig-name descname">press_contain_unity</code><span class="sig-paren">(</span><em class="sig-param">p_cont_res_uty</em>, <em class="sig-param">p_lt_uty</em>, <em class="sig-param">p_mpt_uty</em><span class="sig-paren">)</span> &#x2192; p_cont_uty<a class="reference internal" href="_modules/pdover2t/dnvgl_st_f101/pressure_containment.html#press_contain_unity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.dnvgl_st_f101.pressure_containment.press_contain_unity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pressure containment unity</p>
+<p>(press_contain_unity)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdover2t.dnvgl_st_f101.pressure_containment.system_test_press">
+<code class="sig-prename descclassname">pdover2t.dnvgl_st_f101.pressure_containment.</code><code class="sig-name descname">system_test_press</code><span class="sig-paren">(</span><em class="sig-param">p_d</em>, <em class="sig-param">gamma_inc</em>, <em class="sig-param">alpha_spt</em><span class="sig-paren">)</span> &#x2192; p_t<a class="reference internal" href="_modules/pdover2t/dnvgl_st_f101/pressure_containment.html#system_test_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.dnvgl_st_f101.pressure_containment.system_test_press" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate DNVGL-ST-F101 «system test pressure».</p>
+<p>(system_test_press)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – design pressure <span class="math notranslate nohighlight">\((p_d)\)</span></p></li>
+<li><p><strong>gamma_inc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – incidental to design pressure ratio <span class="math notranslate nohighlight">\((\gamma_{inc})\)</span></p></li>
+<li><p><strong>alpha_spt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – system pressure test factor <span class="math notranslate nohighlight">\((\alpha_{spt})\)</span></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>p_t system test pressure <span class="math notranslate nohighlight">\((p_t)\)</span></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+</dd>
+</dl>
+<p>Reference:
+DNVGL-ST-F101 (2017-12)</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">eq:4.3 sec:4.2.2.2 page:67 <span class="math notranslate nohighlight">\(p_{inc}\)</span>  </div>
+<div class="line">table:5.8 sec:5.4.2.1 page:94 <span class="math notranslate nohighlight">\(\alpha_{spt}\)</span>  </div>
+<div class="line">sec:5.2.2.1 page:84  </div>
+</div>
+</div></blockquote>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">incid_ref_press</span><span class="p">(</span><span class="mf">100e5</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+<span class="go">11000000.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -57,61 +226,55 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="index.html">
+<img class="logo" src="_static/logo.png" width="180" alt="Logo"/>
+</a></p>
+<form class="search" action="search.html" method="get">
+  <input type="text" name="q"
+   placeholder="type to search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table of Contents</a></h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#test">Test</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API reference</a></li>
 </ul>
-</li>
+<h3>Links</h3>
+<ul>
+  <li><a href="https://pypi.org/project/pdover2t/">PDover2t on PyPI</a></li>
+  <li><a href="https://github.com/qwilka/PDover2t">PDover2t on GitHub</a></li>
+  <li><a href="https://qwilka.github.io/">Qwilka blog</a></li>
 </ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="user-guide.html"
-                        title="previous chapter">User Guide</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/api.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="user-guide.html" title="User Guide"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PDover2t  documentation</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Stephen McEntee.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
-    </div>
+  <div class="related bottom">
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="user-guide.html" title="Previous document">User Guide</a>
+        </li>
+    </ul>
+  </nav>
+  <nav id="breadcrumbs">
+    <ul>
+      <li><a href="index.html">PDover2t  documentation</a></li> 
+    </ul>
+  </nav>
+  </div>
+  <footer id="pagefooter">&copy; 2019, Stephen McEntee.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a>
+      2.1.2
+        with the <a href="http://github.com/irskep/sphinx-better-theme">
+          better</a> theme.
+
+  </footer>
+
+  
   </body>
 </html>

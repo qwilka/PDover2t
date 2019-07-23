@@ -6,50 +6,59 @@ from . import factor
 from .material import char_mat_strength
 
 
-__all__ = [ "pressure_containment_all", 
-            "press_contain_unity" ]
+# __all__ = [ "pressure_containment_all", 
+#             "press_contain_unity" ]
 
 
 
 
 
 def incid_ref_press(p_d, gamma_inc) -> "p_inc":
-    """Calculate DNVGL-ST-F101 «incidental reference pressure». 
+    r"""Calculate DNVGL-ST-F101 «incidental reference pressure». 
 
-    :param p_d: $p_d$ design pressure
-    :param gamma_inc: $\gamma_{inc}$ incidental to design pressure ratio
-    :returns: p_inc: $p_{inc}$ incidental reference pressure
+    :param p_d: design pressure :math:`(p_d)`
+    :type p_d: float
+    :param gamma_inc: incidental to design pressure ratio :math:`(\gamma_{inc})`
+    :type gamma_inc: float
+    :returns: p_inc incidental reference pressure :math:`(p_{inc})`
+    :rtype: float
 
     Reference:
     DNVGL-ST-F101 (2017-12) 
-        eq:4.3 sec:4.2.2.2 page:67 p_{inc}
+        eq:4.3 sec:4.2.2.2 page:67 :math:`(p_{inc})`
 
-    Example:    
-    >>> incid_ref_press(100e5, 1.1)
-    11000000.0
+    .. doctest:: 
+
+        >>> incid_ref_press(100e5, 1.1)
+        11000000.0
     """
     return p_d * gamma_inc
 
 
 def system_test_press(p_d, gamma_inc, alpha_spt) -> "p_t":
-    """Calculate DNVGL-ST-F101 «system test pressure». 
+    r"""Calculate DNVGL-ST-F101 «system test pressure». 
 
     (system_test_press)
 
-    :param p_d: $p_d$ design pressure
-    :param gamma_inc: $\gamma_{inc}$ incidental to design pressure ratio
-    :param alpha_spt: $\alpha_{spt}$ system pressure test factor
-    :returns: p_t: $p_t$ system test pressure
+    :param p_d: design pressure :math:`(p_d)`
+    :type p_d: float
+    :param gamma_inc: incidental to design pressure ratio :math:`(\gamma_{inc})`
+    :type gamma_inc: float
+    :param alpha_spt: system pressure test factor :math:`(\alpha_{spt})`
+    :type alpha_spt: float
+    :returns: p_t system test pressure :math:`(p_t)`
+    :rtype: float
 
     Reference:
-    DNVGL-ST-F101 (2017-12) 
-        eq:4.3 sec:4.2.2.2 page:67 p_{inc}
-        table:5.8 sec:5.4.2.1 page:94 $alpha_{spt}$
-        sec:5.2.2.1 page:84
+    DNVGL-ST-F101 (2017-12)  
+        | eq:4.3 sec:4.2.2.2 page:67 :math:`p_{inc}`  
+        | table:5.8 sec:5.4.2.1 page:94 :math:`\alpha_{spt}`  
+        | sec:5.2.2.1 page:84  
 
-    Example:    
-    >>> incid_ref_press(100e5, 1.1)
-    11000000.0
+    .. doctest::    
+    
+        >>> incid_ref_press(100e5, 1.1)
+        11000000.0
     """
     return p_d * gamma_inc * alpha_spt
 
@@ -60,25 +69,33 @@ def local_incid_press(p_d, rho_cont,
     r'''Calculate local incidental pressure. Also applicable for 
     local system test pressure.
 
-    :param p_d: $p_d$ design pressure at ref elevation
-    :param rho_cont: $\rho_{cont}$ density of pipeline contents
-    :param h_l: $h_l$ elevation of the local pressure point
-    :param h_ref: $h_{ref}$ elevation of the reference point
-    :param gamma_inc: $\gamma_{inc}$ incidental to design pressure ratio
-    :param g: $g$ gravitational acceleration
-    :returns: p_li: $h_{ref}$ local incidental pressure
+    :param p_d: design pressure at ref elevation :math:`(p_d)`
+    :type p_d: float
+    :param rho_cont: density of pipeline contents :math:`(\rho_{cont})`
+    :type rho_cont: float
+    :param h_l: elevation of the local pressure point :math:`(h_l)`
+    :type h_l: float
+    :param h_ref: elevation of the reference point :math:`(h_{ref})`
+    :type h_ref: float
+    :param gamma_inc: incidental to design pressure ratio :math:`(\gamma_{inc})`
+    :type gamma_inc: float
+    :param g: gravitational acceleration :math:`(g)`
+    :type g: float
+    :returns: p_li local incidental pressure :math:`(p_{li})`
+    :rtype: float
     
     .. math::
         p_{li} = p_{inc} - \rho_{cont} \cdot g \cdot \left( h_l - h_{ref} \right)
 
     Reference:
     DNVGL-ST-F101 (2017-12) 
-        sec:4.2.2.2 eq:4.1 page:67 p_{li}
-        sec:4.2.2.2 eq:4.2 page:67 $p_{lt}$ 
+        | sec:4.2.2.2 eq:4.1 page:67 :math:`(p_{li})`
+        | sec:4.2.2.2 eq:4.2 page:67 :math:`(p_{lt})` 
 
-    Example:    
-    >>> local_incid_press(100.e-5, 1025, -125, 30)
-    1558563.751
+    .. doctest::
+
+        >>> local_incid_press(100.e-5, 1025, -125, 30)
+        1558563.751
     '''
     p_inc = p_d * gamma_inc
     p_li = p_inc - rho_cont * g * (h_l - h_ref)
@@ -101,6 +118,7 @@ def local_test_press(p_t, rho_t, h_l, h_ref, p_e=None, alpha_spt=None,
     if p_e is not None:
         p_lt = p_lt - p_e
     return p_lt
+
 
 def local_test_press_unity(p_li, p_e, p_lt) -> "p_lt_uty":
     """Local test pressure unity

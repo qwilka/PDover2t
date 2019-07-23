@@ -26,5 +26,5 @@ from .material import char_mat_strength
 
 from .pressure_containment import *
 from .pipe_collapse import *
-from .propagating_buckle import *
+from .propagation_buckling import *
 from .stability import *
