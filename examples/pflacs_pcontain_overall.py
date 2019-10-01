@@ -13,10 +13,14 @@ lh = logging.StreamHandler()
 logger.addHandler(lh)
 
 parameters = {
+    "alpha_mpt": 1.088,
+    "alpha_spt": 1.05,
     "alpha_U": 1.0,
     "D": 0.6176,
     "g": 9.81,
     "gamma_inc": 1.1,
+    "gamma_m": 1.15,
+    "gamma_SCPC": 1.138,
     "h_ref": 30.,
     "h_l": -340.,
     "material": "CMn",
