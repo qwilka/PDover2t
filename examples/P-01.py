@@ -129,8 +129,9 @@ P01_3 = Premise("P-01 section 3, KP 15-79.7",
                 data={"desc": "P-01 section 3, KP 15-79.7."})
 
 rootnode.plugin_func("pressure_containment_all", "pdover2t.dnvgl_st_f101")
+rootnode.plugin_func("pipe_collapse_all", "pdover2t.dnvgl_st_f101")
 
-lc1 = Calc("Calc: lc2 press contain", parent=P01_1, 
+lc1_cont = Calc("Calc: lc2 press contain", parent=P01_1, 
                 parameters={
                     "h_l": -370,
                 },
