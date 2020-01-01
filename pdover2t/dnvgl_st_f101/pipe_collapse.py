@@ -48,7 +48,7 @@ def pipe_ovality(D, D_max=None, D_min=None) -> "O_0":
     return O_0
 
 
-def pipe_char_elastic_pressure(t, D, nu=0.3, E=207.*10**9) -> "p_el":
+def pipe_char_elastic_pressure(t, D, nu=0.3, E=207.0*10**9) -> "p_el":
     """Calculate p_el.
     Reference:
     DNVGL-ST-F101 (2017-12) 

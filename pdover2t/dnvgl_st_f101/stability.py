@@ -4,9 +4,9 @@ import numpy as np
 #from . import factor
 from ..pipe_properties import pipe_physical_props
 
-__all__ = [
-    "floatation_stability"
-]
+# __all__ = [
+#     "floatation_stability"
+# ]
 
 
 def floatation_stability(W_sub, b, gamma_w=1.1) -> "float_stab_uty":
@@ -49,6 +49,20 @@ def peak_horizontal_load(r_toty, rho_w, D, C_y, U, V) -> "F_y":
     F_y = r_toty * 0.5 * rho_w * D * C_y * (U + V)**2
     return F_y
 
+
+def vertical_stability():
+    """Pipeline vertical stability check.
+
+    Not yet implemented.
+    """
+    return False
+
+def lateral_stability():
+    """Pipeline lateral stability check.
+
+    Not yet implemented.
+    """
+    return False
 
 
 if __name__ == "__main__":
