@@ -42,10 +42,89 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-pdover2t">
-<span id="api-reference"></span><h1>API reference<a class="headerlink" href="#module-pdover2t" title="Permalink to this headline">¶</a></h1>
-<p><cite>pdover2t</cite> computational subsea pipeline engineering.</p>
-<span class="target" id="module-pdover2t.dnvgl_st_f101"></span><span class="target" id="module-pdover2t.dnvgl_st_f101.pressure_containment"></span><dl class="function">
+  <div class="section" id="api-reference">
+<h1>API reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#module-pdover2t.pipe.pipe_props" id="id1">pdover2t.pipe</a></p></li>
+<li><p><a class="reference internal" href="#pdover2t-dnvgl-st-f101" id="id2">pdover2t.dnvgl_st_f101</a></p></li>
+<li><p><a class="reference internal" href="#pdover2t-dnvgl-st-f101-pressure-containment" id="id3">pdover2t.dnvgl_st_f101.pressure_containment</a></p></li>
+</ul>
+</div>
+<span class="target" id="module-pdover2t"></span><p><cite>pdover2t</cite> computational subsea pipeline engineering.</p>
+<div class="section" id="module-pdover2t.pipe.pipe_props">
+<span id="pdover2t-pipe"></span><h2><a class="toc-backref" href="#id1">pdover2t.pipe</a><a class="headerlink" href="#module-pdover2t.pipe.pipe_props" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pdover2t.pipe.pipe_props.Di_from_pipe_Do">
+<code class="sig-prename descclassname">pdover2t.pipe.pipe_props.</code><code class="sig-name descname">Di_from_pipe_Do</code><span class="sig-paren">(</span><em class="sig-param">Do</em>, <em class="sig-param">WT</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pdover2t/pipe/pipe_props.html#Di_from_pipe_Do"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.pipe.pipe_props.Di_from_pipe_Do" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate pipe inner diameter (Di), given a reference outer diameter (Do)
+and a wall thickness dimension (WT). WT can be a list or tuple of wall
+thicknesses for compound section pipes.</p>
+<div class="math notranslate nohighlight">
+\[D_i = D_o - 2 * WT\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Do</strong> – pipe outer diameter <span class="math notranslate nohighlight">\((D_o)\)</span></p></li>
+<li><p><strong>WT</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – pipe wall thickness, or list/tuple of wall thicknesses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pipe inner diameter <span class="math notranslate nohighlight">\((D_i)\)</span></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Di_from_pipe_Do</span><span class="p">(</span><span class="mf">203.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+<span class="go">197.2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdover2t.pipe.pipe_props.Do_from_pipe_Di">
+<code class="sig-prename descclassname">pdover2t.pipe.pipe_props.</code><code class="sig-name descname">Do_from_pipe_Di</code><span class="sig-paren">(</span><em class="sig-param">Di</em>, <em class="sig-param">WT</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pdover2t/pipe/pipe_props.html#Do_from_pipe_Di"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.pipe.pipe_props.Do_from_pipe_Di" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate pipe outer diameter (Do), given a reference inner diameter (Di)
+and a wall thickness dimension (WT). WT can be a list or tuple of wall
+thicknesses for compound section pipes.</p>
+<div class="math notranslate nohighlight">
+\[D_o = D_i + 2 * WT\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Di</strong> – pipe inner diameter <span class="math notranslate nohighlight">\((D_i)\)</span></p></li>
+<li><p><strong>WT</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – pipe wall thickness, or list/tuple of wall thicknesses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pipe outer diameter <span class="math notranslate nohighlight">\((D_o)\)</span></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Do_from_pipe_Di</span><span class="p">(</span><span class="mf">0.660</span><span class="p">,</span> <span class="mf">0.045</span><span class="p">)</span>
+<span class="go">0.75</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Do_from_pipe_Di</span><span class="p">(</span><span class="mf">203.2</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="go">309.2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="pdover2t-dnvgl-st-f101">
+<h2><a class="toc-backref" href="#id2">pdover2t.dnvgl_st_f101</a><a class="headerlink" href="#pdover2t-dnvgl-st-f101" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-pdover2t.dnvgl_st_f101"></span></div>
+<div class="section" id="pdover2t-dnvgl-st-f101-pressure-containment">
+<h2><a class="toc-backref" href="#id3">pdover2t.dnvgl_st_f101.pressure_containment</a><a class="headerlink" href="#pdover2t-dnvgl-st-f101-pressure-containment" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-pdover2t.dnvgl_st_f101.pressure_containment"></span><dl class="function">
 <dt id="pdover2t.dnvgl_st_f101.pressure_containment.external_pressure">
 <code class="sig-prename descclassname">pdover2t.dnvgl_st_f101.pressure_containment.</code><code class="sig-name descname">external_pressure</code><span class="sig-paren">(</span><em class="sig-param">h_l</em>, <em class="sig-param">rho_water</em>, <em class="sig-param">g=9.81</em><span class="sig-paren">)</span> &#x2192; p_e<a class="reference internal" href="_modules/pdover2t/dnvgl_st_f101/pressure_containment.html#external_pressure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.dnvgl_st_f101.pressure_containment.external_pressure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Water pressure, external to pipe.</p>
@@ -58,15 +137,15 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>p_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – design pressure <span class="math notranslate nohighlight">\((p_d)\)</span></p></li>
-<li><p><strong>gamma_inc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – incidental to design pressure ratio <span class="math notranslate nohighlight">\((\gamma_{inc})\)</span></p></li>
+<li><p><strong>p_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – design pressure <span class="math notranslate nohighlight">\((p_d)\)</span></p></li>
+<li><p><strong>gamma_inc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – incidental to design pressure ratio <span class="math notranslate nohighlight">\((\gamma_{inc})\)</span></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>p_inc incidental reference pressure <span class="math notranslate nohighlight">\((p_{inc})\)</span></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 <p>Reference:
@@ -88,19 +167,19 @@ local system test pressure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>p_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – design pressure at ref elevation <span class="math notranslate nohighlight">\((p_d)\)</span></p></li>
-<li><p><strong>rho_cont</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – density of pipeline contents <span class="math notranslate nohighlight">\((\rho_{cont})\)</span></p></li>
-<li><p><strong>h_l</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – elevation of the local pressure point <span class="math notranslate nohighlight">\((h_l)\)</span></p></li>
-<li><p><strong>h_ref</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – elevation of the reference point <span class="math notranslate nohighlight">\((h_{ref})\)</span></p></li>
-<li><p><strong>gamma_inc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – incidental to design pressure ratio <span class="math notranslate nohighlight">\((\gamma_{inc})\)</span></p></li>
-<li><p><strong>g</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – gravitational acceleration <span class="math notranslate nohighlight">\((g)\)</span></p></li>
+<li><p><strong>p_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – design pressure at ref elevation <span class="math notranslate nohighlight">\((p_d)\)</span></p></li>
+<li><p><strong>rho_cont</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – density of pipeline contents <span class="math notranslate nohighlight">\((\rho_{cont})\)</span></p></li>
+<li><p><strong>h_l</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – elevation of the local pressure point <span class="math notranslate nohighlight">\((h_l)\)</span></p></li>
+<li><p><strong>h_ref</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – elevation of the reference point <span class="math notranslate nohighlight">\((h_{ref})\)</span></p></li>
+<li><p><strong>gamma_inc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – incidental to design pressure ratio <span class="math notranslate nohighlight">\((\gamma_{inc})\)</span></p></li>
+<li><p><strong>g</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – gravitational acceleration <span class="math notranslate nohighlight">\((g)\)</span></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>p_li local incidental pressure <span class="math notranslate nohighlight">\((p_{li})\)</span></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 <div class="math notranslate nohighlight">
@@ -192,16 +271,16 @@ DNVGL-ST-F101 (2017-12)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>p_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – design pressure <span class="math notranslate nohighlight">\((p_d)\)</span></p></li>
-<li><p><strong>gamma_inc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – incidental to design pressure ratio <span class="math notranslate nohighlight">\((\gamma_{inc})\)</span></p></li>
-<li><p><strong>alpha_spt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – system pressure test factor <span class="math notranslate nohighlight">\((\alpha_{spt})\)</span></p></li>
+<li><p><strong>p_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – design pressure <span class="math notranslate nohighlight">\((p_d)\)</span></p></li>
+<li><p><strong>gamma_inc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – incidental to design pressure ratio <span class="math notranslate nohighlight">\((\gamma_{inc})\)</span></p></li>
+<li><p><strong>alpha_spt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – system pressure test factor <span class="math notranslate nohighlight">\((\alpha_{spt})\)</span></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>p_t system test pressure <span class="math notranslate nohighlight">\((p_t)\)</span></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 <p>Reference:
@@ -219,6 +298,7 @@ DNVGL-ST-F101 (2017-12)</p>
 </div>
 </dd></dl>
 
+</div>
 </div>
 
 
@@ -269,7 +349,7 @@ DNVGL-ST-F101 (2017-12)</p>
   </div>
   <footer id="pagefooter">&copy; 2019, Stephen McEntee.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-      2.1.2
+      2.2.1
         with the <a href="http://github.com/irskep/sphinx-better-theme">
           better</a> theme.
 

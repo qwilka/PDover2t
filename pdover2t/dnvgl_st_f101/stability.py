@@ -2,7 +2,7 @@
 import numpy as np
 
 #from . import factor
-from ..pipe_properties import pipe_physical_props
+from ..pipe.pipe_properties import pipe_physical_props
 
 # __all__ = [
 #     "floatation_stability"
