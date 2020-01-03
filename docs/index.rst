@@ -14,6 +14,7 @@ Python versions 3.6+ only are supported.
    introduction
    user-guide
    api
+   api-docs
 
 
 

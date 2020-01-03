@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pdover2t.pipe.pipe_props &#8212; PDover2t  documentation</title>
+    <link rel="stylesheet" href="_static/better.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="API ref docs" href="api-docs.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  </head><body>
+    <header id="pageheader"><h1><a href="index.html ">
+        PDover2t  documentation
+    </a></h1></header>
+  <div class="related top">
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="api-docs.html" title="Previous document">API ref docs</a>
+        </li>
+    </ul>
+  </nav>
+  <nav id="breadcrumbs">
+    <ul>
+      <li><a href="index.html">PDover2t  documentation</a></li>
+      <li>
+        <a href="api-docs.html">API ref docs</a>
+      </li> 
+    </ul>
+  </nav>
+  </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pdover2t-pipe-pipe-props">
+<h1>pdover2t.pipe.pipe_props<a class="headerlink" href="#pdover2t-pipe-pipe-props" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#pipe-radial-dimensions" id="id1">pipe_radial_dimensions</a></p></li>
+<li><p><a class="reference internal" href="#pipe-cs-area" id="id2">pipe_cs_area</a></p></li>
+<li><p><a class="reference internal" href="#di-from-pipe-do" id="id3">Di_from_pipe_Do</a></p></li>
+<li><p><a class="reference internal" href="#do-from-pipe-di" id="id4">Do_from_pipe_Di</a></p></li>
+</ul>
+</div>
+<div class="section" id="pipe-radial-dimensions">
+<h2><a class="toc-backref" href="#id1">pipe_radial_dimensions</a><a class="headerlink" href="#pipe-radial-dimensions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pdover2t.pipe.pipe_props.pipe_radial_dimensions">
+<code class="sig-prename descclassname">pdover2t.pipe.pipe_props.</code><code class="sig-name descname">pipe_radial_dimensions</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">Do=None</em>, <em class="sig-param">Di=None</em>, <em class="sig-param">WT=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pdover2t/pipe/pipe_props.html#pipe_radial_dimensions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.pipe.pipe_props.pipe_radial_dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve pipe radial dimensions. Given two of three dimensional arguments 
+outer diameter Do; inner diameter Di; wall thickness WT;
+calculate the missing dimension and return a tuple (Do, Di, WT).</p>
+<p>If all arguments are specified a consistency check is carried
+out, and an AssertionError is raised if the dimensions are inconsistent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Do</strong> – pipe outer diameter <span class="math notranslate nohighlight">\((D_o)\)</span></p></li>
+<li><p><strong>Di</strong> – pipe inner diameter <span class="math notranslate nohighlight">\((D_i)\)</span></p></li>
+<li><p><strong>WT</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – pipe wall thickness <span class="math notranslate nohighlight">\((WT)\)</span></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>outer diameter, inner diameter, wall thickness</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></p>
+</dd>
+</dl>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe_radial_dimensions</span><span class="p">(</span><span class="n">Do</span><span class="o">=</span><span class="mf">0.660</span><span class="p">,</span> <span class="n">WT</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="go">(0.66, 0.56, 0.05)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="pipe-cs-area">
+<h2><a class="toc-backref" href="#id2">pipe_cs_area</a><a class="headerlink" href="#pipe-cs-area" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pdover2t.pipe.pipe_props.pipe_cs_area">
+<code class="sig-prename descclassname">pdover2t.pipe.pipe_props.</code><code class="sig-name descname">pipe_cs_area</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">Do=None</em>, <em class="sig-param">Di=None</em>, <em class="sig-param">WT=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pdover2t/pipe/pipe_props.html#pipe_cs_area"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.pipe.pipe_props.pipe_cs_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate pipe cross sectional area by specifying at least
+two of the three dimensional arguments outer diameter Do, 
+inner diameter Di, wall thickness WT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Do</strong> – pipe outer diameter <span class="math notranslate nohighlight">\((D_o)\)</span></p></li>
+<li><p><strong>Di</strong> – pipe inner diameter <span class="math notranslate nohighlight">\((D_i)\)</span></p></li>
+<li><p><strong>WT</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – pipe wall thickness <span class="math notranslate nohighlight">\((WT)\)</span></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pipe cross sectional area</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe_cs_area</span><span class="p">(</span><span class="n">Do</span><span class="o">=</span><span class="mf">0.660</span><span class="p">,</span> <span class="n">WT</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="go">0.09581857593448868</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="di-from-pipe-do">
+<h2><a class="toc-backref" href="#id3">Di_from_pipe_Do</a><a class="headerlink" href="#di-from-pipe-do" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pdover2t.pipe.pipe_props.Di_from_pipe_Do">
+<code class="sig-prename descclassname">pdover2t.pipe.pipe_props.</code><code class="sig-name descname">Di_from_pipe_Do</code><span class="sig-paren">(</span><em class="sig-param">Do</em>, <em class="sig-param">WT</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pdover2t/pipe/pipe_props.html#Di_from_pipe_Do"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.pipe.pipe_props.Di_from_pipe_Do" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate pipe inner diameter (Di), given a reference outer diameter (Do)
+and a wall thickness dimension (WT). WT can be a list or tuple of wall
+thicknesses for compound section pipes.</p>
+<div class="math notranslate nohighlight">
+\[D_i = D_o - 2 * WT\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Do</strong> – pipe outer diameter <span class="math notranslate nohighlight">\((D_o)\)</span></p></li>
+<li><p><strong>WT</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – pipe wall thickness, or list/tuple of wall thicknesses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pipe inner diameter <span class="math notranslate nohighlight">\((D_i)\)</span></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Di_from_pipe_Do</span><span class="p">(</span><span class="mf">203.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+<span class="go">197.2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="do-from-pipe-di">
+<h2><a class="toc-backref" href="#id4">Do_from_pipe_Di</a><a class="headerlink" href="#do-from-pipe-di" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pdover2t.pipe.pipe_props.Do_from_pipe_Di">
+<code class="sig-prename descclassname">pdover2t.pipe.pipe_props.</code><code class="sig-name descname">Do_from_pipe_Di</code><span class="sig-paren">(</span><em class="sig-param">Di</em>, <em class="sig-param">WT</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pdover2t/pipe/pipe_props.html#Do_from_pipe_Di"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pdover2t.pipe.pipe_props.Do_from_pipe_Di" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate pipe outer diameter (Do), given a reference inner diameter (Di)
+and a wall thickness dimension (WT). WT can be a list or tuple of wall
+thicknesses for compound section pipes.</p>
+<div class="math notranslate nohighlight">
+\[D_o = D_i + 2 * WT\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Di</strong> – pipe inner diameter <span class="math notranslate nohighlight">\((D_i)\)</span></p></li>
+<li><p><strong>WT</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – pipe wall thickness, or list/tuple of wall thicknesses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pipe outer diameter <span class="math notranslate nohighlight">\((D_o)\)</span></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Do_from_pipe_Di</span><span class="p">(</span><span class="mf">0.660</span><span class="p">,</span> <span class="mf">0.045</span><span class="p">)</span>
+<span class="go">0.75</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Do_from_pipe_Di</span><span class="p">(</span><span class="mf">203.2</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="go">309.2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="index.html">
+<img class="logo" src="_static/logo.png" width="180" alt="Logo"/>
+</a></p>
+<form class="search" action="search.html" method="get">
+  <input type="text" name="q"
+   placeholder="type to search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api-docs.html">API ref docs</a></li>
+</ul>
+<h3>Links</h3>
+<ul>
+  <li><a href="https://pypi.org/project/pdover2t/">PDover2t on PyPI</a></li>
+  <li><a href="https://github.com/qwilka/PDover2t">PDover2t on GitHub</a></li>
+  <li><a href="https://qwilka.github.io/">Qwilka blog</a></li>
+</ul>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="related bottom">
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="api-docs.html" title="Previous document">API ref docs</a>
+        </li>
+    </ul>
+  </nav>
+  <nav id="breadcrumbs">
+    <ul>
+      <li><a href="index.html">PDover2t  documentation</a></li>
+      <li>
+        <a href="api-docs.html">API ref docs</a>
+      </li> 
+    </ul>
+  </nav>
+  </div>
+  <footer id="pagefooter">&copy; 2019, Stephen McEntee.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a>
+      2.2.1
+        with the <a href="http://github.com/irskep/sphinx-better-theme">
+          better</a> theme.
+
+  </footer>
+
+  
+  </body>
+</html>

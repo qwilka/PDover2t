@@ -4,3 +4,9 @@
 metocean
 ========
 
+
+ReStructured Text
+=================
+https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
+https://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html
+
