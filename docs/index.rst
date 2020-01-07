@@ -9,11 +9,10 @@ Development of `PDover2t` is currently in alpha phase.
 Python versions 3.6+ only are supported.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    introduction
    user-guide
-   api
    api-docs
 
 

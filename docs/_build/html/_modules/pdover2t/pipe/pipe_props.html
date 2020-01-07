@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <title>pdover2t.pipe.pipe_props &#8212; PDover2t  documentation</title>
-    <link rel="stylesheet" href="../../../_static/better.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -14,26 +14,21 @@
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
-    <header id="pageheader"><h1><a href="../../../index.html ">
-        PDover2t  documentation
-    </a></h1></header>
-  <div class="related top">
-  <nav id="rellinks">
-    <ul>
-    </ul>
-  </nav>
-  <nav id="breadcrumbs">
-    <ul>
-      <li><a href="../../../index.html">PDover2t  documentation</a></li>
-      <li>
-        <a href="../../index.html">Module code</a>
-      </li> 
-    </ul>
-  </nav>
-  </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PDover2t  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -56,8 +51,47 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
+<div class="viewcode-block" id="pipe_equivalent_layers"><a class="viewcode-back" href="../../../pipe/pipe_props.html#pdover2t.pipe.pipe_props.pipe_equivalent_layers">[docs]</a><span class="k">def</span> <span class="nf">pipe_equivalent_layers</span><span class="p">(</span><span class="n">layer_props</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">Di_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Do_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;calculate equivalent properties for stacked pipe layers.</span>
 
-<div class="viewcode-block" id="pipe_radial_dimensions"><a class="viewcode-back" href="../../../api-pipe.html#pdover2t.pipe.pipe_props.pipe_radial_dimensions">[docs]</a><span class="k">def</span> <span class="nf">pipe_radial_dimensions</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">Do</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Di</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">WT</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="sd">    :param layer_props: list of layer properties, each element is</span>
+<span class="sd">    a tuple consisting of (layer_thickness, layer_mass_density)</span>
+<span class="sd">    :type layer_props: list, tuple</span>
+
+<span class="sd">    .. doctest::</span>
+
+<span class="sd">        &gt;&gt;&gt; pipe_equivalent_layers([(0.0185,7850),(0.003,7000)], Do_ref=0.3229)</span>
+<span class="sd">        (0.0215, 7738.675329084429, 157.54267202070224)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Di_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">Do_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;arguments not correctly specified: Di_ref=</span><span class="si">{Di_ref}</span><span class="s2">, Do_ref=</span><span class="si">{Do_ref}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">_dref</span> <span class="o">=</span> <span class="n">Di_ref</span> <span class="k">if</span> <span class="n">Di_ref</span> <span class="k">else</span> <span class="n">Do_ref</span>
+    <span class="n">_equiv_mass</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">_total_wt</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layer_props</span><span class="p">:</span>
+        <span class="n">wt</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">layer</span>
+        <span class="n">_total_wt</span> <span class="o">+=</span> <span class="n">wt</span>
+        <span class="k">if</span> <span class="n">Di_ref</span><span class="p">:</span>
+            <span class="n">_Do</span><span class="p">,</span> <span class="n">_Di</span><span class="p">,</span> <span class="n">_WT</span> <span class="o">=</span> <span class="n">pipe_Do_Di_WT</span><span class="p">(</span><span class="n">Do</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Di</span><span class="o">=</span><span class="n">_dref</span><span class="p">,</span> <span class="n">WT</span><span class="o">=</span><span class="n">wt</span><span class="p">)</span>
+            <span class="n">_dref</span> <span class="o">=</span> <span class="n">_Do</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_Do</span><span class="p">,</span> <span class="n">_Di</span><span class="p">,</span> <span class="n">_WT</span> <span class="o">=</span> <span class="n">pipe_Do_Di_WT</span><span class="p">(</span><span class="n">Do</span><span class="o">=</span><span class="n">_dref</span><span class="p">,</span> <span class="n">Di</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">WT</span><span class="o">=</span><span class="n">wt</span><span class="p">)</span>
+            <span class="n">_dref</span> <span class="o">=</span> <span class="n">_Di</span>
+        <span class="n">_csa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">_Do</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">_Di</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">_mass</span> <span class="o">=</span> <span class="n">_csa</span> <span class="o">*</span> <span class="n">rho</span>
+        <span class="n">_equiv_mass</span> <span class="o">+=</span> <span class="n">_mass</span>
+    <span class="k">if</span> <span class="n">Di_ref</span><span class="p">:</span>
+        <span class="n">_csa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">_dref</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">Di_ref</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_csa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">Do_ref</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">_dref</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">_equiv_rho</span> <span class="o">=</span> <span class="n">_equiv_mass</span> <span class="o">/</span> <span class="n">_csa</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">_total_wt</span><span class="p">,</span> <span class="n">_equiv_rho</span><span class="p">,</span> <span class="n">_equiv_mass</span><span class="p">)</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="pipe_Do_Di_WT"><a class="viewcode-back" href="../../../pipe/pipe_props.html#pdover2t.pipe.pipe_props.pipe_Do_Di_WT">[docs]</a><span class="k">def</span> <span class="nf">pipe_Do_Di_WT</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">Do</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Di</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">WT</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Resolve pipe radial dimensions. Given two of three dimensional arguments </span>
 <span class="sd">    outer diameter Do; inner diameter Di; wall thickness WT;</span>
 <span class="sd">    calculate the missing dimension and return a tuple (Do, Di, WT).</span>
@@ -76,11 +110,11 @@
 
 <span class="sd">    .. doctest::</span>
 
-<span class="sd">        &gt;&gt;&gt; pipe_radial_dimensions(Do=0.660, WT=0.05)</span>
+<span class="sd">        &gt;&gt;&gt; pipe_Do_Di_WT(Do=0.660, WT=0.05)</span>
 <span class="sd">        (0.66, 0.56, 0.05)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Do</span><span class="p">,</span> <span class="n">Di</span><span class="p">,</span> <span class="n">WT</span><span class="p">]]):</span>
-        <span class="k">assert</span> <span class="n">Di</span><span class="o">==</span><span class="n">Do</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">WT</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;pipe_radial_dimensions: inconsistent pipe dimensions Do=</span><span class="si">{Do}</span><span class="s2"> Di=</span><span class="si">{Di}</span><span class="s2">, WT=</span><span class="si">{WT}</span><span class="s2">.&quot;</span>
+        <span class="k">assert</span> <span class="n">Di</span><span class="o">==</span><span class="n">Do</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">WT</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;pipe_Do_Di_WT: inconsistent pipe dimensions Do=</span><span class="si">{Do}</span><span class="s2"> Di=</span><span class="si">{Di}</span><span class="s2">, WT=</span><span class="si">{WT}</span><span class="s2">.&quot;</span>
     <span class="k">elif</span> <span class="n">Do</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Di</span><span class="p">,</span> <span class="n">WT</span><span class="p">]]):</span>
         <span class="n">Do</span> <span class="o">=</span> <span class="n">Di</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">WT</span>
     <span class="k">elif</span> <span class="n">Di</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Do</span><span class="p">,</span> <span class="n">WT</span><span class="p">]]):</span>
@@ -88,11 +122,11 @@
     <span class="k">elif</span> <span class="n">WT</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Do</span><span class="p">,</span> <span class="n">Di</span><span class="p">]]):</span>
         <span class="n">WT</span> <span class="o">=</span> <span class="p">(</span><span class="n">Do</span> <span class="o">-</span> <span class="n">Di</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;pipe_radial_dimensions: arguments incorrectly specified: Do=</span><span class="si">%s</span><span class="s2">, Di=</span><span class="si">%s</span><span class="s2">, WT=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Do</span><span class="p">,</span><span class="n">Di</span><span class="p">,</span><span class="n">WT</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;pipe_Do_Di_WT: arguments incorrectly specified: Do=</span><span class="si">%s</span><span class="s2">, Di=</span><span class="si">%s</span><span class="s2">, WT=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Do</span><span class="p">,</span><span class="n">Di</span><span class="p">,</span><span class="n">WT</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">Do</span><span class="p">,</span> <span class="n">Di</span><span class="p">,</span> <span class="n">WT</span></div>
 
 
-<div class="viewcode-block" id="pipe_cs_area"><a class="viewcode-back" href="../../../api-pipe.html#pdover2t.pipe.pipe_props.pipe_cs_area">[docs]</a><span class="k">def</span> <span class="nf">pipe_cs_area</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">Do</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Di</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">WT</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="pipe_cs_area"><a class="viewcode-back" href="../../../pipe/pipe_props.html#pdover2t.pipe.pipe_props.pipe_cs_area">[docs]</a><span class="k">def</span> <span class="nf">pipe_cs_area</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">Do</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Di</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">WT</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Calculate pipe cross sectional area by specifying at least</span>
 <span class="sd">    two of the three dimensional arguments outer diameter Do, </span>
 <span class="sd">    inner diameter Di, wall thickness WT.</span>
@@ -111,25 +145,24 @@
 <span class="sd">        &gt;&gt;&gt; pipe_cs_area(Do=0.660, WT=0.05)</span>
 <span class="sd">        0.09581857593448868</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_Do</span><span class="p">,</span> <span class="n">_Di</span><span class="p">,</span> <span class="n">_WT</span> <span class="o">=</span> <span class="n">pipe_radial_dimensions</span><span class="p">(</span><span class="n">Do</span><span class="o">=</span><span class="n">Do</span><span class="p">,</span> <span class="n">Di</span><span class="o">=</span><span class="n">Di</span><span class="p">,</span> <span class="n">WT</span><span class="o">=</span><span class="n">WT</span><span class="p">)</span>
+    <span class="n">_Do</span><span class="p">,</span> <span class="n">_Di</span><span class="p">,</span> <span class="n">_WT</span> <span class="o">=</span> <span class="n">pipe_Do_Di_WT</span><span class="p">(</span><span class="n">Do</span><span class="o">=</span><span class="n">Do</span><span class="p">,</span> <span class="n">Di</span><span class="o">=</span><span class="n">Di</span><span class="p">,</span> <span class="n">WT</span><span class="o">=</span><span class="n">WT</span><span class="p">)</span>
     <span class="n">csa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">_Do</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">_Di</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">csa</span></div>
 
 
-<div class="viewcode-block" id="pipe_cs_mass"><a class="viewcode-back" href="../../../api.html#pdover2t.pipe.pipe_props.pipe_cs_mass">[docs]</a><span class="k">def</span> <span class="nf">pipe_cs_mass</span><span class="p">(</span><span class="n">density</span><span class="p">,</span> <span class="n">csa</span><span class="p">):</span>
+<div class="viewcode-block" id="pipe_cs_mass"><a class="viewcode-back" href="../../../pipe/pipe_props.html#pdover2t.pipe.pipe_props.pipe_cs_mass">[docs]</a><span class="k">def</span> <span class="nf">pipe_cs_mass</span><span class="p">(</span><span class="n">density</span><span class="p">,</span> <span class="n">csa</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Calculate pipe cross sectional mass (per unit length),</span>
 <span class="sd">    by specifying the material density, and the pipe cross</span>
 <span class="sd">    sectional area (csa). </span>
 
-<span class="sd">    :param density: material density :math:`(\rho)`</span>
+<span class="sd">    :param density: material density :math:`(\\rho)`</span>
 <span class="sd">    :type p_d: float</span>
 <span class="sd">    :param csa: pipe cross sectional area :math:`(pipe_{CSA})`</span>
 <span class="sd">    :type p_d: float</span>
 <span class="sd">    :returns: pipe cross section mass per unit length</span>
 <span class="sd">    :rtype: float</span>
 
-<span class="sd">    .. math::</span>
-<span class="sd">        pipe_{cs_mass} = \rho * pipe_{CSA}</span>
+<span class="sd">    .. math:: pipe_{cs_mass} = \\rho * pipe_{CSA}</span>
 
 <span class="sd">    .. doctest::</span>
 
@@ -141,7 +174,7 @@
 
 
 
-<div class="viewcode-block" id="Do_from_pipe_Di"><a class="viewcode-back" href="../../../api-pipe.html#pdover2t.pipe.pipe_props.Do_from_pipe_Di">[docs]</a><span class="k">def</span> <span class="nf">Do_from_pipe_Di</span><span class="p">(</span><span class="n">Di</span><span class="p">,</span> <span class="n">WT</span><span class="p">):</span>
+<div class="viewcode-block" id="Do_from_pipe_Di"><a class="viewcode-back" href="../../../pipe/pipe_props.html#pdover2t.pipe.pipe_props.Do_from_pipe_Di">[docs]</a><span class="k">def</span> <span class="nf">Do_from_pipe_Di</span><span class="p">(</span><span class="n">Di</span><span class="p">,</span> <span class="n">WT</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Calculate pipe outer diameter (Do), given a reference inner diameter (Di)</span>
 <span class="sd">    and a wall thickness dimension (WT). WT can be a list or tuple of wall</span>
 <span class="sd">    thicknesses for compound section pipes.</span>
@@ -173,7 +206,7 @@
     <span class="k">return</span> <span class="n">Do</span></div>
 
 
-<div class="viewcode-block" id="Di_from_pipe_Do"><a class="viewcode-back" href="../../../api-pipe.html#pdover2t.pipe.pipe_props.Di_from_pipe_Do">[docs]</a><span class="k">def</span> <span class="nf">Di_from_pipe_Do</span><span class="p">(</span><span class="n">Do</span><span class="p">,</span> <span class="n">WT</span><span class="p">):</span>
+<div class="viewcode-block" id="Di_from_pipe_Do"><a class="viewcode-back" href="../../../pipe/pipe_props.html#pdover2t.pipe.pipe_props.Di_from_pipe_Do">[docs]</a><span class="k">def</span> <span class="nf">Di_from_pipe_Do</span><span class="p">(</span><span class="n">Do</span><span class="p">,</span> <span class="n">WT</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Calculate pipe inner diameter (Di), given a reference outer diameter (Do)</span>
 <span class="sd">    and a wall thickness dimension (WT). WT can be a list or tuple of wall</span>
 <span class="sd">    thicknesses for compound section pipes.</span>
@@ -220,21 +253,23 @@
         <div class="sphinxsidebarwrapper"><p class="logo"><a href="../../../index.html">
 <img class="logo" src="../../../_static/logo.png" width="180" alt="Logo"/>
 </a></p>
-<form class="search" action="../../../search.html" method="get">
-  <input type="text" name="q"
-   placeholder="type to search" />
-  <input type="hidden" name="check_keywords" value="yes" />
-  <input type="hidden" name="area" value="default" />
-</form>
-<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api-docs.html">API ref docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api-docs.html">API reference</a></li>
 </ul>
-<h3>Links</h3>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Links</h3>
 <ul>
   <li><a href="https://pypi.org/project/pdover2t/">PDover2t on PyPI</a></li>
   <li><a href="https://github.com/qwilka/PDover2t">PDover2t on GitHub</a></li>
@@ -244,28 +279,22 @@
       </div>
       <div class="clearer"></div>
     </div>
-  <div class="related bottom">
-  <nav id="rellinks">
-    <ul>
-    </ul>
-  </nav>
-  <nav id="breadcrumbs">
-    <ul>
-      <li><a href="../../../index.html">PDover2t  documentation</a></li>
-      <li>
-        <a href="../../index.html">Module code</a>
-      </li> 
-    </ul>
-  </nav>
-  </div>
-  <footer id="pagefooter">&copy; 2019, Stephen McEntee.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-      2.2.1
-        with the <a href="http://github.com/irskep/sphinx-better-theme">
-          better</a> theme.
-
-  </footer>
-
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PDover2t  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Stephen McEntee.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
+    </div>
   </body>
 </html>

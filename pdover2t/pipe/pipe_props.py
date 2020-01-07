@@ -13,8 +13,47 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 
+def pipe_equivalent_layers(layer_props, *, Di_ref=None, Do_ref=None):
+    """calculate equivalent properties for stacked pipe layers.
 
-def pipe_radial_dimensions(*, Do=None, Di=None, WT=None):
+    :param layer_props: list of layer properties, each element is
+    a tuple consisting of (layer_thickness, layer_mass_density)
+    :type layer_props: list, tuple
+
+    .. doctest::
+
+        >>> pipe_equivalent_layers([(0.0185,7850),(0.003,7000)], Do_ref=0.3229)
+        (0.0215, 7738.675329084429, 157.54267202070224)
+    """
+    if (Di_ref is not None) and (Do_ref is not None):
+        raise ValueError(f"arguments not correctly specified: Di_ref={Di_ref}, Do_ref={Do_ref}")
+    _dref = Di_ref if Di_ref else Do_ref
+    _equiv_mass = 0
+    _total_wt = 0
+    for layer in layer_props:
+        wt, rho, *_ = layer
+        _total_wt += wt
+        if Di_ref:
+            _Do, _Di, _WT = pipe_Do_Di_WT(Do=None, Di=_dref, WT=wt)
+            _dref = _Do
+        else:
+            _Do, _Di, _WT = pipe_Do_Di_WT(Do=_dref, Di=None, WT=wt)
+            _dref = _Di
+        _csa = np.pi/4 * (_Do**2 - _Di**2)
+        _mass = _csa * rho
+        _equiv_mass += _mass
+    if Di_ref:
+        _csa = np.pi/4 * (_dref**2 - Di_ref**2)
+    else:
+        _csa = np.pi/4 * (Do_ref**2 - _dref**2)
+    _equiv_rho = _equiv_mass / _csa
+    return (_total_wt, _equiv_rho, _equiv_mass)
+
+
+
+
+
+def pipe_Do_Di_WT(*, Do=None, Di=None, WT=None):
     """Resolve pipe radial dimensions. Given two of three dimensional arguments 
     outer diameter Do; inner diameter Di; wall thickness WT;
     calculate the missing dimension and return a tuple (Do, Di, WT).
@@ -33,11 +72,11 @@ def pipe_radial_dimensions(*, Do=None, Di=None, WT=None):
 
     .. doctest::
 
-        >>> pipe_radial_dimensions(Do=0.660, WT=0.05)
+        >>> pipe_Do_Di_WT(Do=0.660, WT=0.05)
         (0.66, 0.56, 0.05)
     """
     if all([isinstance(x, (float, int)) for x in [Do, Di, WT]]):
-        assert Di==Do-2*WT, f"pipe_radial_dimensions: inconsistent pipe dimensions Do={Do} Di={Di}, WT={WT}."
+        assert Di==Do-2*WT, f"pipe_Do_Di_WT: inconsistent pipe dimensions Do={Do} Di={Di}, WT={WT}."
     elif Do is None and all([isinstance(x, (float, int)) for x in [Di, WT]]):
         Do = Di + 2*WT
     elif Di is None and all([isinstance(x, (float, int)) for x in [Do, WT]]):
@@ -45,7 +84,7 @@ def pipe_radial_dimensions(*, Do=None, Di=None, WT=None):
     elif WT is None and all([isinstance(x, (float, int)) for x in [Do, Di]]):
         WT = (Do - Di)/2
     else:
-        logger.error("pipe_radial_dimensions: arguments incorrectly specified: Do=%s, Di=%s, WT=%s" % (Do,Di,WT))
+        logger.error("pipe_Do_Di_WT: arguments incorrectly specified: Do=%s, Di=%s, WT=%s" % (Do,Di,WT))
     return Do, Di, WT
 
 
@@ -68,7 +107,7 @@ def pipe_cs_area(*, Do=None, Di=None, WT=None):
         >>> pipe_cs_area(Do=0.660, WT=0.05)
         0.09581857593448868
     """
-    _Do, _Di, _WT = pipe_radial_dimensions(Do=Do, Di=Di, WT=WT)
+    _Do, _Di, _WT = pipe_Do_Di_WT(Do=Do, Di=Di, WT=WT)
     csa = np.pi/4 * (_Do**2 - _Di**2)
     return csa
 
@@ -78,15 +117,14 @@ def pipe_cs_mass(density, csa):
     by specifying the material density, and the pipe cross
     sectional area (csa). 
 
-    :param density: material density :math:`(\rho)`
+    :param density: material density :math:`(\\rho)`
     :type p_d: float
     :param csa: pipe cross sectional area :math:`(pipe_{CSA})`
     :type p_d: float
     :returns: pipe cross section mass per unit length
     :rtype: float
 
-    .. math::
-        pipe_{cs_mass} = \rho * pipe_{CSA}
+    .. math:: pipe_{cs_mass} = \\rho * pipe_{CSA}
 
     .. doctest::
 

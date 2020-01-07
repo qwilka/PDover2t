@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <title>pdover2t.dnvgl_st_f101.pressure_containment &#8212; PDover2t  documentation</title>
-    <link rel="stylesheet" href="../../../_static/better.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -14,26 +14,21 @@
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
-    <header id="pageheader"><h1><a href="../../../index.html ">
-        PDover2t  documentation
-    </a></h1></header>
-  <div class="related top">
-  <nav id="rellinks">
-    <ul>
-    </ul>
-  </nav>
-  <nav id="breadcrumbs">
-    <ul>
-      <li><a href="../../../index.html">PDover2t  documentation</a></li>
-      <li>
-        <a href="../../index.html">Module code</a>
-      </li> 
-    </ul>
-  </nav>
-  </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PDover2t  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -56,7 +51,7 @@
 
 
 
-<div class="viewcode-block" id="incid_ref_press"><a class="viewcode-back" href="../../../api.html#pdover2t.dnvgl_st_f101.pressure_containment.incid_ref_press">[docs]</a><span class="k">def</span> <span class="nf">incid_ref_press</span><span class="p">(</span><span class="n">p_d</span><span class="p">,</span> <span class="n">gamma_inc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_inc&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="incid_ref_press"><a class="viewcode-back" href="../../../dnvgl-st-f101/pressure_containment.html#pdover2t.dnvgl_st_f101.pressure_containment.incid_ref_press">[docs]</a><span class="k">def</span> <span class="nf">incid_ref_press</span><span class="p">(</span><span class="n">p_d</span><span class="p">,</span> <span class="n">gamma_inc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_inc&quot;</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate DNVGL-ST-F101 «incidental reference pressure». </span>
 
 <span class="sd">    :param p_d: design pressure :math:`(p_d)`</span>
@@ -78,7 +73,7 @@
     <span class="k">return</span> <span class="n">p_d</span> <span class="o">*</span> <span class="n">gamma_inc</span></div>
 
 
-<div class="viewcode-block" id="system_test_press"><a class="viewcode-back" href="../../../api.html#pdover2t.dnvgl_st_f101.pressure_containment.system_test_press">[docs]</a><span class="k">def</span> <span class="nf">system_test_press</span><span class="p">(</span><span class="n">p_d</span><span class="p">,</span> <span class="n">gamma_inc</span><span class="p">,</span> <span class="n">alpha_spt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_t&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="system_test_press"><a class="viewcode-back" href="../../../dnvgl-st-f101/pressure_containment.html#pdover2t.dnvgl_st_f101.pressure_containment.system_test_press">[docs]</a><span class="k">def</span> <span class="nf">system_test_press</span><span class="p">(</span><span class="n">p_d</span><span class="p">,</span> <span class="n">gamma_inc</span><span class="p">,</span> <span class="n">alpha_spt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_t&quot;</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate DNVGL-ST-F101 «system test pressure». </span>
 
 <span class="sd">    (system_test_press)</span>
@@ -106,7 +101,7 @@
     <span class="k">return</span> <span class="n">p_d</span> <span class="o">*</span> <span class="n">gamma_inc</span> <span class="o">*</span> <span class="n">alpha_spt</span></div>
 
 
-<div class="viewcode-block" id="local_incid_press"><a class="viewcode-back" href="../../../api.html#pdover2t.dnvgl_st_f101.pressure_containment.local_incid_press">[docs]</a><span class="k">def</span> <span class="nf">local_incid_press</span><span class="p">(</span><span class="n">p_d</span><span class="p">,</span> <span class="n">rho_cont</span><span class="p">,</span>
+<div class="viewcode-block" id="local_incid_press"><a class="viewcode-back" href="../../../dnvgl-st-f101/pressure_containment.html#pdover2t.dnvgl_st_f101.pressure_containment.local_incid_press">[docs]</a><span class="k">def</span> <span class="nf">local_incid_press</span><span class="p">(</span><span class="n">p_d</span><span class="p">,</span> <span class="n">rho_cont</span><span class="p">,</span>
         <span class="n">h_l</span><span class="p">,</span> <span class="n">h_ref</span><span class="p">,</span> <span class="n">gamma_inc</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span> 
         <span class="n">g</span><span class="o">=</span><span class="mf">9.81</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_li&quot;</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&#39;&#39;&#39;Calculate local incidental pressure. Also applicable for </span>
@@ -145,7 +140,7 @@
     <span class="k">return</span> <span class="n">p_li</span></div>
 
 
-<div class="viewcode-block" id="local_test_press"><a class="viewcode-back" href="../../../api.html#pdover2t.dnvgl_st_f101.pressure_containment.local_test_press">[docs]</a><span class="k">def</span> <span class="nf">local_test_press</span><span class="p">(</span><span class="n">p_t</span><span class="p">,</span> <span class="n">rho_t</span><span class="p">,</span> <span class="n">h_l</span><span class="p">,</span> <span class="n">h_ref</span><span class="p">,</span> <span class="n">p_e</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha_spt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="local_test_press"><a class="viewcode-back" href="../../../dnvgl-st-f101/pressure_containment.html#pdover2t.dnvgl_st_f101.pressure_containment.local_test_press">[docs]</a><span class="k">def</span> <span class="nf">local_test_press</span><span class="p">(</span><span class="n">p_t</span><span class="p">,</span> <span class="n">rho_t</span><span class="p">,</span> <span class="n">h_l</span><span class="p">,</span> <span class="n">h_ref</span><span class="p">,</span> <span class="n">p_e</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha_spt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">g</span><span class="o">=</span><span class="mf">9.81</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_lt&quot;</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Calculate local test pressure.</span>
 <span class="sd">    </span>
@@ -163,7 +158,7 @@
     <span class="k">return</span> <span class="n">p_lt</span></div>
 
 
-<div class="viewcode-block" id="local_test_press_unity"><a class="viewcode-back" href="../../../api.html#pdover2t.dnvgl_st_f101.pressure_containment.local_test_press_unity">[docs]</a><span class="k">def</span> <span class="nf">local_test_press_unity</span><span class="p">(</span><span class="n">p_li</span><span class="p">,</span> <span class="n">p_e</span><span class="p">,</span> <span class="n">p_lt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_lt_uty&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="local_test_press_unity"><a class="viewcode-back" href="../../../dnvgl-st-f101/pressure_containment.html#pdover2t.dnvgl_st_f101.pressure_containment.local_test_press_unity">[docs]</a><span class="k">def</span> <span class="nf">local_test_press_unity</span><span class="p">(</span><span class="n">p_li</span><span class="p">,</span> <span class="n">p_e</span><span class="p">,</span> <span class="n">p_lt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_lt_uty&quot;</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Local test pressure unity</span>
 
 <span class="sd">    (local_test_press_unity)</span>
@@ -172,13 +167,13 @@
     <span class="k">return</span> <span class="n">p_lt_uty</span></div>
 
 
-<div class="viewcode-block" id="external_pressure"><a class="viewcode-back" href="../../../api.html#pdover2t.dnvgl_st_f101.pressure_containment.external_pressure">[docs]</a><span class="k">def</span> <span class="nf">external_pressure</span><span class="p">(</span><span class="n">h_l</span><span class="p">,</span> <span class="n">rho_water</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="mf">9.81</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_e&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="external_pressure"><a class="viewcode-back" href="../../../dnvgl-st-f101/pressure_containment.html#pdover2t.dnvgl_st_f101.pressure_containment.external_pressure">[docs]</a><span class="k">def</span> <span class="nf">external_pressure</span><span class="p">(</span><span class="n">h_l</span><span class="p">,</span> <span class="n">rho_water</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="mf">9.81</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_e&quot;</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Water pressure, external to pipe.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">h_l</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho_water</span> <span class="o">*</span> <span class="n">g</span></div>
 
 
-<div class="viewcode-block" id="press_contain_resis"><a class="viewcode-back" href="../../../api.html#pdover2t.dnvgl_st_f101.pressure_containment.press_contain_resis">[docs]</a><span class="k">def</span> <span class="nf">press_contain_resis</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">f_y</span><span class="p">,</span> <span class="n">f_u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="press_contain_resis"><a class="viewcode-back" href="../../../dnvgl-st-f101/pressure_containment.html#pdover2t.dnvgl_st_f101.pressure_containment.press_contain_resis">[docs]</a><span class="k">def</span> <span class="nf">press_contain_resis</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">f_y</span><span class="p">,</span> <span class="n">f_u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">gamma_m</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">gamma_SCPC</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_b&quot;</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Pressure containment resistance in accordance with DNVGL-ST-F101.</span>
 
@@ -199,7 +194,7 @@
     <span class="k">return</span> <span class="n">p_b</span></div>
 
 
-<div class="viewcode-block" id="press_contain_resis_unity"><a class="viewcode-back" href="../../../api.html#pdover2t.dnvgl_st_f101.pressure_containment.press_contain_resis_unity">[docs]</a><span class="k">def</span> <span class="nf">press_contain_resis_unity</span><span class="p">(</span><span class="n">p_li</span><span class="p">,</span> <span class="n">p_e</span><span class="p">,</span> <span class="n">p_b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_cont_res_uty&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="press_contain_resis_unity"><a class="viewcode-back" href="../../../dnvgl-st-f101/pressure_containment.html#pdover2t.dnvgl_st_f101.pressure_containment.press_contain_resis_unity">[docs]</a><span class="k">def</span> <span class="nf">press_contain_resis_unity</span><span class="p">(</span><span class="n">p_li</span><span class="p">,</span> <span class="n">p_e</span><span class="p">,</span> <span class="n">p_b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_cont_res_uty&quot;</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Pressure containment resistance unity</span>
 
 <span class="sd">    (press_contain_resis_unity)</span>
@@ -208,7 +203,7 @@
     <span class="k">return</span> <span class="n">p_cont_res_uty</span></div>
 
 
-<div class="viewcode-block" id="mill_test_press"><a class="viewcode-back" href="../../../api.html#pdover2t.dnvgl_st_f101.pressure_containment.mill_test_press">[docs]</a><span class="k">def</span> <span class="nf">mill_test_press</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">SMYS</span><span class="p">,</span> <span class="n">SMTS</span><span class="p">,</span> 
+<div class="viewcode-block" id="mill_test_press"><a class="viewcode-back" href="../../../dnvgl-st-f101/pressure_containment.html#pdover2t.dnvgl_st_f101.pressure_containment.mill_test_press">[docs]</a><span class="k">def</span> <span class="nf">mill_test_press</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">SMYS</span><span class="p">,</span> <span class="n">SMTS</span><span class="p">,</span> 
                     <span class="n">alpha_U</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha_mpt</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_mpt&quot;</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Mill test pressure</span>
 
@@ -224,7 +219,7 @@
     <span class="k">return</span> <span class="n">p_mpt</span></div>
 
 
-<div class="viewcode-block" id="mill_test_press_unity"><a class="viewcode-back" href="../../../api.html#pdover2t.dnvgl_st_f101.pressure_containment.mill_test_press_unity">[docs]</a><span class="k">def</span> <span class="nf">mill_test_press_unity</span><span class="p">(</span><span class="n">p_li</span><span class="p">,</span> <span class="n">p_e</span><span class="p">,</span> <span class="n">p_mpt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_mpt_uty&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="mill_test_press_unity"><a class="viewcode-back" href="../../../dnvgl-st-f101/pressure_containment.html#pdover2t.dnvgl_st_f101.pressure_containment.mill_test_press_unity">[docs]</a><span class="k">def</span> <span class="nf">mill_test_press_unity</span><span class="p">(</span><span class="n">p_li</span><span class="p">,</span> <span class="n">p_e</span><span class="p">,</span> <span class="n">p_mpt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_mpt_uty&quot;</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Mill test pressure unity</span>
 
 <span class="sd">    (mill_test_press_unity)</span>
@@ -233,7 +228,7 @@
     <span class="k">return</span> <span class="n">p_mpt_uty</span></div>
 
 
-<div class="viewcode-block" id="press_contain_unity"><a class="viewcode-back" href="../../../api.html#pdover2t.dnvgl_st_f101.pressure_containment.press_contain_unity">[docs]</a><span class="k">def</span> <span class="nf">press_contain_unity</span><span class="p">(</span><span class="n">p_cont_res_uty</span><span class="p">,</span> <span class="n">p_lt_uty</span><span class="p">,</span>
+<div class="viewcode-block" id="press_contain_unity"><a class="viewcode-back" href="../../../dnvgl-st-f101/pressure_containment.html#pdover2t.dnvgl_st_f101.pressure_containment.press_contain_unity">[docs]</a><span class="k">def</span> <span class="nf">press_contain_unity</span><span class="p">(</span><span class="n">p_cont_res_uty</span><span class="p">,</span> <span class="n">p_lt_uty</span><span class="p">,</span>
                         <span class="n">p_mpt_uty</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;p_cont_uty&quot;</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Pressure containment unity</span>
 
@@ -246,7 +241,7 @@
     <span class="k">return</span> <span class="n">p_cont_uty</span></div>
 
 
-<span class="k">def</span> <span class="nf">pressure_containment_all</span><span class="p">(</span><span class="n">p_d</span><span class="p">,</span>  
+<div class="viewcode-block" id="pressure_containment_all"><a class="viewcode-back" href="../../../dnvgl-st-f101/pressure_containment.html#pdover2t.dnvgl_st_f101.pressure_containment.pressure_containment_all">[docs]</a><span class="k">def</span> <span class="nf">pressure_containment_all</span><span class="p">(</span><span class="n">p_d</span><span class="p">,</span>  
         <span class="n">D</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t_corr</span><span class="p">,</span> <span class="n">t_fab</span><span class="p">,</span>
         <span class="n">h_l</span><span class="p">,</span> <span class="n">h_ref</span><span class="p">,</span> <span class="n">rho_cont</span><span class="p">,</span> <span class="n">rho_water</span><span class="p">,</span>
         <span class="n">gamma_m</span><span class="p">,</span> <span class="n">gamma_SCPC</span><span class="p">,</span> <span class="n">alpha_U</span><span class="p">,</span> <span class="n">alpha_spt</span><span class="p">,</span> <span class="n">alpha_mpt</span><span class="p">,</span> 
@@ -308,7 +303,7 @@
         <span class="s2">&quot;p_lt_uty&quot;</span><span class="p">:</span> <span class="n">p_lt_uty</span><span class="p">,</span>
         <span class="s2">&quot;p_mpt_uty&quot;</span><span class="p">:</span> <span class="n">p_mpt_uty</span><span class="p">,</span>
         <span class="s2">&quot;p_cont_uty&quot;</span><span class="p">:</span> <span class="n">p_cont_uty</span><span class="p">,</span>
-    <span class="p">}</span>
+    <span class="p">}</span></div>
 
 
 
@@ -349,21 +344,23 @@
         <div class="sphinxsidebarwrapper"><p class="logo"><a href="../../../index.html">
 <img class="logo" src="../../../_static/logo.png" width="180" alt="Logo"/>
 </a></p>
-<form class="search" action="../../../search.html" method="get">
-  <input type="text" name="q"
-   placeholder="type to search" />
-  <input type="hidden" name="check_keywords" value="yes" />
-  <input type="hidden" name="area" value="default" />
-</form>
-<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api-docs.html">API ref docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api-docs.html">API reference</a></li>
 </ul>
-<h3>Links</h3>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Links</h3>
 <ul>
   <li><a href="https://pypi.org/project/pdover2t/">PDover2t on PyPI</a></li>
   <li><a href="https://github.com/qwilka/PDover2t">PDover2t on GitHub</a></li>
@@ -373,28 +370,22 @@
       </div>
       <div class="clearer"></div>
     </div>
-  <div class="related bottom">
-  <nav id="rellinks">
-    <ul>
-    </ul>
-  </nav>
-  <nav id="breadcrumbs">
-    <ul>
-      <li><a href="../../../index.html">PDover2t  documentation</a></li>
-      <li>
-        <a href="../../index.html">Module code</a>
-      </li> 
-    </ul>
-  </nav>
-  </div>
-  <footer id="pagefooter">&copy; 2019, Stephen McEntee.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-      2.2.1
-        with the <a href="http://github.com/irskep/sphinx-better-theme">
-          better</a> theme.
-
-  </footer>
-
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PDover2t  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Stephen McEntee.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
+    </div>
   </body>
 </html>
