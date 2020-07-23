@@ -153,7 +153,7 @@ if __name__=="__main__":
         plt.plot(omega, S_etaeta, omega, S_uu, omega, G)
         #plt.plot(omega, S_uu)
         plt.show()
-    if True:
+    if False:
         T_p=15; depth=50; H_s=10
         wavelen = calc_wave_length(T_p, depth)
         print(f"wave length={wavelen:.3f}; T={T_p}, depth={depth}")

@@ -78,7 +78,7 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme_path = [better_theme_path]
+#html_theme_path = [better_theme_path]
 html_theme = 'nature'    #'nature' 'sphinxdoc'  'better'
 
 # Theme options are theme-specific and customize the look and feel of a theme
