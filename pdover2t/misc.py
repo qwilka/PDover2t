@@ -10,6 +10,10 @@ def symbol(desc):
         return "α"
     if _desc == "lambda" or len(desc)==1 and desc=="l":
         return "λ"
+    if _desc == "nu" or len(desc)==1 and desc=="n":
+        return "ν"
+    if _desc == "rho" or len(desc)==1 and desc=="r":
+        return "ρ"
     if _desc == "sigma" or len(desc)==1 and desc=="s":
         return "σ"
 
