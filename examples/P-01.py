@@ -14,6 +14,8 @@ lh = logging.StreamHandler()
 # lh.setFormatter(formatter)
 logger.addHandler(lh)
 
+study_file = "Skarv_study.vn4"
+
 
 field_params = {
     "ast_country": "IRL",
@@ -75,7 +77,7 @@ env_params = {
 #     "T": 60,
 # }
 
-vnpkl_file = "/home/develop/engineering/src/scratch/pflacs_test/IRL--PFLACS--P-01.vnpkl"
+vnpkl_file = "IRL--PFLACS--P-01.vn4"
 
 
 rootnode = Premise("Pflacs oil&gas field, subsea", 

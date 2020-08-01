@@ -13,12 +13,12 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 
-def lpipe_layers_equiv(layer_props, *, Di=None, Do=None):
+def lpipe_layers_equiv(layers, *, Di_ref=None, Do_ref=None):
     """calculate equivalent properties for stacked ring layers.
 
-    :param layer_props: list of layer properties, each element is
+    :param layers: list of layer properties, each element is
     a tuple consisting of (layer_thickness, layer_mass_density)
-    :type layer_props: list, tuple
+    :type layers: list, tuple
     :returns: tuple with equivalent properties (thickness, density, mass/length)
     :rtype: tuple
 
@@ -27,27 +27,30 @@ def lpipe_layers_equiv(layer_props, *, Di=None, Do=None):
         >>> ring_layers_equiv([(0.0185,7850),(0.003,7000)], Do_ref=0.3229)
         (0.0215, 7738.675329084429, 157.54267202070224)
     """
-    if (Di is not None) and (Do is not None):
-        raise ValueError(f"arguments not correctly specified: Di_ref={Di}, Do_ref={Do}")
+    if (Di_ref is not None) and (Do_ref is not None):
+        raise ValueError(f"arguments not correctly specified: Di_ref={Di_ref}, Do_ref={Do_ref}")
     _dref = Di_ref if Di_ref else Do_ref
     _equiv_mass = 0
     _total_wt = 0
-    for layer in layer_props:
+    for layer in layers:
         wt, rho, *_ = layer
         _total_wt += wt
         if Di_ref:
-            _Do, _Di, _WT = ring_D_t(Do=None, Di=_dref, t=wt)
+            _Do, _Di, _WT = lpipe_D_WT(Do=None, Di=_dref, t=wt)
             _dref = _Do
         else:
-            _Do, _Di, _WT = ring_D_t(Do=_dref, Di=None, t=wt)
+            _Do, _Di, _WT = lpipe_D_WT(Do=_dref, Di=None, t=wt)
             _dref = _Di
-        _csa = np.pi/4 * (_Do**2 - _Di**2)
+        #_csa = np.pi/4 * (_Do**2 - _Di**2)
+        _csa = np.pi/4 * (np.power(_Do,2) - np.power(_Di,2))
         _mass = _csa * rho
         _equiv_mass += _mass
     if Di_ref:
-        _csa = np.pi/4 * (_dref**2 - Di_ref**2)
+        #_csa = np.pi/4 * (_dref**2 - Di_ref**2)
+        _csa = np.pi/4 * (np.power(_dref,2) - np.power(Di_ref,2))
     else:
-        _csa = np.pi/4 * (Do_ref**2 - _dref**2)
+        #_csa = np.pi/4 * (Do_ref**2 - _dref**2)
+        _csa = np.pi/4 * (np.power(Do_ref,2) - np.power(_dref,2))
     _equiv_rho = _equiv_mass / _csa
     return (_total_wt, _equiv_rho, _equiv_mass)
 
@@ -55,7 +58,7 @@ def lpipe_layers_equiv(layer_props, *, Di=None, Do=None):
 
 
 
-def lpipe_D_WT(*, Do=None, Di=None, WT=None, _round=False):
+def lpipe_D_WT(*, Do=None, Di=None, WT=None, _round=False) -> "('Do', 'Di', 'WT')":
     """Resolve pipe radial dimensions. Given two of three dimensional arguments 
     outer diameter Do; inner diameter Di; wall thickness WT;
     calculate the missing dimension and return a tuple (Do, Di, WT).
@@ -84,7 +87,7 @@ def lpipe_D_WT(*, Do=None, Di=None, WT=None, _round=False):
     if all([isinstance(x, (float, int)) for x in [Do, Di, WT]]):
         try:
             assert Di==Do-2*WT, f"inconsistent pipe dimensions Do={Do} Di={Di}, WT={WT}."
-            return True
+            #return True
         except AssertionError as err:
             logger.error("lpipe_D_WT:  %s" % (err,))
             return False
@@ -102,7 +105,7 @@ def lpipe_D_WT(*, Do=None, Di=None, WT=None, _round=False):
 
 
 
-def lpipe_CSA(*, Do=None, Di=None, WT=None):
+def lpipe_CSA(*, Do=None, Di=None, WT=None, layers=None):
     """Calculate the area of a circular ring,
     by specifying at least
     two of the three dimensional arguments outer diameter Do, 
@@ -127,6 +130,7 @@ def lpipe_CSA(*, Do=None, Di=None, WT=None):
     """
     _Do, _Di, _WT = lpipe_D_WT(Do=Do, Di=Di, WT=WT)
     _csa = np.pi/4 * (_Do**2 - _Di**2)
+    #_csa = np.pi/4 * (np.power(_Do,2) - np.power(_Di,2))
     return _csa
 
 
@@ -156,6 +160,22 @@ def lpipe_Ix(*, Do=None, Di=None, t=None):
     _Do, _Di, _WT = lpipe_Ix(Do=Do, Di=Di, WT=WT)
     _moi = np.pi/64 * (_Do**4 - _Di**4)
     return _moi
+
+
+def all_pipe_properties(*, Do=None, Di=None, WT=None):
+    """All pipe properties
+    """
+    CSA = lpipe_CSA(Do=Do, Di=Di, WT=None)
+    coat_WT, coat_ρ, coat_mass = lpipe_layers_equiv(layers, 
+        Di_ref=Do)
+
+    return {
+        "CSA": CSA,
+        "coat_WT": coat_WT,
+        "coat_ρ": coat_ρ,
+        "coat_mass": coat_mass,
+    }
+
 
 
 if __name__ == "__main__":

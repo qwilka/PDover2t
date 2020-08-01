@@ -1,6 +1,8 @@
 .vscode/
 *.pflacs
 *.hdf5
+*.vn3
+*.vn4
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
