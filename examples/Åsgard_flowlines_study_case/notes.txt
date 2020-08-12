@@ -1,0 +1,14 @@
+
+Example calculations following chapter 23 in [@bai2014subsea].
+
+@book{bai2014subsea,
+  title={Subsea pipeline design, analysis, and installation},
+  author={Bai, Qiang and Bai, Yong},
+  year={2014},
+  publisher={Gulf Professional Publishing},
+  isbn = {978-0-12-386888-6}
+}
+
+
+https://factpages.npd.no/factpages/
+
