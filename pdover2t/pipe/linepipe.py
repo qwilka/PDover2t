@@ -6,11 +6,33 @@ References:
 1. https://en.wikipedia.org/wiki/Section_modulus
 """
 import logging
+import math
 
 import numpy as np
 
 
 logger = logging.getLogger(__name__)
+
+π = math.pi
+
+
+class Material:
+
+    def __init__(self, name, ρ):
+        self.name = name
+        self.ρ = ρ
+
+
+
+class LinePipe:
+
+    def __init__(self, material, *, Do=None, Di=None, WT=None, length=None):
+        self.Do, self.Di, self.WT = lpipe_D_WT(Do=Do, Di=Di, WT=WT) 
+        self.CSA = π/4 * (self.Do**2 - self.Di**2)
+        self.material = material if isinstance(material, Material) else None
+        self.mass = self.CSA * self.material.ρ
+        self.length = length
+        self.weight = self.mass * self.length if self.length else None
 
 
 def lpipe_layers_equiv(layers, *, Di_ref=None, Do_ref=None):
@@ -29,23 +51,29 @@ def lpipe_layers_equiv(layers, *, Di_ref=None, Do_ref=None):
     """
     if (Di_ref is not None) and (Do_ref is not None):
         raise ValueError(f"arguments not correctly specified: Di_ref={Di_ref}, Do_ref={Do_ref}")
-    _dref = Di_ref if Di_ref else Do_ref
+    #_dref = Di_ref if Di_ref else Do_ref
+    _dref = Di_ref if Do_ref is None else Do_ref
     _equiv_mass = 0
     _total_wt = 0
     for layer in layers:
         wt, rho, *_ = layer
         _total_wt += wt
-        if Di_ref:
-            _Do, _Di, _WT = lpipe_D_WT(Do=None, Di=_dref, t=wt)
+        #if Di_ref:
+        if Do_ref is None:
+            #_Do, _Di, _WT = lpipe_D_WT(Do=None, Di=_dref, WT=wt)
+            _WT = None
+            _Do = _dref + 2*wt
+            _Di = _dref
             _dref = _Do
         else:
-            _Do, _Di, _WT = lpipe_D_WT(Do=_dref, Di=None, t=wt)
+            _Do, _Di, _WT = lpipe_D_WT(Do=_dref, Di=None, WT=wt)
             _dref = _Di
         #_csa = np.pi/4 * (_Do**2 - _Di**2)
         _csa = np.pi/4 * (np.power(_Do,2) - np.power(_Di,2))
         _mass = _csa * rho
         _equiv_mass += _mass
-    if Di_ref:
+    #if Di_ref:
+    if Do_ref is None:
         #_csa = np.pi/4 * (_dref**2 - Di_ref**2)
         _csa = np.pi/4 * (np.power(_dref,2) - np.power(Di_ref,2))
     else:
@@ -102,7 +130,13 @@ def lpipe_D_WT(*, Do=None, Di=None, WT=None, _round=False) -> "('Do', 'Di', 'WT'
     return Do, Di, WT
 
 
-
+def lpipe_umass(ρ, *, Do=None, Di=None, WT=None, CSA=None):
+    """Calculate linepipe mass per unit length.
+    """
+    if CSA is None:
+        CSA = lpipe_CSA(Do=Do, Di=Di, WT=WT)
+    umass = CSA * ρ
+    return umass
 
 
 def lpipe_CSA(*, Do=None, Di=None, WT=None, layers=None):
@@ -161,20 +195,107 @@ def lpipe_Ix(*, Do=None, Di=None, t=None):
     _moi = np.pi/64 * (_Do**4 - _Di**4)
     return _moi
 
+def circle_CSA(Do, Di=None):
+    # if Di:
+    #     CSA = np.pi/4 * (Do**2 - Di**2)
+    # else:
+    #     CSA = np.pi/4 * Do**2
+    if Di is None:
+        CSA = np.pi/4 * Do**2
+    else:
+        CSA = np.pi/4 * (Do**2 - Di**2)
+    return CSA
 
-def all_pipe_properties(*, Do=None, Di=None, WT=None):
-    """All pipe properties
+
+def calc_pipeline_props(lpipe_Do=None, lpipe_Di=None, lpipe_WT=None,
+    lpipe_ρ=None, coat_layers=None,
+    content_ρ=None,
+    seawater_ρ=None,
+    g=9.81, **kwargs):
+    """Calculate all pipeline properties from basic data.
     """
-    CSA = lpipe_CSA(Do=Do, Di=Di, WT=None)
-    coat_WT, coat_ρ, coat_mass = lpipe_layers_equiv(layers, 
-        Di_ref=Do)
+    #if [lpipe_Do, lpipe_Di, lpipe_WT].count(None)>1: # Numpy bug ValueError: The truth value of an array with more than one element is ambiguous.
+    if len([None for x in [lpipe_Do, lpipe_Di, lpipe_WT] if x is None])>1:
+        logger.error("calc_pipeline_props: arguments not specified correcly lpipe_Do=%s, lpipe_Di=%s, lpipe_WT=%s" % (lpipe_Do, lpipe_Di, lpipe_WT))
+        return False
+    #lpipe_Do, lpipe_Di, lpipe_WT = lpipe_D_WT(Do=lpipe_Do, Di=lpipe_Di, WT=lpipe_WT, _round=False)
+    if lpipe_Do is None:
+        lpipe_Do = lpipe_Di + 2 * lpipe_WT
+    elif lpipe_Di is None:
+        lpipe_Di = lpipe_Do - 2 * lpipe_WT
+    elif lpipe_WT is None:
+        lpipe_WT = (lpipe_Do - lpipe_Di)/2
+    # Numpy bug ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+    try:
+        assert np.array_equal(lpipe_Di, lpipe_Do-2*lpipe_WT), f"inconsistent pipe dimensions lpipe_Do={lpipe_Do} lpipe_Di={lpipe_Di}, lpipe_WT={lpipe_WT}."
+        # try:
+        #     assert np.array_equal(lpipe_Di, lpipe_Do-2*lpipe_WT), f"inconsistent pipe dimensions lpipe_Do={lpipe_Do} lpipe_Di={lpipe_Di}, lpipe_WT={lpipe_WT}."
+        # except TypeError:
+        #     assert lpipe_Di==lpipe_Do-2*lpipe_WT, f"inconsistent pipe dimensions lpipe_Do={lpipe_Do} lpipe_Di={lpipe_Di}, lpipe_WT={lpipe_WT}."
+    except AssertionError as err:
+        logger.error("calc_pipeline_props:  %s" % (err,))
+        return False
 
-    return {
-        "CSA": CSA,
-        "coat_WT": coat_WT,
-        "coat_ρ": coat_ρ,
-        "coat_mass": coat_mass,
+    #lpipe_CSA = np.pi/4 * (lpipe_Do**2 - lpipe_Di**2)
+    lpipe_CSA = circle_CSA(lpipe_Do, lpipe_Di)
+    #lpipe_CSA = np.pi/4 * (np.power(lpipe_Do,2) - np.power(lpipe_Di,2))
+    lpipe_I = np.pi/64 * (lpipe_Do**4 - lpipe_Di**4)
+    retObj = {
+        "lpipe_Do": lpipe_Do,
+        "lpipe_Di": lpipe_Di,
+        "lpipe_WT": lpipe_WT,
+        "lpipe_CSA": lpipe_CSA,
+        "lpipe_I": lpipe_I,
     }
+
+    pl_Do = lpipe_Do
+    pl_empty_umass = None
+    if lpipe_ρ:
+        lpipe_umass = lpipe_CSA * lpipe_ρ
+        retObj["lpipe_umass"] = lpipe_umass
+        pl_empty_umass = lpipe_umass
+
+    coat_umass = None
+    if coat_layers:
+        coat_WT, coat_ρ, coat_umass = lpipe_layers_equiv(coat_layers, Di_ref=lpipe_Do)
+        pl_Do = pl_Do + 2 * coat_WT
+        retObj["coat_WT"] = coat_WT
+        retObj["coat_ρ"] = coat_ρ
+
+    content_umass = None
+    if content_ρ:
+        content_Do = lpipe_Di
+        content_CSA = circle_CSA(content_Do)
+        content_umass = content_CSA * content_ρ
+        retObj["content_umass"] = content_umass
+
+    if pl_empty_umass is not None:
+        retObj["pl_empty_umass"] = pl_empty_umass
+        if coat_umass is not None:
+            pl_empty_umass = pl_empty_umass + coat_umass
+            retObj["pl_empty_umass"] = pl_empty_umass
+        if content_umass is not None:
+            pl_content_umass = pl_empty_umass + content_umass
+            retObj["pl_content_umass"] = pl_content_umass
+        #retObj["pl_uweight"] = total_umass * g
+
+    if seawater_ρ:
+        pl_CSA = circle_CSA(pl_Do)
+        pl_ubuoyf = pl_CSA * seawater_ρ * g
+        retObj["pl_ubuoyf"] = pl_ubuoyf
+        if pl_empty_umass is not None:
+            pl_empty_usubw =  pl_empty_umass * g - pl_ubuoyf
+            retObj["pl_empty_usubw"] =  pl_empty_usubw
+            # if coat_umass is not None:
+            #     pl_empty_usubw = pl_empty_usubw + coat_umass * g
+            #     retObj["pl_empty_usubw"] =  pl_empty_usubw
+            if content_umass is not None:
+                pl_content_usubw = pl_empty_usubw + content_umass * g
+                retObj["pl_content_usubw"] =  pl_content_usubw
+
+    retObj["pl_Do"] = pl_Do
+
+    return retObj
 
 
 
