@@ -211,7 +211,7 @@ def calc_pipeline_props(lpipe_Do=None, lpipe_Di=None, lpipe_WT=None,
     lpipe_ρ=None, coat_layers=None,
     content_ρ=None,
     seawater_ρ=None,
-    g=9.81, **kwargs):
+    g=9.806650, **kwargs):
     """Calculate all pipeline properties from basic data.
     """
     #if [lpipe_Do, lpipe_Di, lpipe_WT].count(None)>1: # Numpy bug ValueError: The truth value of an array with more than one element is ambiguous.
@@ -240,62 +240,84 @@ def calc_pipeline_props(lpipe_Do=None, lpipe_Di=None, lpipe_WT=None,
     lpipe_CSA = circle_CSA(lpipe_Do, lpipe_Di)
     #lpipe_CSA = np.pi/4 * (np.power(lpipe_Do,2) - np.power(lpipe_Di,2))
     lpipe_I = np.pi/64 * (lpipe_Do**4 - lpipe_Di**4)
-    retObj = {
-        "lpipe_Do": lpipe_Do,
-        "lpipe_Di": lpipe_Di,
-        "lpipe_WT": lpipe_WT,
-        "lpipe_CSA": lpipe_CSA,
-        "lpipe_I": lpipe_I,
-    }
+    # retObj = {
+    #     "lpipe_Do": lpipe_Do,
+    #     "lpipe_Di": lpipe_Di,
+    #     "lpipe_WT": lpipe_WT,
+    #     "lpipe_CSA": lpipe_CSA,
+    #     "lpipe_I": lpipe_I,
+    # }
 
     pl_Do = lpipe_Do
+    lpipe_umass = None
     pl_empty_umass = None
     if lpipe_ρ:
         lpipe_umass = lpipe_CSA * lpipe_ρ
-        retObj["lpipe_umass"] = lpipe_umass
+        #retObj["lpipe_umass"] = lpipe_umass
         pl_empty_umass = lpipe_umass
 
     coat_umass = None
+    coat_WT = None
+    coat_ρ = None
     if coat_layers:
         coat_WT, coat_ρ, coat_umass = lpipe_layers_equiv(coat_layers, Di_ref=lpipe_Do)
         pl_Do = pl_Do + 2 * coat_WT
-        retObj["coat_WT"] = coat_WT
-        retObj["coat_ρ"] = coat_ρ
+        #retObj["coat_WT"] = coat_WT
+        #retObj["coat_ρ"] = coat_ρ
 
     content_umass = None
     if content_ρ:
         content_Do = lpipe_Di
         content_CSA = circle_CSA(content_Do)
         content_umass = content_CSA * content_ρ
-        retObj["content_umass"] = content_umass
+        #retObj["content_umass"] = content_umass
 
     if pl_empty_umass is not None:
-        retObj["pl_empty_umass"] = pl_empty_umass
+        #retObj["pl_empty_umass"] = pl_empty_umass
         if coat_umass is not None:
             pl_empty_umass = pl_empty_umass + coat_umass
-            retObj["pl_empty_umass"] = pl_empty_umass
+            #retObj["pl_empty_umass"] = pl_empty_umass
         if content_umass is not None:
             pl_content_umass = pl_empty_umass + content_umass
-            retObj["pl_content_umass"] = pl_content_umass
+            #retObj["pl_content_umass"] = pl_content_umass
         #retObj["pl_uweight"] = total_umass * g
 
+    pl_ubuoyf = None
+    pl_empty_usubw = None
+    pl_content_usubw = None
     if seawater_ρ:
         pl_CSA = circle_CSA(pl_Do)
         pl_ubuoyf = pl_CSA * seawater_ρ * g
-        retObj["pl_ubuoyf"] = pl_ubuoyf
+        #retObj["pl_ubuoyf"] = pl_ubuoyf
         if pl_empty_umass is not None:
             pl_empty_usubw =  pl_empty_umass * g - pl_ubuoyf
-            retObj["pl_empty_usubw"] =  pl_empty_usubw
+            #retObj["pl_empty_usubw"] =  pl_empty_usubw
             # if coat_umass is not None:
             #     pl_empty_usubw = pl_empty_usubw + coat_umass * g
             #     retObj["pl_empty_usubw"] =  pl_empty_usubw
             if content_umass is not None:
                 pl_content_usubw = pl_empty_usubw + content_umass * g
-                retObj["pl_content_usubw"] =  pl_content_usubw
+                #retObj["pl_content_usubw"] =  pl_content_usubw
 
-    retObj["pl_Do"] = pl_Do
+    #retObj["pl_Do"] = pl_Do
 
-    return retObj
+    return {
+        "lpipe_Do": lpipe_Do,
+        "lpipe_Di": lpipe_Di,
+        "lpipe_WT": lpipe_WT,
+        "lpipe_CSA": lpipe_CSA,
+        "lpipe_I": lpipe_I,     
+        "lpipe_umass": lpipe_umass,   
+        "coat_WT": coat_WT,
+        "coat_ρ": coat_ρ,
+        "content_umass": content_umass,
+        "pl_Do": pl_Do,
+        "pl_empty_umass": pl_empty_umass,
+        "pl_content_umass": pl_content_umass,
+        "pl_ubuoyf": pl_ubuoyf,
+        "pl_empty_usubw": pl_empty_usubw,
+        "pl_content_usubw": pl_content_usubw,
+    }
 
 
 
