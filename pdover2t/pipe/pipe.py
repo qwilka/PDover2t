@@ -126,8 +126,9 @@ def pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0):
 
     .. doctest::
 
-        >>> pipe_layers([(0.0185,7850),(0.003,7000)], Di_ref=0.3229)
-        (0.0215, 7738.675329084429, 157.54267202070224)
+        >>> layers = [(0.0003, 1450.), (0.0038, 960.), (0.045, 2250.)]
+        >>> pipe_layers(layers, Di_ref=0.660, umass=337.0)
+        (5232.900238245189, 572.3758552655826, 0.7582, 0.66, 0.0491)
     """
     #if (Di is not None) and (Do is not None):
     if len([None for x in [Di_ref, Do_ref] if x is None]) != 1:
@@ -135,7 +136,7 @@ def pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0):
 
     #alayers = np.array(layers, dtype=[('WT', 'f4'), ('density', 'f4')])
     alayers = layers
-    print(alayers)
+    #print(alayers)
     if Do_ref:
     #     Di_ref = Do_ref - np.sum(alayers["WT"]) * 2
     #     alayers = alayers[::-1]
@@ -145,7 +146,7 @@ def pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0):
     equiv_umass = umass
     layer_Di = Di_ref 
     for layer in alayers:
-        print(layer)
+        #print(layer)
         layer_Do = layer_Di + 2*layer[0]
         WT_total += layer[0]
         _csa = np.pi/4 * (np.power(layer_Do,2) - np.power(layer_Di,2))
@@ -159,36 +160,36 @@ def pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0):
 
 
 if __name__ == "__main__":
-    # import doctest
-    # doctest.testmod(verbose=True, optionflags=doctest.ELLIPSIS)
-    if True:
-        Do = 0.660
-        WT = 0.0214
-        coating_layers = [(0.0003, 1450.), (0.0038, 960.), (0.045, 2250.)]
-    else:
-        Do = np.array([0.660, 0.6656])
-        WT = np.array([0.0214, 0.0242])
-        # coating_layers = [ (np.array([0.0003, 0.0003]), np.array([1450., 1450.])), 
-        #     (np.array([0.0038, 0.0038]), np.array([960., 960.]) ), 
-        #     (np.array([0.045, 0.045]), np.array([2250., 1900.]) )]
-        coating_layers = [ (0.0003, 1450.), (0.0038, 960. ), 
-            (0.045, np.array([2250., 1900.]) )]
-    length = 12.2
-    pipe_ρ = 7850.    
-    seawater_ρ = 1027.0
-    g = 9.81
+    import doctest
+    doctest.testmod(verbose=True, optionflags=doctest.ELLIPSIS)
+    # if True:
+    #     Do = 0.660
+    #     WT = 0.0214
+    #     coating_layers = [(0.0003, 1450.), (0.0038, 960.), (0.045, 2250.)]
+    # else:
+    #     Do = np.array([0.660, 0.6656])
+    #     WT = np.array([0.0214, 0.0242])
+    #     # coating_layers = [ (np.array([0.0003, 0.0003]), np.array([1450., 1450.])), 
+    #     #     (np.array([0.0038, 0.0038]), np.array([960., 960.]) ), 
+    #     #     (np.array([0.045, 0.045]), np.array([2250., 1900.]) )]
+    #     coating_layers = [ (0.0003, 1450.), (0.0038, 960. ), 
+    #         (0.045, np.array([2250., 1900.]) )]
+    # length = 12.2
+    # pipe_ρ = 7850.    
+    # seawater_ρ = 1027.0
+    # g = 9.81
 
-    Do, Di, WT = pipe_Do_Di_WT(Do=Do, WT=WT)
-    CSA = pipe_CSA(Do, Di)
-    umass = pipe_umass(CSA, pipe_ρ)
-    joint_mass = umass * length
-    uwgt = pipe_uwgt(umass, g)
-    usubwgt = pipe_usubwgt(uwgt, Do, seawater_ρ, g)
-    joint_subwgt = usubwgt * length
+    # Do, Di, WT = pipe_Do_Di_WT(Do=Do, WT=WT)
+    # CSA = pipe_CSA(Do, Di)
+    # umass = pipe_umass(CSA, pipe_ρ)
+    # joint_mass = umass * length
+    # uwgt = pipe_uwgt(umass, g)
+    # usubwgt = pipe_usubwgt(uwgt, Do, seawater_ρ, g)
+    # joint_subwgt = usubwgt * length
 
-    layersObj = pipe_layers(coating_layers, Di_ref=Do, umass=umass)
-    pl_umass = layersObj[1]
-    pl_Do = layersObj[2]
-    pl_uwgt = pipe_uwgt(pl_umass, g)
-    pl_usubwgt = pipe_usubwgt(pl_uwgt, pl_Do, seawater_ρ, g)
+    # layersObj = pipe_layers(coating_layers, Di_ref=Do, umass=umass)
+    # pl_umass = layersObj[1]
+    # pl_Do = layersObj[2]
+    # pl_uwgt = pipe_uwgt(pl_umass, g)
+    # pl_usubwgt = pipe_usubwgt(pl_uwgt, pl_Do, seawater_ρ, g)
 
