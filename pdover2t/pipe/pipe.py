@@ -5,7 +5,7 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
-π = np.pi
+#π = np.pi
 
 
 def WT_from_D(Do, Di):
@@ -40,80 +40,46 @@ def pipe_Do_Di_WT(*, Do=None, Di=None, WT=None):
     return Do, Di, WT
 
 
-def pipe_CSA(Do, Di):
+def pipe_CSA(Do=None, Di=None, WT=None):
     """Calculate pipe cross sectional area.
     """
-    return π / 4 * (Do**2 - Di**2)
+    if Do is None or Di is None:
+        Do, Di, WT = pipe_Do_Di_WT(Do=Do, Di=Di, WT=WT)
+    CSA = np.pi / 4 * (Do**2 - Di**2)
+    return CSA
 
 
-def pipe_umass(CSA, pipe_ρ):
+def pipe_umass(pipe_ρ, *, CSA=None, Do=None, Di=None, WT=None):
     """Calculate pipe unit mass (mass/length).
     """
-    return CSA * pipe_ρ
+    if CSA is None:
+        CSA = pipe_CSA(Do=Do, Di=Di, WT=WT)
+    umass = CSA * pipe_ρ
+    return umass
 
-def pipe_uwgt(umass, g=9.806650):
+
+def pipe_uwgt(g=9.806650, *, umass=None, Do=None, Di=None, WT=None, pipe_ρ=None):
     """Calculate pipe unit weight (weight/length).
     """
-    return umass * g
+    if umass is None:
+        umass = pipe_umass(pipe_ρ, Do=Do, Di=Di, WT=WT)
+    uwgt = umass * g
+    return uwgt
 
-def pipe_usubwgt(uwgt, Dbuoy, seawater_ρ, g=9.806650):
+
+def pipe_usubwgt(Dbuoy, seawater_ρ, g=9.806650, *, uwgt=None, 
+        Do=None, Di=None, WT=None, umass=None, pipe_ρ=None):
     """Calculate pipe unit submerged weight (weight/length).
     """
-    return uwgt - π/4*Dbuoy**2 * seawater_ρ * g
+    if uwgt is None:
+        uwgt = pipe_uwgt(g, Do=Do, Di=Di, WT=WT, umass=umass, pipe_ρ=pipe_ρ)
+    usubwgt = uwgt - np.pi/4*Dbuoy**2 * seawater_ρ * g
+    return usubwgt
 
 
-# def pipe_layers(layers, *, Di=None, Do=None, umass=0):
-#     """calculate equivalent properties for stacked ring layers.
-
-#     :param layers: list of layer properties, each element is
-#     a tuple consisting of (layer_thickness, layer_mass_density)
-#     :type layers: list, tuple
-#     :returns: tuple with equivalent properties (thickness, density, mass/length)
-#     :rtype: tuple
-
-#     .. doctest::
-
-#         >>> pipe_layers([(0.0185,7850),(0.003,7000)], Do=0.3229)
-#         (0.0215, 7738.675329084429, 157.54267202070224)
-#     """
-#     if (Di is not None) and (Do is not None):
-#         raise ValueError(f"pipe_layers: arguments not correctly specified: Di={Di}, Do={Do}")
-#     #_dref = Di_ref if Di_ref else Do_ref
-#     _dref = Di if Do is None else Do
-#     _equiv_mass = umass
-#     _total_wt = 0
-#     for layer in layers:
-#         wt, rho, *_ = layer
-#         _total_wt += wt
-#         #if Di_ref:
-#         if Do is None:
-#             #_Do, _Di, _WT = lpipe_D_WT(Do=None, Di=_dref, WT=wt)
-#             _WT = None
-#             _Do = _dref + 2*wt
-#             _Di = _dref
-#             _dref = _Do
-#         else:
-#             _Do, _Di, _WT = lpipe_D_WT(Do=_dref, Di=None, WT=wt)
-#             _dref = _Di
-#         #_csa = np.pi/4 * (_Do**2 - _Di**2)
-#         _csa = np.pi/4 * (np.power(_Do,2) - np.power(_Di,2))
-#         _mass = _csa * rho
-#         _equiv_mass += _mass
-#     #if Di_ref:
-#     if Do is None:
-#         #_csa = np.pi/4 * (_dref**2 - Di_ref**2)
-#         _csa = np.pi/4 * (np.power(_dref,2) - np.power(Di,2))
-#         Do = Di + 2*_total_wt
-#     else:
-#         #_csa = np.pi/4 * (Do_ref**2 - _dref**2)
-#         _csa = np.pi/4 * (np.power(Do,2) - np.power(_dref,2))
-#         Di = Do - 2*_total_wt
-#     _equiv_rho = _equiv_mass / _csa
-#     return (_equiv_rho, _equiv_mass, Do, Di, _total_wt)
-
-
-def pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0):
-    """calculate equivalent properties for stacked ring layers.
+def pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0,
+        returnDict=False):
+    """calculate equivalent properties for stacked pipe layers.
 
     :param layers: list of layer properties, each element is
     a tuple consisting of (layer_thickness, layer_mass_density)
@@ -128,7 +94,7 @@ def pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0):
 
         >>> layers = [(0.0003, 1450.), (0.0038, 960.), (0.045, 2250.)]
         >>> pipe_layers(layers, Di_ref=0.660, umass=337.0)
-        (5232.900238245189, 572.3758552655826, 0.7582, 0.66, 0.0491)
+        (5232.900238245189, 0.0491)
     """
     #if (Di is not None) and (Do is not None):
     if len([None for x in [Di_ref, Do_ref] if x is None]) != 1:
@@ -155,41 +121,53 @@ def pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0):
     if Do_ref is None:
         Do_ref = Di_ref + 2 * WT_total
     _csa = np.pi/4 * (np.power(Do_ref,2) - np.power(Di_ref,2))
-    equiv_density = equiv_umass / _csa
-    return (equiv_density, equiv_umass, Do_ref, Di_ref, WT_total)
+    equiv_ρ = equiv_umass / _csa
+    #return (equiv_density, equiv_umass, Do_ref, Di_ref, WT_total)
+    if returnDict:
+        return {
+            "equiv_ρ": equiv_ρ,
+            "umass": equiv_umass,
+            "Do": Do_ref,
+            "Di": Di_ref,
+            "WT": WT_total
+        }
+    else:
+        return (equiv_ρ, WT_total)
 
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod(verbose=True, optionflags=doctest.ELLIPSIS)
-    # if True:
-    #     Do = 0.660
-    #     WT = 0.0214
-    #     coating_layers = [(0.0003, 1450.), (0.0038, 960.), (0.045, 2250.)]
-    # else:
-    #     Do = np.array([0.660, 0.6656])
-    #     WT = np.array([0.0214, 0.0242])
-    #     # coating_layers = [ (np.array([0.0003, 0.0003]), np.array([1450., 1450.])), 
-    #     #     (np.array([0.0038, 0.0038]), np.array([960., 960.]) ), 
-    #     #     (np.array([0.045, 0.045]), np.array([2250., 1900.]) )]
-    #     coating_layers = [ (0.0003, 1450.), (0.0038, 960. ), 
-    #         (0.045, np.array([2250., 1900.]) )]
-    # length = 12.2
-    # pipe_ρ = 7850.    
-    # seawater_ρ = 1027.0
-    # g = 9.81
+    # import doctest
+    # doctest.testmod(verbose=True, optionflags=doctest.ELLIPSIS)
+    if True:
+        Do = 0.660
+        WT = 0.0214
+        coating_layers = [(0.0003, 1450.), (0.0038, 960.), (0.045, 2250.)]
+    else:
+        Do = np.array([0.660, 0.6656])
+        WT = np.array([0.0214, 0.0242])
+        # coating_layers = [ (np.array([0.0003, 0.0003]), np.array([1450., 1450.])), 
+        #     (np.array([0.0038, 0.0038]), np.array([960., 960.]) ), 
+        #     (np.array([0.045, 0.045]), np.array([2250., 1900.]) )]
+        coating_layers = [ (0.0003, 1450.), (0.0038, 960. ), 
+            (0.045, np.array([2250., 1900.]) )]
+    length = 12.2
+    pipe_ρ = 7850.    
+    seawater_ρ = 1027.0
+    g = 9.81
 
     # Do, Di, WT = pipe_Do_Di_WT(Do=Do, WT=WT)
     # CSA = pipe_CSA(Do, Di)
     # umass = pipe_umass(CSA, pipe_ρ)
     # joint_mass = umass * length
     # uwgt = pipe_uwgt(umass, g)
-    # usubwgt = pipe_usubwgt(uwgt, Do, seawater_ρ, g)
+    # usubwgt = pipe_usubwgt(Do, seawater_ρ, g, Do=Do, WT=WT)
     # joint_subwgt = usubwgt * length
 
-    # layersObj = pipe_layers(coating_layers, Di_ref=Do, umass=umass)
-    # pl_umass = layersObj[1]
-    # pl_Do = layersObj[2]
-    # pl_uwgt = pipe_uwgt(pl_umass, g)
-    # pl_usubwgt = pipe_usubwgt(pl_uwgt, pl_Do, seawater_ρ, g)
+    umass = pipe_umass(pipe_ρ, Do=Do, WT=WT)
+    layersObj = pipe_layers(coating_layers, Di_ref=Do, umass=umass, returnDict=True)
+    pl_umass = layersObj["umass"]
+    pl_Do = layersObj["Do"]
+    #pl_uwgt = pipe_uwgt(pl_umass, g)
+    pl_usubwgt = pipe_usubwgt(pl_Do, seawater_ρ, g, Do=Do, WT=WT,
+        umass=pl_umass)
 

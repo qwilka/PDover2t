@@ -15,3 +15,100 @@ VIV
 ====
 https://www.petroskills.com/blog/entry/piping-vibration-calculate-natural-frequency#.XnClH9_ngxQ
 
+
+
+
+=================================================================
+def pipe_Do_Di_WT(*, Do=None, Di=None, WT=None, returnDict=False):
+    """Calculate pipe wall thickness / outer diameter / inner diameter.
+    """
+    if Do is not None and Di is not None and WT is not None:
+        assert Do==Di+2*WT, f"pipe_D_WT: inconsistent pipe dimensions Do={Do} Di={Di} WT={WT}."
+    elif WT is None:
+        WT = (Do - Di) / 2
+    elif Di is None:
+        Di = Do - 2 * WT
+    elif Do is None:
+        Do = Di + 2 * WT
+    else:
+        return False
+    if returnDict:
+        return {"Do":Do,"Di":Di,"WT":WT}
+    else:
+        return Do, Di, WT
+
+
+def pipe_CSA(Do=None, Di=None, WT=None, returnDict=False):
+    """Calculate pipe cross sectional area.
+    """
+    if returnDict: retObj = {}
+    if Do is None or Di is None:
+        retObj = pipe_Do_Di_WT(Do=Do, Di=Di, WT=WT)
+        if returnDict:
+            Do = retObj["Do"]
+            Di = retObj["Di"]
+        else:
+            Do, Di, WT = retObj
+    CSA = np.pi / 4 * (Do**2 - Di**2)
+    if returnDict:
+        return retObj.update({"CSA":CSA})
+    else:
+        return CSA
+
+
+def pipe_umass(pipe_ρ, *, CSA=None, Do=None, Di=None, WT=None,
+        returnDict=False):
+    """Calculate pipe unit mass (mass/length).
+    """
+    if returnDict: retObj = {}
+    if CSA is None:
+        retObj = pipe_CSA(Do=Do, Di=Di, WT=WT, returnDict=returnDict)
+        if returnDict:
+            CSA = retObj["CSA"]
+        else:
+            CSA = retObj
+    umass = CSA * pipe_ρ
+    if returnDict:
+        return retObj.update({"umass": umass})
+    else:
+        return umass
+
+
+def pipe_uwgt(g=9.806650, *, umass=None, Do=None, Di=None, WT=None, 
+        pipe_ρ=None, returnDict=False):
+    """Calculate pipe unit weight (weight/length).
+    """
+    if returnDict: retObj = {}
+    if umass is None:
+        retObj = pipe_umass(pipe_ρ, Do=Do, Di=Di, WT=WT, 
+                    returnDict=returnDict)
+        if returnDict:
+            umass = retObj["umass"]
+        else:
+            uwgt = retObj
+    uwgt = umass * g
+    if returnDict:
+        return retObj.update({"uwgt": uwgt})
+    else:
+        return uwgt
+
+
+def pipe_usubwgt(Dbuoy, seawater_ρ, g=9.806650, *, uwgt=None, 
+        Do=None, Di=None, WT=None, umass=None, pipe_ρ=None,
+        returnDict=False):
+    """Calculate pipe unit submerged weight (weight/length).
+    """
+    if returnDict: retObj = {}
+    if uwgt is None:
+        retObj = pipe_uwgt(g, Do=Do, Di=Di, WT=WT, umass=umass, 
+            pipe_ρ=pipe_ρ, returnDict=returnDict)
+        if returnDict:
+            uwgt = retObj["uwgt"]
+        else:
+            uwgt = retObj
+    usubwgt = uwgt - np.pi/4*Dbuoy**2 * seawater_ρ * g
+    if returnDict:
+        return retObj.update({"usubwgt": usubwgt})
+    else:
+        return usubwgt
+=================================================================
