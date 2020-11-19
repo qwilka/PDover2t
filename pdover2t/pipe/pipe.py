@@ -2,6 +2,7 @@ import logging
 
 import numpy as np
 
+from ..utilities.function_tools import func_call_exception_trap
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,7 @@ def Do_from_WT(Di, WT):
     return Di + 2 * WT
 
 
+@func_call_exception_trap
 def pipe_Do_Di_WT(*, Do=None, Di=None, WT=None):
     """Calculate pipe wall thickness / outer diameter / inner diameter.
     """
@@ -40,6 +42,7 @@ def pipe_Do_Di_WT(*, Do=None, Di=None, WT=None):
     return Do, Di, WT
 
 
+@func_call_exception_trap
 def pipe_CSA(Do=None, Di=None, WT=None):
     """Calculate pipe cross sectional area.
     """
@@ -49,6 +52,7 @@ def pipe_CSA(Do=None, Di=None, WT=None):
     return CSA
 
 
+@func_call_exception_trap
 def pipe_umass(pipe_ρ, *, CSA=None, Do=None, Di=None, WT=None):
     """Calculate pipe unit mass (mass/length).
     """
@@ -58,6 +62,7 @@ def pipe_umass(pipe_ρ, *, CSA=None, Do=None, Di=None, WT=None):
     return umass
 
 
+@func_call_exception_trap
 def pipe_uwgt(g=9.806650, *, umass=None, Do=None, Di=None, WT=None, pipe_ρ=None):
     """Calculate pipe unit weight (weight/length).
     """
@@ -67,6 +72,7 @@ def pipe_uwgt(g=9.806650, *, umass=None, Do=None, Di=None, WT=None, pipe_ρ=None
     return uwgt
 
 
+@func_call_exception_trap
 def pipe_usubwgt(Dbuoy, seawater_ρ, g=9.806650, *, uwgt=None, 
         Do=None, Di=None, WT=None, umass=None, pipe_ρ=None):
     """Calculate pipe unit submerged weight (weight/length).
@@ -77,6 +83,7 @@ def pipe_usubwgt(Dbuoy, seawater_ρ, g=9.806650, *, uwgt=None,
     return usubwgt
 
 
+@func_call_exception_trap
 def pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0,
         returnDict=False):
     """calculate equivalent properties for stacked pipe layers.
@@ -136,38 +143,37 @@ def pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0,
 
 
 if __name__ == "__main__":
-    # import doctest
-    # doctest.testmod(verbose=True, optionflags=doctest.ELLIPSIS)
-    if True:
-        Do = 0.660
-        WT = 0.0214
-        coating_layers = [(0.0003, 1450.), (0.0038, 960.), (0.045, 2250.)]
-    else:
-        Do = np.array([0.660, 0.6656])
-        WT = np.array([0.0214, 0.0242])
-        # coating_layers = [ (np.array([0.0003, 0.0003]), np.array([1450., 1450.])), 
-        #     (np.array([0.0038, 0.0038]), np.array([960., 960.]) ), 
-        #     (np.array([0.045, 0.045]), np.array([2250., 1900.]) )]
-        coating_layers = [ (0.0003, 1450.), (0.0038, 960. ), 
-            (0.045, np.array([2250., 1900.]) )]
-    length = 12.2
-    pipe_ρ = 7850.    
-    seawater_ρ = 1027.0
-    g = 9.81
+    import doctest
+    doctest.testmod(verbose=True, optionflags=doctest.ELLIPSIS)
+    # if True:
+    #     Do = 0.660
+    #     WT = 0.0214
+    #     coating_layers = [(0.0003, 1450.), (0.0038, 960.), (0.045, 2250.)]
+    # else:
+    #     Do = np.array([0.660, 0.6656])
+    #     WT = np.array([0.0214, 0.0242])
+    #     # coating_layers = [ (np.array([0.0003, 0.0003]), np.array([1450., 1450.])), 
+    #     #     (np.array([0.0038, 0.0038]), np.array([960., 960.]) ), 
+    #     #     (np.array([0.045, 0.045]), np.array([2250., 1900.]) )]
+    #     coating_layers = [ (0.0003, 1450.), (0.0038, 960. ), 
+    #         (0.045, np.array([2250., 1900.]) )]
+    # length = 12.2
+    # pipe_ρ = 7850.    
+    # seawater_ρ = 1027.0
+    # g = 9.81
 
-    # Do, Di, WT = pipe_Do_Di_WT(Do=Do, WT=WT)
-    # CSA = pipe_CSA(Do, Di)
-    # umass = pipe_umass(CSA, pipe_ρ)
-    # joint_mass = umass * length
-    # uwgt = pipe_uwgt(umass, g)
-    # usubwgt = pipe_usubwgt(Do, seawater_ρ, g, Do=Do, WT=WT)
-    # joint_subwgt = usubwgt * length
+    # # Do, Di, WT = pipe_Do_Di_WT(Do=Do, WT=WT)
+    # # CSA = pipe_CSA(Do, Di)
+    # # umass = pipe_umass(CSA, pipe_ρ)
+    # # joint_mass = umass * length
+    # # uwgt = pipe_uwgt(umass, g)
+    # # usubwgt = pipe_usubwgt(Do, seawater_ρ, g, Do=Do, WT=WT)
+    # # joint_subwgt = usubwgt * length
 
-    umass = pipe_umass(pipe_ρ, Do=Do, WT=WT)
-    layersObj = pipe_layers(coating_layers, Di_ref=Do, umass=umass, returnDict=True)
-    pl_umass = layersObj["umass"]
-    pl_Do = layersObj["Do"]
-    #pl_uwgt = pipe_uwgt(pl_umass, g)
-    pl_usubwgt = pipe_usubwgt(pl_Do, seawater_ρ, g, Do=Do, WT=WT,
-        umass=pl_umass)
-
+    # umass = pipe_umass(pipe_ρ, Do=Do, WT=WT)
+    # layersObj = pipe_layers(coating_layers, Di_ref=Do, umass=umass, returnDict=True)
+    # pl_umass = layersObj["umass"]
+    # pl_Do = layersObj["Do"]
+    # #pl_uwgt = pipe_uwgt(pl_umass, g)
+    # #pl_usubwgt = pipe_usubwgt(pl_Do, seawater_ρ, g, Do=Do, WT=WT, umass=pl_umass)
+    # pl_usubwgt = pipe_usubwgt(pl_Do, seawater_ρ, g, Do=Do, WT=WT)

@@ -43,7 +43,7 @@ def pipe_CSA(Do=None, Di=None, WT=None, returnDict=False):
     """
     if returnDict: retObj = {}
     if Do is None or Di is None:
-        retObj = pipe_Do_Di_WT(Do=Do, Di=Di, WT=WT)
+        retObj = pipe_Do_Di_WT(Do=Do, Di=Di, WT=WT, returnDict=returnDict)
         if returnDict:
             Do = retObj["Do"]
             Di = retObj["Di"]
@@ -51,7 +51,8 @@ def pipe_CSA(Do=None, Di=None, WT=None, returnDict=False):
             Do, Di, WT = retObj
     CSA = np.pi / 4 * (Do**2 - Di**2)
     if returnDict:
-        return retObj.update({"CSA":CSA})
+        retObj.update({"CSA":CSA})
+        return retObj
     else:
         return CSA
 
@@ -69,7 +70,8 @@ def pipe_umass(pipe_ρ, *, CSA=None, Do=None, Di=None, WT=None,
             CSA = retObj
     umass = CSA * pipe_ρ
     if returnDict:
-        return retObj.update({"umass": umass})
+        retObj.update({"umass": umass})
+        return retObj
     else:
         return umass
 
@@ -82,13 +84,17 @@ def pipe_uwgt(g=9.806650, *, umass=None, Do=None, Di=None, WT=None,
     if umass is None:
         retObj = pipe_umass(pipe_ρ, Do=Do, Di=Di, WT=WT, 
                     returnDict=returnDict)
+        #print("pipe_umass retObj=", retObj)
         if returnDict:
             umass = retObj["umass"]
         else:
-            uwgt = retObj
+            umass = retObj
     uwgt = umass * g
+    #print("uwgt=", uwgt)
     if returnDict:
-        return retObj.update({"uwgt": uwgt})
+        retObj.update({"uwgt": uwgt})
+        #print("pipe_uwgt retObj=", retObj)
+        return retObj
     else:
         return uwgt
 
@@ -101,14 +107,30 @@ def pipe_usubwgt(Dbuoy, seawater_ρ, g=9.806650, *, uwgt=None,
     if returnDict: retObj = {}
     if uwgt is None:
         retObj = pipe_uwgt(g, Do=Do, Di=Di, WT=WT, umass=umass, 
-            pipe_ρ=pipe_ρ, returnDict=returnDict)
+                    pipe_ρ=pipe_ρ, returnDict=returnDict)
+        #print("pipe_uwgt retObj=", retObj)
         if returnDict:
             uwgt = retObj["uwgt"]
         else:
             uwgt = retObj
     usubwgt = uwgt - np.pi/4*Dbuoy**2 * seawater_ρ * g
     if returnDict:
-        return retObj.update({"usubwgt": usubwgt})
+        retObj.update({"usubwgt": usubwgt})
+        return retObj
     else:
         return usubwgt
+-----------------------------------------------------------------
+def pipe_usubwgt(Dbuoy, seawater_ρ, g=9.806650, *, uwgt=None, 
+        Do=None, Di=None, WT=None, umass=None, pipe_ρ=None):
+    """Calculate pipe unit submerged weight (weight/length).
+    """
+    if uwgt is None:
+        try:
+            uwgt = pipe_uwgt(g, Do=Do, Di=Di, WT=WT, umass=umass, pipe_ρ=pipe_ρ)
+        except Exception as err:
+            _args = {"g":g,"Do":Do,"Di":Di,"WT":WT,"umass":umass,"pipe_ρ":pipe_ρ}
+            logger.error("pipe_usubwgt: Exception «%s»; cannot call function «pipe_uwgt» with arguments %s" % (err,_args))
+            return False        
+    usubwgt = uwgt - np.pi/4*Dbuoy**2 * seawater_ρ * g
+    return usubwgt
 =================================================================
