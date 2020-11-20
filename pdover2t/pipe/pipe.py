@@ -143,6 +143,9 @@ def pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0,
 
 
 if __name__ == "__main__":
+    """ To run doctests:
+    $ python -m pdover2t.pipe.pipe
+    """
     import doctest
     doctest.testmod(verbose=True, optionflags=doctest.ELLIPSIS)
     # if True:

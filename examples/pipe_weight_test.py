@@ -1,3 +1,9 @@
+"""
+Pipeline Submerged Weight 
+
+to run:
+python pipe_weight_test.py 
+"""
 import argparse
 import numpy as np
 
@@ -7,23 +13,20 @@ turn_on_logging(template='%(levelname)s: %(message)s')
 from pdover2t.pipe import (pipe_umass, pipe_layers, pipe_usubwgt, 
     pipe_uwgt, pipe_Do_Di_WT)
 
-# select test case
-#case = "scalar"    #  options "scalar" or "array"
-
 aparser = argparse.ArgumentParser(description="Testing pdover2t module.")
 aparser.add_argument("case", help="Specify a test case to run.", 
     nargs='?', default="scalar",
-    choices=["scalar", "array"])
+    choices=["scalar", "array", "error"])
 args = aparser.parse_args()
 
 
-if args.case.lower()=="scalar":
-    print("Running test 'scalar'")
+eqs = "="*30
+print(f"{eqs}\nRunning test case «{args.case}»\n{eqs}")
+if args.case.lower() in ["scalar", "error"]:
     Do = 0.660
     WT = 0.0214
     coating_layers = [(0.0003, 1450.), (0.0038, 960.), (0.045, 2250.)]
 elif args.case.lower()=="array":
-    print("Running test 'array'")
     Do = np.array([0.660, 0.6656])
     WT = np.array([0.0214, 0.0242])
     # coating_layers = [ (np.array([0.0003, 0.0003]), np.array([1450., 1450.])), 
@@ -51,7 +54,11 @@ layersObj = pipe_layers(coating_layers, Di_ref=Do, umass=umass, returnDict=True)
 pl_umass = layersObj["umass"]
 pl_Do = layersObj["Do"]
 #pl_uwgt = pipe_uwgt(pl_umass, g)
-pl_usubwgt = pipe_usubwgt(pl_Do, seawater_ρ, g, Do=Do, WT=WT, umass=pl_umass)
+if args.case.lower()=="error":
+    pl_usubwgt = pipe_usubwgt(pl_Do, seawater_ρ, g, Do=Do, WT=WT)
+else:
+    pl_usubwgt = pipe_usubwgt(pl_Do, seawater_ρ, g, Do=Do, WT=WT, 
+                        umass=pl_umass)
 #pl_usubwgt = pipe_usubwgt(pl_Do, seawater_ρ, g, Do=Do, WT=WT)
 print(f"empty pl_usubwgt={pl_usubwgt}")
 
