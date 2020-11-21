@@ -99,8 +99,9 @@ def local_incid_press(p_d, ρ_cont, h_l, h_ref, γ_inc=1.1, g=9.80665):
     return p_li
 
 
-def local_test_press(p_t, ρ_t, h_l, h_ref, p_e=None, α_spt=None, g=9.80665):
-    """Calculate local test pressure.
+def local_test_press(p_li=None, *, p_t=None, ρ_t=None, p_e=None, 
+        h_l=None, h_ref=None, α_spt=1.0, g=9.80665):
+    """Calculate local test pressure.  CHECK THIS!!!
     
     Reference:
     DNVGL-ST-F101 (2017-12) 
@@ -108,19 +109,25 @@ def local_test_press(p_t, ρ_t, h_l, h_ref, p_e=None, α_spt=None, g=9.80665):
         sec:5.4.2.1 eq:5.6 page:93 $p_{li}$
     (local_test_press)
     """
-    p_lt = local_incid_press(p_t, ρ_t, h_l, h_ref, g)
-    if α_spt:
-        p_lt = p_lt / α_spt
+    if p_li is not None:
+        p_li = local_incid_press(p_t, ρ_t, h_l, h_ref, g)
+    p_lt = p_li / α_spt
     if p_e is not None:
         p_lt = p_lt - p_e
     return p_lt
 
 
-def local_test_press_unity(p_li, p_e, p_lt):
+def local_test_press_unity(p_li=None, p_e=0.0, p_lt=None, *,
+        p_t=None, ρ_t=None, 
+        h_l=None, h_ref=None, g=9.80665):
     """Local test pressure unity
 
     (local_test_press_unity)
     """
+    if p_li is not None:
+        p_li = local_incid_press(p_t, ρ_t, h_l, h_ref, g)
+    if p_lt is not None:
+        p_lt = local_test_press(p_li)
     p_lt_uty = (p_li - p_e) / p_lt
     return p_lt_uty
 
@@ -150,17 +157,18 @@ def press_contain_resis(D, t, f_y, f_u=None, γ_m=1.0, γ_SCPC=1.0):
     return p_b
 
 
-def press_contain_resis_unity(p_li, p_e, p_b):
+def press_contain_resis_unity(p_li=None, p_e=None, p_b=None, **kwargs):
     """Pressure containment resistance unity
 
     (press_contain_resis_unity)
     """
+    if p_li is not None:
+        p_li = local_incid_press(p_t, ρ_t, h_l, h_ref, g)
     p_cont_res_uty = (p_li - p_e) / p_b
     return p_cont_res_uty
 
 
-def mill_test_press(D, t_min, SMYS, SMTS, 
-                    α_U=None, α_mpt=None):
+def mill_test_press(D, t_min, SMYS, SMTS, α_U=None, α_mpt=None):
     """Mill test pressure
 
     Reference:
@@ -175,20 +183,38 @@ def mill_test_press(D, t_min, SMYS, SMTS,
     return p_mpt
 
 
-def mill_test_press_unity(p_li, p_e, p_mpt):
+def mill_test_press_unity(p_li=None, p_e=None, p_mpt=None, *,
+        p_d=None, ρ_cont=None, ρ_seawater=None, h_l=None, h_ref=None, 
+        γ_inc=1.1, g=9.80665,
+        D=None, t_min=None, SMYS=None, SMTS=None, α_U=None, α_mpt=None):
     """Mill test pressure unity
 
     (mill_test_press_unity)
     """
+    if p_li is None:
+        p_li = local_incid_press(p_d, ρ_cont, h_l, h_ref, γ_inc, g)
+    if p_e is None:
+        p_e = external_pressure(h_l, ρ_seawater, g)
+    if p_mpt is None:
+        p_mpt = mill_test_press(D, t_min, SMYS, SMTS, α_U, α_mpt)
     p_mpt_uty = (p_li - p_e) / p_mpt
     return p_mpt_uty
 
 
-def press_contain_unity(p_cont_res_uty, p_lt_uty, p_mpt_uty):
+@func_call_exception_trap
+def press_contain_unity(p_cont_res_uty=None, p_lt_uty=None, p_mpt_uty=None,
+        *, p_li=None, p_e=0.0, p_b=None, p_lt=None, p_mpt=None,
+        ):
     """Pressure containment unity
 
     (press_contain_unity)
     """
+    if p_cont_res_uty is None:
+        p_cont_res_uty = press_contain_resis_unity(p_li, p_e, p_b)
+    if p_lt_uty is None:
+        p_lt_uty = local_test_press_unity(p_li, p_e, p_lt)
+    if p_mpt_uty is None:
+        p_mpt_uty = mill_test_press_unity(p_li, p_e, p_mpt)
     p_cont_uty = np.maximum(p_cont_res_uty, p_lt_uty, p_mpt_uty)
     return p_cont_uty
 
@@ -196,7 +222,7 @@ def press_contain_unity(p_cont_res_uty, p_lt_uty, p_mpt_uty):
 
 if __name__ == "__main__":
     """ To run doctests:
-    $ python -m pdover2t.pipe.pipe
+    $ python -m pdover2t.dnvgl_st_f101.pressure_containment
     """
     import doctest
     doctest.testmod(verbose=True, optionflags=doctest.ELLIPSIS)
