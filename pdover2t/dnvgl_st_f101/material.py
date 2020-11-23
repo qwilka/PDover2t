@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 
-def mat_strength_derating(T, material=None, curve=None):
+def material_strength_derating(T, material=None, curve=None):
     """Material strength de-rating value qith temperature, 
     according to DNVGL-ST-F101.
     
@@ -43,7 +43,7 @@ def mat_strength_derating(T, material=None, curve=None):
     return np.interp(T, xy[0,:], xy[1,:])
 
 
-def char_mat_strength(SMYS, material=None, T=None, f_ytemp=None, α_U="default"):
+def characteristic_material_strength(SMYS, α_U, material=None, T=None, f_ytemp=None):
     """Characteristic material strength in accordance with DNVGL-ST-F101 .
 
     :param SMYS: material specified minimum yield stress (or SMTS)
@@ -74,11 +74,26 @@ def char_mat_strength(SMYS, material=None, T=None, f_ytemp=None, α_U="default")
         raise ValueError('char_mat_strength: arguments not correctly specified.')
     # if α_U not in [0.96, 1.00]:
     #     logger.warning("char_mat_strength: non-standard value for arg «α_U»=«%s»" % α_U)
-    _α_U = factor.α_U_map(α_U)
+    _α_U = factor.alpha_U_map(α_U)
     if f_ytemp is None:
         f_ytemp = mat_strength_derating(T, material=material)
     return (SMYS - f_ytemp) * _α_U
 
+
+def characteristic_wall_thickness(t, t_fab, t_corr):
+    """Pipe characteristic wall thickness.
+
+
+    Notes:
+        for t2, set t_fab=0.0
+        for pre-operation set t_corr=0.0
+
+    Reference:
+    DNVGL-ST-F101 (2017-12) 
+        s:5.4.2.1 p:91 t:5-5 
+    """
+    t_char = t - t_fab - t_corr
+    return t_char
 
 
 if __name__ == "__main__":
