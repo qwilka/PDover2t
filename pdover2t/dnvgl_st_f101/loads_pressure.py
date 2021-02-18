@@ -8,6 +8,14 @@ from . import factor
 logger = logging.getLogger(__name__)
 
 
+
+def external_pressure(h_l, ρ_seawater, g=9.80665):
+    """Water pressure, external to pipe.
+    """
+    p_e = np.abs(h_l) * ρ_seawater * g
+    return p_e
+
+
 # Definitions
 # DNVGL-ST-F101 (2017-12) Table 4-1 page 66
 definitions = {

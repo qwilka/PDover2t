@@ -6,30 +6,7 @@ import scipy.optimize
 from . import factor
 from .material import char_mat_strength
 
-__all__ = [
-    "pipe_ovality",
-    "pipe_char_elastic_pressure",
-    "pipe_char_plastic_pressure",
-    "char_collapse_pressure_num",
-    "char_collapse_pressure",
-    "pipe_collapse_unity",
-    "pipe_collapse_all"
-]
 
-# from .pipe_collapse import pipe_char_elastic_pressure
-# from .pipe_collapse import pipe_char_plastic_pressure
-# from .pipe_collapse import pipe_ovality
-# from .pipe_collapse import char_collapse_pressure
-# from .pipe_collapse import pipe_collapse_unity
-
-# def pipeCollapse(t,D,P_c,SMYS,nu=0.3,E=207.*10**9, f_o=None):
-#     '''DNV-OS-F101:2010 Sec.5 D401, collapse due to external pressure '''
-#     P_el = 2*E*(t/D)**3/(1-nu**2)
-#     P_p = f_y*alpha_fab*(2*t/D)
-#     if not f_o:
-#         f_o = (D_max-D_min)/D
-#         if f_o<0.005: f_o = 0.005
-#     return (P_c-P_el)*(P_c**2-P_p**2) - P_c*P_el*P_p*f_o*D/t
 
 
 def pipe_ovality(D, D_max=None, D_min=None) -> "O_0":
@@ -102,13 +79,12 @@ def char_collapse_pressure(p_el, p_p, O_0, D, t) -> "p_c":
     return p_c
 
 
-def pipe_collapse_unity(p_e, p_c, gamma_m, gamma_SCLB, p_min=0
-        ) -> "pipe_collapse_uty":
+def pipe_collapse_unity(p_e, p_c, gamma_m, gamma_SCLB, p_min=0):
     """Calculate pipe collapse unity value.
     Local buckling – system collapse (external over pressure only).
     Reference:
     DNVGL-ST-F101 (2017-12) 
-        sec:5.4.4.1 eq:5.10 page:95 $p_{lt}$
+        sec:5.4.4.1 eq:5.10 p:95 $p_{lt}$
     """ 
     # if gamma_m is None:
     #     gamma_m = factor.gamma_m_map[limit_state]
@@ -118,9 +94,11 @@ def pipe_collapse_unity(p_e, p_c, gamma_m, gamma_SCLB, p_min=0
     return pipe_collapse_uty
 
 
-def external_pressure(depth, rho_water, g=9.81) -> "p_e":
-    p_e = abs(depth) * rho_water * g
-    return p_e
+
+# def external_pressure(depth, rho_water, g=9.81) -> "p_e":
+#     p_e = abs(depth) * rho_water * g
+#     return p_e
+
 
 def pipe_collapse_all(t, D, E, nu, SMYS, h_l, rho_water,
         gamma_m, alpha_fab, alpha_U, gamma_SCLB, 

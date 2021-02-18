@@ -76,7 +76,7 @@ def characteristic_material_strength(SMYS, α_U, material=None, T=None, f_ytemp=
     #     logger.warning("char_mat_strength: non-standard value for arg «α_U»=«%s»" % α_U)
     _α_U = factor.alpha_U_map(α_U)
     if f_ytemp is None:
-        f_ytemp = mat_strength_derating(T, material=material)
+        f_ytemp = material_strength_derating(T, material=material)
     return (SMYS - f_ytemp) * _α_U
 
 

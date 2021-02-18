@@ -22,7 +22,7 @@ def incidental_reference_pressure(p_d, γ_inc):
 
     Reference:
     DNVGL-ST-F101 (2017-12) 
-        eq:4.3 sec:4.2.2.2 page:67 :math:`(p_{inc})`
+        eq:4.3 sec:4.2.2.2 p:67 :math:`(p_{inc})`
 
     .. doctest:: 
 
@@ -49,9 +49,9 @@ def system_test_pressure(p_d, γ_inc, α_spt):
 
     Reference:
     DNVGL-ST-F101 (2017-12)  
-        | eq:4.3 sec:4.2.2.2 page:67 :math:`p_{inc}`  
-        | table:5.8 sec:5.4.2.1 page:94 :math:`\alpha_{spt}`  
-        | sec:5.2.2.1 page:84  
+        | eq:4.3 sec:4.2.2.2 p:67 :math:`p_{inc}`  
+        | table:5.8 sec:5.4.2.1 p:94 :math:`\alpha_{spt}`  
+        | sec:5.2.2.1 p:84  
 
     .. doctest::    
     
@@ -88,8 +88,8 @@ def local_incidental_pressure(p_d, ρ_cont, h_l, h_ref, γ_inc, g=9.80665):
 
     Reference:
     DNVGL-ST-F101 (2017-12) 
-        | sec:4.2.2.2 eq:4.1 page:67 :math:`(p_{li})`
-        | sec:4.2.2.2 eq:4.3 page:67 :math:`(p_{inc})` 
+        | sec:4.2.2.2 eq:4.1 p:67 :math:`(p_{li})`
+        | sec:4.2.2.2 eq:4.3 p:67 :math:`(p_{inc})` 
 
     .. doctest::
 
@@ -106,7 +106,7 @@ def local_test_pressure(p_t, ρ_t, h_l, h_ref, g=9.80665):
     
     Reference:
     DNVGL-ST-F101 (2017-12) 
-        sec:4.2.2.2 eq:4.2 page:67 $p_{lt}$
+        sec:4.2.2.2 eq:4.2 p:67 $p_{lt}$
 
     """
     _γ_inc = 1.0
@@ -119,7 +119,7 @@ def local_test_pressure_unity(α_spt, p_lt=None, p_li=None, p_e=None, **kwargs):
 
     Reference:
     DNVGL-ST-F101 (2017-12) 
-        sec:5.4.2.1 eq:5.6 page:93 
+        sec:5.4.2.1 eq:5.6 p:93 
 
     (local_test_press_unity)
     """
@@ -146,7 +146,7 @@ def mill_test_pressure(D, SMYS, SMTS, α_U=None, α_mpt=None,
 
     Reference:
     DNVGL-ST-F101 (2017-12) 
-        sec:7.5.1.2 eq:7.3 page:175 $p_{mpt}$
+        sec:7.5.1.2 eq:7.3 p:175 $p_{mpt}$
     (mill_test_press)
     see also p93.
     """
@@ -165,7 +165,7 @@ def mill_test_pressure_unity(p_li=None, p_e=None, p_mpt=None, **kwargs):
 
     Reference:
     DNVGL-ST-F101 (2017-12) 
-        sec:5.4.2.1 eq:5.6 page:93 
+        sec:5.4.2.1 eq:5.6 p:93 
     (mill_test_press_unity)
     """
     if p_li is None:
@@ -185,7 +185,7 @@ def pressure_containment_resistance(D, t, f_y, f_u=None):
 
     Reference:
     DNVGL-ST-F101 (2017-12) 
-        sc:5.4.2.2 eq:5.8 pg:94 $p_{b}(t)$
+        sec:5.4.2.2 eq:5.8 p:94 $p_{b}(t)$
 
     """
     if f_u is None:
@@ -201,7 +201,7 @@ def pressure_containment_resistance_unity(p_e, γ_m, γ_SCPC, p_li=None, p_b=Non
 
     Reference:
     DNVGL-ST-F101 (2017-12) 
-        sc:5.4.2.1 eq:5.6 pg:93 
+        sec:5.4.2.1 eq:5.6 p:93 
 
     (press_contain_resis_unity)
     """
@@ -219,7 +219,7 @@ def pressure_containment_unity(p_cont_res_uty=None, p_lt_uty=None, p_mpt_uty=Non
 
     Reference:
     DNVGL-ST-F101 (2017-12) 
-        sc:5.4.2.1 eq:5.6 pg:93 
+        sec:5.4.2.1 eq:5.6 p:93 
 
     (press_contain_unity)
     """

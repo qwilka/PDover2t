@@ -139,7 +139,7 @@ def pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0,
             "WT": WT_total
         }
     else:
-        return (equiv_ρ, WT_total)
+        return (equiv_ρ, equiv_umass, Do_ref, Di_ref, WT_total)
 
 
 if __name__ == "__main__":
