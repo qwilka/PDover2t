@@ -44,7 +44,7 @@ h_l = -LAT   # adjust h_l for tide and
 γ_SCPC = 1.308  # safety class resistance factor for pressure containment
 
 
-Do, _, _ = pipe_Do_Di_WT(Di=D_i, WT=t_nom)
+D_o, _, _ = pipe_Do_Di_WT(Di=D_i, WT=t_nom)
 f_y = char_strength(SMYS, α_U, f_ytemp=f_ytemp)
 f_u = char_strength(SMTS, α_U, f_ytemp=f_utemp)
 
@@ -57,10 +57,10 @@ p_t = p_system_test_ref(p_d, γ_inc, α_spt)
 p_lt = p_test_loc(p_t, ρ_t, h_l, h_ref)
 
 t_min_mill_test = char_WT(t_nom, t_fab, t_corr=0.0)
-p_mpt = p_mill_test(Do, t_min_mill_test, SMYS, SMTS, α_U, α_mpt, k=1.15)
+p_mpt = p_mill_test(D_o, t_min_mill_test, SMYS, SMTS, α_U, α_mpt, k=1.15)
 
 t_1 = char_WT(t_nom, t_fab, t_corr)
-p_b = p_contain_resist(Do, t_1, f_y, f_u)
+p_b = p_contain_resist(D_o, t_1, f_y, f_u)
 
 p_cont_res_uty = p_contain_resist_uty(p_li, p_e,  p_b, γ_m, γ_SCPC)
 p_lt_uty = p_test_loc_uty(α_spt, p_lt, p_li, p_e)
