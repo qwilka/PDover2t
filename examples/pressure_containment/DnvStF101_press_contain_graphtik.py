@@ -132,6 +132,6 @@ cgraph = compose("Pressure containment",
     )
 
 sol = cgraph(**params)
-sol.plot("press_conatin.svg")
+sol.plot("press_contain_calc_graph.svg")
 
 #cgraph.compute(params, outputs=["t_1", "p_b", "p_cont_res_uty","p_lt_uty","p_mpt_uty", "p_cont_uty"])

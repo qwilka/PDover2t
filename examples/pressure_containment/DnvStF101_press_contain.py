@@ -69,22 +69,22 @@ p_cont_uty = p_contain_uty(p_cont_res_uty, p_lt_uty, p_mpt_uty)
 
 
 # repeat 3 cases as a single array ---------------------
-t_nom = np.array([0.0242, 0.0242, 0.0214])
-Do, _, _ = pipe_Do_Di_WT(Di=D_i, WT=t_nom)
-t_1 = char_WT(t_nom, t_fab, t_corr)
+# t_nom = np.array([0.0242, 0.0242, 0.0214])
+# D_o, _, _ = pipe_Do_Di_WT(Di=D_i, WT=t_nom)
+# t_1 = char_WT(t_nom, t_fab, t_corr)
 
-MSL = np.array([340., 340., 250.])
-LAT = MSL - 1.1 
-h_l = -LAT
-f_utemp = f_ytemp = np.array([6.e6, 6.e6, 0.0])
+# MSL = np.array([340., 340., 250.])
+# LAT = MSL - 1.1 
+# h_l = -LAT
+# f_utemp = f_ytemp = np.array([6.e6, 6.e6, 0.0])
 
-γ_SCPC = np.array([1.308, 1.138, 1.138])
+# γ_SCPC = np.array([1.308, 1.138, 1.138])
 
-arr = pressure_containment_all(p_d,  
-        Do, t_nom, t_corr, t_fab,
-        h_l, h_ref, ρ_cont, ρ_seawater, ρ_t,
-        γ_inc=γ_inc,
-        γ_m=γ_m, γ_SCPC=γ_SCPC, α_U=α_U, 
-        α_spt=α_spt, α_mpt=α_mpt, 
-        SMYS=SMYS, SMTS=SMTS,  
-        f_ytemp=f_ytemp, f_utemp=f_utemp)
+# arr = pressure_containment_all(p_d,  
+#         D_o, t_nom, t_corr, t_fab,
+#         h_l, h_ref, ρ_cont, ρ_seawater, ρ_t,
+#         γ_inc=γ_inc,
+#         γ_m=γ_m, γ_SCPC=γ_SCPC, α_U=α_U, 
+#         α_spt=α_spt, α_mpt=α_mpt, 
+#         SMYS=SMYS, SMTS=SMTS,  
+#         f_ytemp=f_ytemp, f_utemp=f_utemp)
