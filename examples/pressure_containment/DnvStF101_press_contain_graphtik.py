@@ -1,14 +1,16 @@
 
 """
-Pipeline pressure containment according to DNVGL-ST-F101 (2017-12)
+Test graphtik computational graph using:
+pipeline pressure containment according to DNVGL-ST-F101 (2017-12)
 refs:
+https://github.com/pygraphkit/graphtik
 https://graphtik.readthedocs.io/en/latest/
 
 Notes:
 
 
 to run:
-python DnvStF101_pressure_containment.py 
+
 """
 
 from graphtik import compose, operation
