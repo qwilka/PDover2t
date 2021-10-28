@@ -7,7 +7,7 @@ import logging
 import numpy as np
 
 from .material import char_strength, char_WT
-from ..pipe import calc_pipe_Do_Di_WT as pipe_Do_Di_WT
+from ..pipe import dodiwt as pipe_Do_Di_WT
 
 
 tex_map = {

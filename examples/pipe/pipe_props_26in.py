@@ -9,13 +9,20 @@ from pdover2t.pipe import *
 
 Di = 617.2 * 1.e-3
 WT = 24.22 * 1.e-3
+pipe_l = 12.2   # pipe length
 
-Do = pipe_Do(Di, WT)
-CSA = pipe_CSA(Do, Di)
+Do = diwt2do(Di, WT)
+CSA = dodi2CSA(Do, Di)
+
+coating = [
+    (0.0003, 1450),
+    (0.0003, 900),
+    (0.045, 1900),
+
+]
 
 
-
-# pipe_length = 12.2
+# 
 
 # # p.11
 # Do = 0.3229

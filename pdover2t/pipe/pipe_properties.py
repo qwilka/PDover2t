@@ -4,25 +4,25 @@ import math
 import numpy as np
 
 
-def calc_pipe_WT(Do, Di):
+def dodi2wt(Do, Di):
     """Calculate pipe wall thickness from outer diameter and inner diameter.
     """
     return (Do - Di) / 2
 
 
-def calc_pipe_Di(Do, WT):
+def dowt2di(Do, WT):
     """Calculate pipe inner diameter from outer diameter and wall thickness.
     """
     return Do - 2 * WT
 
 
-def calc_pipe_Do(Di, WT):
+def diwt2do(Di, WT):
     """Calculate pipe outer diameter from inner diameter and wall thickness.
     """
     return Di + 2 * WT
 
 
-def calc_pipe_Do_Di_WT(*, Do=None, Di=None, WT=None):
+def dodiwt(*, Do=None, Di=None, WT=None):
     """Calculate pipe wall thickness / outer diameter / inner diameter.
     """
     if Do is not None and Di is not None and WT is not None:
@@ -39,7 +39,7 @@ def calc_pipe_Do_Di_WT(*, Do=None, Di=None, WT=None):
 
 
 
-def calc_pipe_CSA(Do, Di):
+def dodi2CSA(Do, Di):
     """Calculate pipe cross sectional area, given the pipe outer diamater and inner diameter.
 
     :param Do: pipe outer diameter :math:`(D_o)`
@@ -54,43 +54,40 @@ def calc_pipe_CSA(Do, Di):
 
     .. doctest::
 
-        >>> calc_pipe_(0.6656, 0.6172)
+        >>> dodi2CSA(0.6656, 0.6172)
         0.19522098526377624
     """
     CSA = math.pi / 4 * (Do*Do - Di*Di)
     return CSA
 
 
-def calc_pipe_umass(pipe_ρ, *, CSA=None, Do=None, Di=None, WT=None):
+def pipe_unit_mass(ρ, CSA):
     """Calculate pipe unit mass (mass/length).
     """
-    if CSA is None:
-        CSA = calc_pipe_CSA(Do=Do, Di=Di, WT=WT)
-    umass = CSA * pipe_ρ
-    return umass
+    # if CSA is None:
+    #     CSA = dodi2CSA(Do=Do, Di=Di, WT=WT)
+    return CSA * ρ
 
 
 
-def calc_pipe_uwgt(g=9.806650, *, umass=None, Do=None, Di=None, WT=None, pipe_ρ=None):
+def pipe_unit_wgt(umass, g=9.806650):
     """Calculate pipe unit weight (weight/length).
     """
-    if umass is None:
-        umass = calc_pipe_umass(pipe_ρ, Do=Do, Di=Di, WT=WT)
-    uwgt = umass * g
-    return uwgt
+    # if umass is None:
+    #     umass = calc_pipe_umass(pipe_ρ, Do=Do, Di=Di, WT=WT)
+    return umass * g
 
 
-def calc_pipe_usubwgt(Dbuoy, seawater_ρ, g=9.806650, *, uwgt=None, 
-        Do=None, Di=None, WT=None, umass=None, pipe_ρ=None):
+def pipe_unit_subwgt(Dbuoy, seawater_ρ, uwgt, g=9.806650):
     """Calculate pipe unit submerged weight (weight/length).
     """
-    if uwgt is None:
-        uwgt = calc_pipe_uwgt(g, Do=Do, Di=Di, WT=WT, umass=umass, pipe_ρ=pipe_ρ)
+    # if uwgt is None:
+    #     uwgt = calc_pipe_uwgt(g, Do=Do, Di=Di, WT=WT, umass=umass, pipe_ρ=pipe_ρ)
     usubwgt = uwgt - np.pi/4*Dbuoy**2 * seawater_ρ * g
     return usubwgt
 
 
-def calc_pipe_layers(layers, *, Di_ref=None, Do_ref=None, umass=0,
+def pipe_equiv_layers(layers, *, Di_ref=None, Do_ref=None, umass=0,
         returnDict=False):
     """calculate equivalent properties for stacked pipe layers.
 
