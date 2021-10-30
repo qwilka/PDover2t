@@ -14,7 +14,7 @@ to run:
 import pickle
 
 from graphkit import compose, operation
-from pdover2t.DnvStF101 import *
+from pdover2t.dnvstf101 import *
 
 
 # Gas Export (0-0.3 km) location class II, 60°C max. Temp. 340-370m depth

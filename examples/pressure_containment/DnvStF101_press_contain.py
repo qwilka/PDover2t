@@ -9,7 +9,7 @@ Notes:
 to run:
 python DnvStF101_pressure_containment.py 
 """
-from pdover2t.DnvStF101 import *
+from pdover2t.dnvstf101 import *
 from pdover2t.pipe import pipe_Do_Di_WT
 
 # Gas Export (0-0.3 km) location class II, 60°C max. Temp. 340-370m depth
