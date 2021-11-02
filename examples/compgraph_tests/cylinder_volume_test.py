@@ -69,3 +69,16 @@ def cylinder_volume_all(rr, **kwargs):
     #print("locals()=", locals())
     print("kwargs=", kwargs)
     return op
+
+
+def cylinder_volume_all2(**kwargs):
+    op = {}
+    if "D" not in kwargs:
+        try:
+            r = kwargs["r"]
+            D = r2D(r)
+            op["D"] = D
+        except Exception as err:
+            print(f"ERROR cylinder_volume_all2: failed to run «r2D»: {type(err).__name__} {err}")
+            return op
+    return op
