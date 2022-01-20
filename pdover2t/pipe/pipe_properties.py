@@ -61,6 +61,28 @@ def dodi2CSA(Do, Di):
     return CSA
 
 
+def dodi2I(Do, Di):
+    """Calculate pipe second moment of area (I), given the pipe outer diamater and inner diameter.
+
+    :param Do: pipe outer diameter :math:`(D_o)`
+    :type p_d: float
+    :param Di: pipe inner diameter :math:`(D_i)`
+    :type p_d: float
+    :returns: ipe second moment of area :math:`(I)`
+    :rtype: float
+
+    .. math::
+        A =  \frac{\pi}{4} \left( D_o^2 - D_i^2   \right)  
+
+    .. doctest::
+
+        >>> dodi2CSA(0.6656, 0.6172)
+        0.19522098526377624
+    """
+    CSA = math.pi / 64 * (Do**4 - Di**4)
+    return CSA
+
+
 def pipe_unit_mass(ρ, CSA):
     """Calculate pipe unit mass (mass/length).
     """
@@ -160,3 +182,19 @@ def pipe_equiv_layers(layers, *, Di_ref=None, Do_ref=None, umass=0,
 #     pl_usubwgt = pdover2t.pipe.calc_pipe_usubwgt(pl_Do, seawater_ρ, g, uwgt=pl_uwgt)
 #     return pl_usubwgt
 
+
+
+def calc_pipe_props(**kwargs):
+    retObj = {}
+    Do = kwargs.get("Do", None)
+    Di = kwargs.get("Di", None)
+    WT = kwargs.get("WT", None)
+    Do, Di, WT = dodiwt(Do=Do, Di=Di, WT=WT)
+    retObj["Do"] = Do
+    retObj["Di"] = Di
+    retObj["WT"] = WT
+    CSA = dodi2CSA(Do, Di)
+    retObj["CSA"] = CSA
+    I = dodi2I(Do, Di)
+    retObj["I"] = I
+    return retObj
