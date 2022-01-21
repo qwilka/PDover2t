@@ -3,6 +3,8 @@ import math
 
 import numpy as np
 
+logger = logging.getLogger(__name__)
+
 
 def dodi2wt(Do, Di):
     """Calculate pipe wall thickness from outer diameter and inner diameter.
@@ -185,16 +187,66 @@ def pipe_equiv_layers(layers, *, Di_ref=None, Do_ref=None, umass=0,
 
 
 def calc_pipe_props(**kwargs):
+    """[summary]
+
+    additional inputs:
+    length - pipe length
+
+    Returns:
+        [type]: [description]
+    """
     retObj = {}
     Do = kwargs.get("Do", None)
     Di = kwargs.get("Di", None)
     WT = kwargs.get("WT", None)
-    Do, Di, WT = dodiwt(Do=Do, Di=Di, WT=WT)
-    retObj["Do"] = Do
-    retObj["Di"] = Di
-    retObj["WT"] = WT
-    CSA = dodi2CSA(Do, Di)
-    retObj["CSA"] = CSA
-    I = dodi2I(Do, Di)
-    retObj["I"] = I
+    CSA = I = None
+    try:
+        Do, Di, WT = dodiwt(Do=Do, Di=Di, WT=WT)
+    except TypeError:
+        logger.warning("calc_pipe_props: pipe diameter/wall thickness not correctly specified.")
+    else:
+        retObj["Do"] = Do
+        retObj["Di"] = Di
+        retObj["WT"] = WT
+        CSA = dodi2CSA(Do, Di)
+        retObj["CSA"] = CSA
+        I = dodi2I(Do, Di)
+        retObj["I"] = I
+    # pipe unit mass (mass/length) «umass», and mass if pipe length is specified
+    umass = None
+    ρ_pipe = kwargs.get("ρ_pipe", None)
+    length = kwargs.get("length", None)
+    try:
+        umass = pipe_unit_mass(ρ_pipe, CSA)
+    except TypeError:
+        logger.warning("calc_pipe_props: umass not calculated, check pipe density «ρ».")
+    else:
+        retObj["umass_pipe"] = umass
+        if length: retObj["mass_pipe"] = umass * length
+    # pipe unit weight «uwgt»
+    uwgt = None
+    ip = {"umass": umass}  # dict for function inputs as keyword arguments 
+    g = kwargs.get("ρ", None)  
+    if g:
+        ip["g"] = g   # only include g in function input dict if specified
+    try:
+        uwgt = pipe_unit_wgt(**ip)
+    except TypeError:
+        logger.warning("calc_pipe_props: uwgt not calculated.")
+    else:
+        retObj["uwgt"] = uwgt
+    # coating
+    coat_layers = kwargs.get("coat", None)
+    ip = {"Di_ref": Do, "umass": umass} 
+    try:
+        _ret = pipe_equiv_layers(coat_layers, **ip)
+        print("pipe_equiv_layers: ", _ret)
+        _, umass, Do_coat, _, WT_coat = _ret
+    except TypeError:
+        logger.warning("calc_pipe_props: coating not calculated.")
+    else:
+        retObj["Do_coat"] = Do_coat
+        retObj["umass_coat"] = umass
+        if length: retObj["mass_coat"] = umass * length
+    
     return retObj
