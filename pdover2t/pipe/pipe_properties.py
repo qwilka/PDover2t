@@ -41,7 +41,7 @@ def dodiwt(*, Do=None, Di=None, WT=None):
 
 
 
-def dodi2CSA(Do, Di):
+def dodi2CSA(Do, Di=0):
     """Calculate pipe cross sectional area, given the pipe outer diamater and inner diameter.
 
     :param Do: pipe outer diameter :math:`(D_o)`
@@ -63,7 +63,7 @@ def dodi2CSA(Do, Di):
     return CSA
 
 
-def dodi2I(Do, Di):
+def dodi2I(Do, Di=0):
     """Calculate pipe second moment of area (I), given the pipe outer diamater and inner diameter.
 
     :param Do: pipe outer diameter :math:`(D_o)`
@@ -102,12 +102,12 @@ def pipe_unit_wgt(umass, g=9.806650):
     return umass * g
 
 
-def pipe_unit_subwgt(Dbuoy, seawater_ρ, uwgt, g=9.806650):
+def pipe_unit_subwgt(Do_buoy, ρ_seawater, umass, g=9.806650):
     """Calculate pipe unit submerged weight (weight/length).
     """
     # if uwgt is None:
     #     uwgt = calc_pipe_uwgt(g, Do=Do, Di=Di, WT=WT, umass=umass, pipe_ρ=pipe_ρ)
-    usubwgt = uwgt - np.pi/4*Dbuoy**2 * seawater_ρ * g
+    usubwgt = (umass - np.pi/4*Do_buoy**2 * ρ_seawater) * g
     return usubwgt
 
 
@@ -208,6 +208,7 @@ def calc_pipe_props(**kwargs):
         retObj["Do"] = Do
         retObj["Di"] = Di
         retObj["WT"] = WT
+        retObj["D_buoy"] = Do_buoy = Do
         CSA = dodi2CSA(Do, Di)
         retObj["CSA"] = CSA
         I = dodi2I(Do, Di)
@@ -240,13 +241,35 @@ def calc_pipe_props(**kwargs):
     ip = {"Di_ref": Do, "umass": umass} 
     try:
         _ret = pipe_equiv_layers(coat_layers, **ip)
-        print("pipe_equiv_layers: ", _ret)
+        ##print("pipe_equiv_layers: ", _ret)
         _, umass, Do_coat, _, WT_coat = _ret
-    except TypeError:
-        logger.warning("calc_pipe_props: coating not calculated.")
+    except TypeError as err:
+        logger.warning("calc_pipe_props: coating not calculated.  %s"  % (err,))
     else:
         retObj["Do_coat"] = Do_coat
         retObj["umass_coat"] = umass
         if length: retObj["mass_coat"] = umass * length
+        retObj["D_buoy"] = Do_buoy = Do_coat
+    # pipeline contents   umass including pipeline contents 
+    ρ_content = kwargs.get("ρ_content", None)
+    try:
+        umass_content = dodi2CSA(Di) * ρ_content
+    except TypeError as err:
+        logger.warning("calc_pipe_props: pipeline contents not calculated.  %s"  % (err,))
+    else:
+        umass += umass_content
+        retObj["umass_content"] = umass
+        if length: retObj["mass_content"] = umass * length
+    # submerged weight empty pipeline
+    ρ_seawater = kwargs.get("ρ_seawater", None)
+    ip = {"Do_buoy": Do_buoy, "ρ_seawater": ρ_seawater, "umass": umass}
+    g = kwargs.get("ρ", None)  
+    if g: ip["g"] = g   # only include g in function input dict if specified
+    try:
+        usubwgt_empty = pipe_unit_subwgt(**ip)
+    except TypeError as err:
+        logger.warning("calc_pipe_props: usubwgt_empty not calculated.  %s"  % (err,))
+    else:
+        retObj["usubwgt_empty"] = usubwgt_empty
     
     return retObj
