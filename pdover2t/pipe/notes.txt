@@ -1,0 +1,7 @@
+
+
+
+
+Alternative to dataclass: pydantic
+https://pypi.org/project/pydantic/
+https://towardsdatascience.com/pydantic-688e897cfd3a

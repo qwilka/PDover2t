@@ -185,6 +185,15 @@ def pipe_equiv_layers(layers, *, Di_ref=None, Do_ref=None, umass=0,
 #     return pl_usubwgt
 
 
+def pipe_joint_props(*, Do=None, Di=None, WT=None):
+    try:
+        Do, Di, WT = dodiwt(Do=Do, Di=Di, WT=WT)
+    except TypeError:
+        logger.error("pipe_joint_props: pipe diameter/wall thickness not correctly specified.") 
+        return None
+    CSA = dodi2CSA(Do, Di)
+    I = dodi2I(Do, Di)
+
 
 def calc_pipe_props(**kwargs):
     """[summary]
