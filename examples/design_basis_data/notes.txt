@@ -1,0 +1,5 @@
+
+
+https://stackoverflow.com/questions/2904274/globals-and-locals-in-python-exec
+https://stackoverflow.com/questions/7782233/python-how-to-create-private-class-variables-using-setattr-or-exec
+

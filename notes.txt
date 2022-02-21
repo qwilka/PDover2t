@@ -1,4 +1,8 @@
-https://stackoverflow.com/questions/37393287/how-to-make-decorators-optionally-turn-on-or-off
+
+
+engineering source code
+======================
+https://github.com/CalebBell/fluids  Fluid dynamics component of Chemical Engineering Design Library
 
 
 metocean
@@ -15,6 +19,10 @@ VIV
 ====
 https://www.petroskills.com/blog/entry/piping-vibration-calculate-natural-frequency#.XnClH9_ngxQ
 
+
+Python
+=======
+https://stackoverflow.com/questions/37393287/how-to-make-decorators-optionally-turn-on-or-off
 
 
 

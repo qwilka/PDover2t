@@ -1,4 +1,4 @@
-"""Analysis of gas pipeline «P-01»
+"""Analysis of gas pipeline «P01»
 """
 #import logging
 
