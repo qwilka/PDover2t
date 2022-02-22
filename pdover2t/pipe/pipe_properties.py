@@ -85,12 +85,12 @@ def dodi2I(Do, Di=0):
     return CSA
 
 
-def pipe_unit_mass(ρ, CSA):
-    """Calculate pipe unit mass (mass/length).
+def pipe_mass(ρ, CSA, length=None):
+    """Calculate pipe mass. Returns pipe mass if length 
+    is specified, otherwise returns pipe unit mass (mass/length). 
     """
-    # if CSA is None:
-    #     CSA = dodi2CSA(Do=Do, Di=Di, WT=WT)
-    return CSA * ρ
+    _length = length if length else 1.0
+    return CSA * ρ * _length
 
 
 

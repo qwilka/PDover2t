@@ -38,4 +38,4 @@ with open(data_fp, 'w') as _fh:
 # with open(data_fp, 'r') as _fh:
 #     P01_copy = json.load(_fh)
 
-json2globals(data_fp, globals())
+json2globals(data_fp)   # , globals()
