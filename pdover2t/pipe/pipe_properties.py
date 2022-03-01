@@ -85,7 +85,7 @@ def dodi2I(Do, Di=0):
     return CSA
 
 
-def pipe_mass(ρ, CSA, length=None):
+def pipe_unit_mass(ρ, CSA, length=None):
     """Calculate pipe mass. Returns pipe mass if length 
     is specified, otherwise returns pipe unit mass (mass/length). 
     """
@@ -111,9 +111,72 @@ def pipe_unit_subwgt(Do_buoy, ρ_seawater, umass, g=9.806650):
     return usubwgt
 
 
+def pipe_equiv_coating(Do, coating):
+    Di_layer = Do
+    for (thk, density, *_) in coating:
+        Do_layer = Di_layer + 2 * thk
+        CSA = dodi2CSA(Do_layer, Di_layer)
+
+
+def pipe_equiv_coating(Do, layers):
+    """Calculate equivalent properties for pipe coating layers.
+
+    :param Do: pipe outer diameter :math:`(D_o)`
+    :type p_d: float
+    :param layers: list of layer properties, each element is
+    a tuple consisting of (layer_thickness, layer_mass_density), in order
+    starting with the innermost coating layer. 
+    :type layers: list, tuple
+    :returns: tuple with equivalent properties (WT_coat, ρ_coat_equiv, umass_coat)
+    :rtype: tuple
+
+    .. doctest::
+
+        >>> layers = [(0.0003, 1450.), (0.0038, 960.), (0.045, 2250.)]
+        >>> pipe_layers(layers, Di_ref=0.660, umass=337.0)
+        (5232.900238245189, 0.0491)
+    """
+    Di_layer = Do
+    umass_coat = 0
+    CSA_coat = 0
+    for (WT_layer, density_layer) in layers:
+        Do_layer = Di_layer + 2 * WT_layer
+        CSA_layer = dodi2CSA(Do_layer, Di_layer)
+        umass_coat += CSA_layer * density_layer
+        CSA_coat += CSA_layer
+        Di_layer = Do_layer
+    WT_coat = (Do_layer - Do) / 2
+    ρ_coat_equiv = umass_coat / CSA_coat
+    return WT_coat, ρ_coat_equiv, umass_coat
+
+
+def calc_basic_pipe_properties(Do, WT, ρ_pipe, coat_layers,
+    ρ_seawater, g=9.806650):
+    """
+    """
+    Di = Do - 2 * WT
+    CSA_pipe = dodi2CSA(Do, Di)
+    umass_pipe = pipe_unit_mass(ρ_pipe, CSA_pipe)
+    WT_coat, ρ_coat_equiv, umass_coat = pipe_equiv_coating(Do, coat_layers)
+    umass_pipe_coat = umass_pipe + umass_coat
+    Do_buoy = Do + 2 * WT_coat
+    umass_pl_empty = umass_pipe_coat
+    usubwgt_pl_empty = pipe_unit_subwgt(Do_buoy, ρ_seawater, umass_pl_empty, g)
+    return {
+        "umass_pipe": umass_pipe,
+        "umass_pipe_coat": umass_pipe_coat,
+        "umass_pl_empty": umass_pl_empty,
+        "usubwgt_pl_empty": usubwgt_pl_empty,
+    }
+
+
+
+
+# =====================================================================
+
 def pipe_equiv_layers(layers, *, Di_ref=None, Do_ref=None, umass=0,
         returnDict=False):
-    """calculate equivalent properties for stacked pipe layers.
+    """DEPR calculate equivalent properties for stacked pipe layers.
 
     :param layers: list of layer properties, each element is
     a tuple consisting of (layer_thickness, layer_mass_density)
@@ -185,14 +248,14 @@ def pipe_equiv_layers(layers, *, Di_ref=None, Do_ref=None, umass=0,
 #     return pl_usubwgt
 
 
-def pipe_joint_props(*, Do=None, Di=None, WT=None):
-    try:
-        Do, Di, WT = dodiwt(Do=Do, Di=Di, WT=WT)
-    except TypeError:
-        logger.error("pipe_joint_props: pipe diameter/wall thickness not correctly specified.") 
-        return None
-    CSA = dodi2CSA(Do, Di)
-    I = dodi2I(Do, Di)
+# def pipe_joint_props(*, Do=None, Di=None, WT=None):
+#     try:
+#         Do, Di, WT = dodiwt(Do=Do, Di=Di, WT=WT)
+#     except TypeError:
+#         logger.error("pipe_joint_props: pipe diameter/wall thickness not correctly specified.") 
+#         return None
+#     CSA = dodi2CSA(Do, Di)
+#     I = dodi2I(Do, Di)
 
 
 def calc_pipe_props(**kwargs):
@@ -259,16 +322,6 @@ def calc_pipe_props(**kwargs):
         retObj["umass_coat"] = umass
         if length: retObj["mass_coat"] = umass * length
         retObj["D_buoy"] = Do_buoy = Do_coat
-    # pipeline contents   umass including pipeline contents 
-    ρ_content = kwargs.get("ρ_content", None)
-    try:
-        umass_content = dodi2CSA(Di) * ρ_content
-    except TypeError as err:
-        logger.warning("calc_pipe_props: pipeline contents not calculated.  %s"  % (err,))
-    else:
-        umass += umass_content
-        retObj["umass_content"] = umass
-        if length: retObj["mass_content"] = umass * length
     # submerged weight empty pipeline
     ρ_seawater = kwargs.get("ρ_seawater", None)
     ip = {"Do_buoy": Do_buoy, "ρ_seawater": ρ_seawater, "umass": umass}
@@ -280,5 +333,37 @@ def calc_pipe_props(**kwargs):
         logger.warning("calc_pipe_props: usubwgt_empty not calculated.  %s"  % (err,))
     else:
         retObj["usubwgt_empty"] = usubwgt_empty
-    
+    # pipeline  umass with internal content   
+    ρ_content = kwargs.get("ρ_content", None)
+    try:
+        umass_content = dodi2CSA(Di) * ρ_content
+    except TypeError as err:
+        logger.warning("calc_pipe_props: pipeline contents not calculated.  %s"  % (err,))
+    else:
+        umass += umass_content
+        #retObj["umass_content"] = umass
+        #if length: retObj["mass_content"] = umass * length  
+    # pipeline submerged weight with internal content filled
+    ρ_seawater = kwargs.get("ρ_seawater", None)
+    ip = {"Do_buoy": Do_buoy, "ρ_seawater": ρ_seawater, "umass": umass}
+    g = kwargs.get("ρ", None)  
+    if g: ip["g"] = g   # only include g in function input dict if specified
+    try:
+        usubwgt_content = pipe_unit_subwgt(**ip)
+    except TypeError as err:
+        logger.warning("calc_pipe_props: usubwgt_content not calculated.  %s"  % (err,))
+    else:
+        retObj["usubwgt_content"] = usubwgt_content
+    # pipeline submerged weight with seawater filed  
+    ρ_seawater = kwargs.get("ρ_seawater", None)
+    umass_seawater = dodi2CSA(Di) * ρ_seawater + retObj["umass_coat"]
+    ip = {"Do_buoy": Do_buoy, "ρ_seawater": ρ_seawater, "umass": umass_seawater}
+    g = kwargs.get("ρ", None)  
+    if g: ip["g"] = g   # only include g in function input dict if specified
+    try:
+        usubwgt_seawater = pipe_unit_subwgt(**ip)
+    except TypeError as err:
+        logger.warning("calc_pipe_props: usubwgt_seawater not calculated.  %s"  % (err,))
+    else:
+        retObj["usubwgt_seawater"] = usubwgt_seawater
     return retObj

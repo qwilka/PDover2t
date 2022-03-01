@@ -12,3 +12,5 @@ CSA = dodi2CSA(Do, Di)
 I = dodi2I(Do, Di)
 umass = pipe_unit_mass(ρ_pipe, CSA)
 uwgt = pipe_unit_wgt(umass, g)
+#uwgt = umass * g
+
