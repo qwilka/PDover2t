@@ -1,5 +1,6 @@
 
 
+
 engineering source code
 ======================
 https://github.com/CalebBell/fluids  Fluid dynamics component of Chemical Engineering Design Library
@@ -24,6 +25,15 @@ Python
 =======
 https://stackoverflow.com/questions/37393287/how-to-make-decorators-optionally-turn-on-or-off
 
+
+JSON Schema
+===========
+https://json-schema.org/
+https://github.com/python-jsonschema/jsonschema
+https://python-jsonschema.readthedocs.io/en/stable/
+https://stackoverflow.com/questions/29916065/how-to-do-camelcase-split-in-python
+
+https://github.com/mbello/dict-deep  'dotted strings' or lists as key
 
 
 =================================================================

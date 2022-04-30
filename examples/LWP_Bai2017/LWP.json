@@ -1,0 +1,29 @@
+{
+    "pipe_Do": [
+        0.5,
+        0.18,
+        0.205,
+        0.24,
+        0.365
+    ],
+    "pipe_WT": [
+        0.05,
+        0.0165,
+        0.0265,
+        0.044,
+        0.033
+    ],
+    "pipe_ρ": 3850,
+    "cont_ρ": [0, 1025, 1025, 1025, 1025],
+    "seawater_ρ": 1025,
+    "g": 9.81,
+    "_vnmeta": {
+        "name": "Lightweight pipeline, LWP",
+        "desc": "Lightweight pipeline (LWP), from Bai(2014).",
+        "refs": [
+            "https://www.researchgate.net/publication/282555040_Reliability-based_design_of_subsea_light_weight_pipeline_against_lateral_stability",
+            "https://www.researchgate.net/publication/285462732_On-bottom_stability_of_subsea_lightweight_pipeline_LWP_on_sand_soil_surface"
+        ],
+        "vectorize": []
+    }
+}

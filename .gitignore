@@ -3,6 +3,7 @@
 *.hdf5
 *.vn3
 *.vn4
+_notes.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
