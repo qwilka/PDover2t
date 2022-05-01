@@ -1,0 +1,21 @@
+
+
+
+
+https://www.researchgate.net/publication/265394914_An_optimum_design_of_on-bottom_stability_of_offshore_pipelines_on_soft_clay
+
+Yu, Su & Choi, Han & Lee, Seung & Do, Chang Ho & Kim, Do. (2013). An optimum design of on-bottom stability of offshore pipelines on soft clay. International Journal of Naval Architecture and Ocean Engineering. 5. 10.2478/IJNAOE-2013-0156. 
+
+@article{article,
+author = {Yu, Su and Choi, Han and Lee, Seung and Do, Chang Ho and Kim, Do},
+year = {2013},
+month = {12},
+pages = {},
+title = {An optimum design of on-bottom stability of offshore pipelines on soft clay},
+volume = {5},
+journal = {International Journal of Naval Architecture and Ocean Engineering},
+doi = {10.2478/IJNAOE-2013-0156}
+}
+
+
+

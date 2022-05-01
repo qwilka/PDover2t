@@ -14,21 +14,15 @@ from pdover2t.pipe import *
 
 data_filepath = "LWP.json"
 
-mapvars = {
-    "pipe_Do": "Do",
-    "pipe_WT": "WT",
-}
-mapvars = None
-
-varnames = json2globals(data_filepath, mapvars)  # import data in JSON file into the current global scope as variables
+json2globals(data_filepath)  # import data in JSON file into the current global scope as variables
 
 Do = pipe_Do[0]
 WT = pipe_WT[0]
-cont_ρ = cont_ρ[0]
+cont_ρ = pipe_WT[cont_ρ]
 
 # Do = np.array(pipe_Do)
 # WT = np.array(pipe_WT)
-#cont_ρ = np.array(cont_ρ)
+# cont_ρ = np.array(cont_ρ)
 
 Di = dowt2di(Do, WT)
 CSA = dodi2CSA(Do, Di)

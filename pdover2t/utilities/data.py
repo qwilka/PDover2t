@@ -2,6 +2,8 @@ import inspect
 import json
 import logging
 
+import numpy as np
+
 # https://stackoverflow.com/questions/4152963/get-name-of-current-script-in-python
 
 logger = logging.getLogger(__name__)
@@ -18,6 +20,17 @@ def json2globals(json_fp, mapvars=None, _globals=None, clobber=False):
     if _globals is None:
         frame = inspect.stack()[1][0]  #  get calling frame
         _globals = frame.f_globals
+    # vectorize the items listed in _vnmeta.vectorize
+    # NOTE: each item must be an array/list
+    # NOTE: item names as per json file (not mapvars)
+    vectorize = data["_vnmeta"].get("vectorize", None) if "_vnmeta" in data else None
+    if vectorize:
+        for dpath in vectorize:
+            _val = dotted_get(data, dpath)
+            if _val and isinstance(_val, list):
+                dotted_set(data, dpath, np.array(_val))
+            else:
+                logger.warning("json2globals: cannot vectorize: «%s» in «%s»" % (dpath, json_fp))
     for k,v in data.items():
         if not clobber and k in _globals: continue
         if k in ["_vnmeta"]: continue
@@ -27,9 +40,9 @@ def json2globals(json_fp, mapvars=None, _globals=None, clobber=False):
             key = k
         _globals[key] = v
         varnames.append(key)
-    logger.warning("json2globals: adding variables to global scope: %s" % (str(varnames), ))
+    logger.warning("json2globals: adding variables to global scope: %s from «%s»" % (str(varnames), json_fp))
     _meta = data["_vnmeta"].copy() if "_vnmeta" in data else {}
-    _meta["varnames"] = varnames
+    _meta["_globals"] = varnames
     return _meta
 
 
@@ -38,7 +51,13 @@ def dotted_get(obj, dotted):
     _o = obj
     for k in keys:
         _k = int(k) if k.isnumeric() else k
-        _o = _o[_k]
+        #_o = _o[_k]
+        try:
+            _o = _o[_k]
+        except Exception as err:
+            logger.error("dotted_get: cannot find item: %s; %s" % (k, err))
+            #raise KeyError(f"dotted_get: cannot find item: {k}; {err}")
+            return None
     return _o
 
 

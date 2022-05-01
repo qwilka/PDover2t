@@ -24,6 +24,6 @@
             "https://www.researchgate.net/publication/282555040_Reliability-based_design_of_subsea_light_weight_pipeline_against_lateral_stability",
             "https://www.researchgate.net/publication/285462732_On-bottom_stability_of_subsea_lightweight_pipeline_LWP_on_sand_soil_surface"
         ],
-        "vectorize": []
+        "vectorize": ["pipe_Do", "pipe_WT", "cont_ρ"]
     }
 }
