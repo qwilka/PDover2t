@@ -12,22 +12,30 @@ from pdover2t.pipe import *
 #from pdover2t.pipe.pipe_properties import *
 
 
-data_filepath = "LWP.json"
+data_filepath = "Ossia2016.json"
 
 json2globals(data_filepath)  # import data in JSON file into the current global scope as variables
 
-Do = pipe_Do[0]
-WT = pipe_WT[0]
-cont_ρ = pipe_WT[cont_ρ]
+# Do = pipe_Do[0]
+# WT = pipe_WT[0]
+# cont_ρ = pipe_WT[cont_ρ]
 
 # Do = np.array(pipe_Do)
 # WT = np.array(pipe_WT)
 # cont_ρ = np.array(cont_ρ)
 
 Di = dowt2di(Do, WT)
-CSA = dodi2CSA(Do, Di)
+#pipe_CSA = dodi2CSA(Do, Di)
+#cont_CSA = dodi2CSA(Di)
 I = dodi2I(Do, Di)
-umass = pipe_unit_mass(pipe_ρ, CSA, cont_ρ)
-uwgt = pipe_unit_wgt(umass, g)
-usubwgt = pipe_unit_subwgt(Do, seawater_ρ, umass, g)
+
+pipe_wgt = pipe_weight(pipe_ρ, pipe_Do=pipe_Do, pipe_Di=pipe_Di, g=g)
+cont_wgt = pipe_content_weight(cont_ρ, pipe_Di=pipe_Di, g=g)
+coat_wgt, coat_WT, coat_ρ_eqv = pipe_coat_weight(pipe_Do, pipe_coat, g, eqv_props=True)
+PL_wgt = pipe_wgt + cont_wgt + coat_wgt
+PL_buoy_Do = pipe_Do + 2.0 * coat_WT
+PL_buoy = pipe_content_weight(seawater_ρ, buoy_Do=PL_buoy_Do, g=g)
+PL_subwgt =  PL_wgt - PL_buoy
+
+
 

@@ -85,6 +85,86 @@ def dodi2I(Do, Di=0):
     return CSA
 
 
+def pipe_weight(pipe_ρ, pipe_Do=None, pipe_Di=0.0, CSA=None, g=9.806650, weight=True, length=None):
+    """Calculate pipe weight (default) or mass. 
+
+
+    """
+    _g = g if weight else 1.0
+    _length = length if length else 1.0
+    if CSA is None and pipe_Do:
+        CSA = dodi2CSA(pipe_Do, pipe_Di)
+    pipe_wgt = CSA * pipe_ρ * _length * _g
+    return pipe_wgt
+
+
+def pipe_content_weight(cont_ρ, pipe_Di=None, CSA=None, g=9.806650, weight=True, length=None):
+    """Calculate pipe content weight (default) or mass. 
+
+
+    """
+    _g = g if weight else 1.0
+    _length = length if length else 1.0
+    if CSA is None and pipe_Di:
+        CSA = dodi2CSA(pipe_Di)
+    cont_wgt = CSA * cont_ρ * _length * _g
+    return cont_wgt
+
+
+def pipe_coat_weight(pipe_Do, layers, g=9.806650, eqv_props=False, weight=True, length=None):
+    """Calculate pipe coating weight (default) or mass.
+
+    :param Do: pipe outer diameter :math:`(D_o)`
+    :type p_d: float
+    :param layers: list of layer properties, each element is
+    a tuple consisting of (layer_thickness, layer_mass_density), in order
+    starting with the innermost coating layer. 
+    :type layers: list, tuple
+    :returns: tuple with equivalent properties (WT_coat, ρ_coat_equiv, umass_coat)
+    :rtype: tuple
+
+    .. doctest::
+
+        >>> layers = [(0.0003, 1450.), (0.0038, 960.), (0.045, 2250.)]
+        >>> pipe_layers(layers, Di_ref=0.660, umass=337.0)
+        (5232.900238245189, 0.0491)
+    """
+    _g = g if weight else 1.0
+    _length = length if length else 1.0
+    layer_Di = pipe_Do
+    coat_wgt = 0.0
+    for (layer_WT, layer_ρ) in layers:
+        layer_Do = layer_Di + 2.0 * layer_WT
+        CSA = dodi2CSA(layer_Do, layer_Di)
+        coat_wgt += CSA * layer_ρ * _length * _g
+        layer_Di = layer_Do
+    if eqv_props:
+        coat_WT = (layer_Do - pipe_Do) / 2.0
+        CSA = dodi2CSA(layer_Do, pipe_Do)
+        coat_ρ_eqv = coat_wgt / (CSA * _length * _g)
+        return coat_wgt, coat_WT, coat_ρ_eqv
+    else:
+        return coat_wgt
+
+
+def pipe_buoyancy(seawater_ρ, buoy_Do=None, CSA=None, g=9.806650, weight=True, length=None):
+    """Calculate pipe buoyancy weight (default) or mass. 
+
+
+    """
+    _g = g if weight else 1.0
+    _length = length if length else 1.0
+    if CSA is None and buoy_Do:
+        CSA = dodi2CSA(buoy_Do)
+    buoy = CSA * seawater_ρ * _length * _g
+    return buoy
+
+
+# ---------------------------------------------------
+
+
+
+
 def pipe_unit_mass(ρ, CSA, cont_ρ=None, length=None):
     """Calculate pipe mass. Returns pipe mass if length 
     is specified, otherwise returns pipe unit mass (mass/length). 
