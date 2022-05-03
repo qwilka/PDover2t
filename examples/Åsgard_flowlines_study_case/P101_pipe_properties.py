@@ -8,6 +8,8 @@ import unittest
 
 import numpy as np
 import pdover2t
+from pdover2t.pipe.pipe_properties2 import calc_pipe_props, calc_basic_pipe_properties
+
 
 # p.544 Table 23.2 Installation Analysis Results for Phase I Flowlines
 # array order: zone-1, zone-2
@@ -24,4 +26,6 @@ ipObj = {
 
 
 # Calculate pipe inner diameter
-plObj = pdover2t.pipe.calc_pipeline_props(**ipObj)
+#plObj = pdover2t.pipe.calc_pipeline_props(**ipObj)
+plObj = calc_pipe_props(**ipObj)
+

@@ -1,5 +1,6 @@
 
-
+The most recent test for pipe weigth calculation is (2022-05-03):
+ipython -i pipe_weight3.py
 
 
 Alternative to dataclass: pydantic

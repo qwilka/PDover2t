@@ -1,0 +1,17 @@
+{
+    "pipe_Do": [0.2588, 0.2518, 0.2518],
+    "pipe_WT": [0.0156, 0.0116, 0.0116],
+    "pipe_ρ": 7760.0,
+    "pipe_coat": [[0.053, [1190.0, 1190.0, 1000.0]]],
+    "cont_ρ": 0.0,
+    "seawater_ρ": 1027.0,
+    "g": 9.81,
+    "_vnmeta": {
+        "name": "P101",
+        "desc": "P101 zone 1 and zone 2",
+        "refs": [
+            "Bai 2014  p.544 Table 23.2"
+        ],
+        "vectorize": ["pipe_Do", "pipe_WT", "pipe_coat.0.1"]
+    }
+}
