@@ -1,0 +1,17 @@
+{
+    "pipe_Do": 0.32385,
+    "pipe_WT": 0.02697,
+    "pipe_ρ": 7850.0,
+    "pipe_coat": [[0.0032, 900.0], [0.050, 2240.0]],
+    "cont_ρ": [0.0, 1088.0],
+    "seawater_ρ": 1025.0,
+    "g": 9.81,
+    "_vnmeta": {
+        "name": "WI-12",
+        "desc": "12 inch water injection pipeline",
+        "refs": [
+            "Nuno Salsa Ferreira, 2016 thesis, p.93"
+        ],
+        "vectorize": ["cont_ρ"]
+    }
+}
