@@ -7,6 +7,7 @@ python pipe_weight_test.py
 
 
 import numpy as np
+from pyparsing import alphanums
 
 from pdover2t.utilities.data import json2globals
 from pdover2t.pipe import *
