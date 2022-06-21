@@ -1,11 +1,15 @@
 """
 
+https://docs.python.org/3/library/unicodedata.html
+https://www.unicode.org/Public/UCD/latest/ucd/NamesList.txt
+https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals
+https://realpython.com/python-encodings-guide/#python-string-literals-ways-to-skin-a-cat
 """
 greek_letters_map = {
     'Alpha': 'Α',
     'Beta': 'Β',
     'Chi': 'Χ',
-    'Delta': 'Δ',
+    'Delta': 'Δ',             # "\N{GREEK CAPITAL LETTER DELTA}"
     'Epsilon': 'Ε',
     'Eta': 'Η',
     'Gamma': 'Γ',
@@ -29,7 +33,7 @@ greek_letters_map = {
     'alpha': 'α',
     'beta': 'β',
     'chi': 'χ',
-    'delta': 'δ',
+    'delta': 'δ',    # "\N{GREEK SMALL LETTER DELTA}"
     'epsilon': 'ε',
     'eta': 'η',
     'gamma': 'γ',
