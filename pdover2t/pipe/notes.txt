@@ -1,8 +1,0 @@
-
-The most recent test for pipe weigth calculation is (2022-05-03):
-ipython -i pipe_weight3.py
-
-
-Alternative to dataclass: pydantic
-https://pypi.org/project/pydantic/
-https://towardsdatascience.com/pydantic-688e897cfd3a
