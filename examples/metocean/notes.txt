@@ -1,9 +1,0 @@
-
-
-
-=====================================================
-def U_s_and_T_u(depth, H_s, T_p=None, T_z=None):
-    if not T_p and T_z:
-        T_p = 1.281 * T_z  # 1986_SR76-method-calculating-orbital-velocity-waves.pdf eq. 19, p. 13 
-    elif not T_p and not T_z:
-        return False

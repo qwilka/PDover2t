@@ -26,9 +26,5 @@ setup(
     ],
     keywords='engineering computational',
     packages=find_packages(exclude=['docs', 'examples']),
-    python_requires='>=3.6',
-    install_requires=[
-        "numpy",
-        "scipy",
-    ],
+    python_requires='>=3.8',
 )

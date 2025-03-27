@@ -1,8 +1,0 @@
-
-
-https://github.com/pygraphkit/graphtik
-https://graphtik.readthedocs.io/en/latest/
-
-https://stackoverflow.com/questions/14692071/sharing-scope-in-python-between-called-and-calling-functions
-https://stackoverflow.com/questions/5218895/python-nested-functions-variable-scoping
-https://realpython.com/primer-on-python-decorators/
