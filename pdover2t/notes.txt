@@ -1,0 +1,5 @@
+
+
+Re-factor 2025-01-27
+
+https://ichard26.github.io/blog/2024/08/whats-new-in-pip-24.2/#:~:text=DEPRECATION%3A%20Legacy%20editable%20install%20of%20version_pkg%3D%3D0.1%20from%20file%3A%2F%2F%2Fhome%2Fichard26%2Fdev%2Foss%2Fpip%2Ftemp%2Fpip-test-package,or%20enable%20--use-pep517%2C%20and%20use%20setuptools%20%3E%3D%2064.

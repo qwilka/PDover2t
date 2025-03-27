@@ -1,0 +1,6 @@
+
+
+DNV-ST-F101 (2021-08)
+h_l = the elevation of the local pressure point (positive upwards)  sec:4.2.2.2 page:64  
+h_ref = the elevation of the reference point (positive upwards) sec:4.2.2.2 page:64   (h_ref=0 at LAT?)
+p_d = the design pressure at the pressure reference elevation  sec:4.2.2.2 page:64
