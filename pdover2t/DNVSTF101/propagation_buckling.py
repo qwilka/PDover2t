@@ -10,7 +10,7 @@ if use_numpy:
 else:
     from math import exp
 
-from ..util.named_tuple import make_return_namedtuple
+from ..utilities.named_tuple import make_return_namedtuple
 from ..pipe.pipe import characteristic_WT
 from ..pipe.material import characteristic_material_strength
 from ..pipe.environment import external_water_pressure

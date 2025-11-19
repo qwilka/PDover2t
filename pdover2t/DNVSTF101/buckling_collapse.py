@@ -14,7 +14,7 @@ else:
     from math import sqrt, pi, cos, acos
     _abs = abs
 
-from ..util.named_tuple import make_return_namedtuple
+from ..utilities.named_tuple import make_return_namedtuple
 from ..pipe.environment import external_water_pressure
 from ..pipe.material import characteristic_material_strength
 from ..pipe.pipe import characteristic_WT

@@ -7,7 +7,7 @@ if use_numpy:
 else:
     from math import pi
 
-from ..util.named_tuple import make_return_namedtuple, isinstance_namedtuple
+from ..utilities.named_tuple import make_return_namedtuple, isinstance_namedtuple
 
 logger = logging.getLogger(__name__)
 

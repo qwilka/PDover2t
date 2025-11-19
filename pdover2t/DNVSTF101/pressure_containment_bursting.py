@@ -23,8 +23,8 @@ else:
 
 from ..pipe.pipe import pipe_Do_Di_WT, characteristic_WT
 from ..pipe.material import characteristic_material_strength
-from ..util.utils import min_nums_vectors
-from ..util.named_tuple import make_return_namedtuple
+from ..utilities.utils import min_nums_vectors
+from ..utilities.named_tuple import make_return_namedtuple
 
 
 

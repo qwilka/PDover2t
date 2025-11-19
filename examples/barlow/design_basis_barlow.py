@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 project_name = "Barlow-test"
-db_path =  "M:\\Trans\\STMC\\_db\\test-Barlow"
+db_path =  "_doc/test-Barlow.db"
 comment  = "Test study using Barlow formula"  # description
 
 db = PickleShareDB(db_path)
