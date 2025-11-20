@@ -2,6 +2,10 @@
 
 networkx version issue
 https://github.com/pygraphkit/graphtik/issues/10  Exception with the latest versions of networkx
+
+
+https://dnmtechs.com/troubleshooting-dot_parser-import-error-in-python-3-with-pydot-and-graphviz/
+https://github.com/pydot/pydot/issues/166
 """
 import importlib
 
@@ -22,9 +26,9 @@ cgraph = compose("hoop-stress",
 )
 
 try:
-    cgraph.plot("barlow-graph.svg")
-except:
-    print(f"error: cgraph.plot")
+    cgraph.plot("./_doc/barlow-graph.svg")
+except Exception as e:
+    print(f"error: cgraph.plot exception: {e}")
 
 
 if __name__ == "__main__":
@@ -35,7 +39,12 @@ if __name__ == "__main__":
         "SMYS": 450.e6,
         "Df": 0.72
     }
-    result = cgraph.compute(premise)
-    result.plot("barlow-result.svg")
-
+    try:
+        result = cgraph.compute(premise)
+    except Exception as e:
+        print(f"error: cgraph.compute exception: {e}")
+    try:
+        result.plot("./_doc/barlow-result.svg")
+    except Exception as e:
+        print(f"error: result.plot exception: {e}")
     
