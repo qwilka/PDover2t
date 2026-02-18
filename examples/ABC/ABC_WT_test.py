@@ -89,8 +89,8 @@ df2xl = [
     (prop,     "propagation", "Propagation buckling", "DNV-ST-F101 (2021-08) sec:5.4.5"),
 ]
 
-# save excel file in _doc/ folder for gitignore
-loadcases2excel("_doc/BHC_loadcases.xlsx", df2xl)
+# save excel file in build/ folder for gitignore
+loadcases2excel("build/ABC_loadcases.xlsx", df2xl)
 
 
 

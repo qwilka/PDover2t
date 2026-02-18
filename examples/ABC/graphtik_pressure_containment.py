@@ -62,7 +62,7 @@ operation(p_contain_uty2, name="compare unity values", needs=["pli_cont_res_uty"
 # if create_graph_images:
 #     cgraph.plot("pressure-containment_graphtik.svg")
 try:
-    cgraph.plot("./_doc/pressure-containment_graphtik.svg")
+    cgraph.plot("./build/pressure-containment_graphtik.svg")
 except Exception as e:
     print(f"error: cgraph.plot exception: {e}")
 
@@ -123,7 +123,7 @@ if __name__=="__main__":
     # if create_graph_images:
     #     bcase.plot("pressure-containment_sol.svg")
     try:
-        bcase.plot("./_doc/pressure-containment_sol.svg")
+        bcase.plot("./build/pressure-containment_sol.svg")
     except Exception as e:
         print(f"error: bcase.plot exception: {e}")
 
